@@ -7,9 +7,9 @@ Created on Mar 11, 2009
 from google.appengine.ext import db
 
 class Customer(db.Model):
-    user = db.UserProperty()
-    orders = db.ListProperty(Order)
-    environmentProfile = db.ReferenceProperty(EnvironmentProfile)
+    user = db.UserProperty(required=True)
+    description = db.TextProperty()
+    averageCarbonFootprint = db.FloatProperty()
     
 
     def __init__(selfparams):
