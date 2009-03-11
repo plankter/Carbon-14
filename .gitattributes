@@ -8,6 +8,12 @@ Android/res/values/strings.xml -text
 Android/src/net/carbon14/MainActivity.java -text
 GAE/.project -text
 GAE/.pydevproject -text
+GAE/src/Model/Customer.py -text
+GAE/src/Model/EnvironmentProfile.py -text
+GAE/src/Model/Order.py -text
+GAE/src/Model/Producer.py -text
+GAE/src/Model/Product.py -text
+GAE/src/Model/ProductCategory.py -text
 GAE/src/app.yaml -text
 GAE/src/helloworld.py -text
 GAE/src/index.yaml -text
