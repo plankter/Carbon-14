@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?eclipse-pydev version="1.0"?>
 
 <pydev_project>
@@ -12,5 +12,10 @@
 <path>C:\Program Files\Google\google_appengine\lib\django</path>
 <path>C:\Program Files\Google\google_appengine\lib\webob</path>
 <path>C:\Program Files\Google\google_appengine\lib\yaml\lib</path>
+<path>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine</path>
+<path>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/django</path>
+<path>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/webob</path>
+<path>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/yaml/lib</path>
+<path>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/antlr3</path>
 </pydev_pathproperty>
 </pydev_project>
