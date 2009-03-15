@@ -34,6 +34,7 @@ Android/res/layout/search_book_contents.xml -text
 Android/res/layout/search_book_contents_header.xml -text
 Android/res/layout/search_book_contents_list_item.xml -text
 Android/res/layout/share.xml -text
+Android/res/menu/main_menu.xml -text
 Android/res/raw/beep.ogg -text
 Android/res/values/attrs.xml -text
 Android/res/values/colors.xml -text
