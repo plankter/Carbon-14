@@ -30,6 +30,8 @@ Android/res/layout/capture.xml -text
 Android/res/layout/encode.xml -text
 Android/res/layout/help.xml -text
 Android/res/layout/main.xml -text
+Android/res/layout/product.xml -text
+Android/res/layout/profile.xml -text
 Android/res/layout/search_book_contents.xml -text
 Android/res/layout/search_book_contents_header.xml -text
 Android/res/layout/search_book_contents_list_item.xml -text
@@ -77,6 +79,8 @@ Android/src/com/google/zxing/client/android/result/TelResultHandler.java -text
 Android/src/com/google/zxing/client/android/result/TextResultHandler.java -text
 Android/src/com/google/zxing/client/android/result/URIResultHandler.java -text
 Android/src/net/carbon14/MainActivity.java -text
+Android/src/net/carbon14/ProductActivity.java -text
+Android/src/net/carbon14/ProfileActivity.java -text
 GAE/.project -text
 GAE/.pydevproject -text
 GAE/src/Model/Customer.py -text

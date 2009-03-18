@@ -3,6 +3,7 @@ package net.carbon14;
 import com.google.zxing.client.android.PreferencesActivity;
 
 import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,19 +13,25 @@ import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TabHost;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends TabActivity {
 	private final static int SCAN_REQUEST_CODE = 0;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        TabHost mTabHost = getTabHost();
         
-        Button buttonScan = (Button) findViewById(R.id.ButtonScan);
-        buttonScan.setOnClickListener(mScanListener);
+        mTabHost.addTab(mTabHost.newTabSpec("tab_test1").setIndicator("TAB 1").setContent(R.id.textview1));
+        mTabHost.addTab(mTabHost.newTabSpec("tab_test2").setIndicator("TAB 2").setContent(R.id.textview2));
+        mTabHost.addTab(mTabHost.newTabSpec("tab_test3").setIndicator("TAB 3").setContent(R.id.textview3));
+        
+        mTabHost.setCurrentTab(0);
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,7 +70,7 @@ public class MainActivity extends Activity {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 // Handle successful scan
-                ProductRegistered(contents, format);
+                ProductRecognized(contents, format);
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
             	Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
@@ -71,7 +78,7 @@ public class MainActivity extends Activity {
         }
     }
     
-    private void ProductRegistered(String contents, String format)
+    private void ProductRecognized(String contents, String format)
     {
     	
     }
