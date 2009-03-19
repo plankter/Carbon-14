@@ -47,6 +47,7 @@ public class MainActivity extends TabActivity {
         	StartScanning();
             return true;
         case R.id.profileMenuItem:
+        	showUserProfile();
             return true;
         case R.id.settingsMenuItem:
         	Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -81,6 +82,12 @@ public class MainActivity extends TabActivity {
     private void ProductRecognized(String contents, String format)
     {
     	
+    }
+    
+    private void showUserProfile()
+    {
+    	Intent intent = new Intent("net.carbon14.PROFILE");
+        startActivity(intent);
     }
     
     private void StartScanning()
