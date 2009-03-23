@@ -8,7 +8,7 @@ from google.appengine.ext import db
 
 class Order(db.Model):
     time = db.DateTimeProperty(required=True)
-    owner = db.ReferenceProperty(Customer, required=True)
+    customer = db.ReferenceProperty(Customer, required=True)
     product = db.ReferenceProperty(Product, required=True)
     location = db.GeoPtProperty()
 

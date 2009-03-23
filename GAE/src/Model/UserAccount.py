@@ -6,7 +6,7 @@ Created on Mar 11, 2009
 
 from google.appengine.ext import db
 
-class Customer(db.Model):
+class UserAccount(db.Model):
     user = db.UserProperty(required=True)
     description = db.TextProperty()
     averageCarbonFootprint = db.FloatProperty()

@@ -1,20 +1,28 @@
 <html>
   <body>
-    {% for greeting in greetings %}
-      {% if greeting.author %}
-        <b>{{ greeting.author.nickname }}</b> wrote:
-      {% else %}
-       An anonymous person wrote:
-      {% endif %}
-      <blockquote>{{ greeting.content|escape }}</blockquote>
-    {% endfor %}
-
-    <form action="/sign" method="post">
-      <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="submit" value="Sign Guestbook"></div>
-    </form>
-
     <a href="{{ url }}">{{ url_linktext }}</a>
-
+    <ol>
+    	{% for update in updates %}
+    		<li>
+    			From {{update.service}}: 
+    			<a href="{{update.link}}">{{update.content}}</a>
+    			posted at: {{update.printTime}}
+    		</li>
+    	{% endfor %}
+    </ol>
+    {% if account %}
+	    <form action="/add" method="post">
+	    	<label for="service">Service: </label>
+	    	<select name="service">
+	    		<option>twitter</option>
+	    		<option>del.icio.us</option>
+	    		<option>last.fm</option>
+	    		<option>YouTube</option>
+	    	</select><br/>
+	    	<label for="username">Username: </label>
+	    	<input type="text" name="username"/>
+	    	<input type="submit" value="Add"/>
+	    </form>
+    {% endif %}
   </body>
 </html>
