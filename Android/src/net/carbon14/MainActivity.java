@@ -44,7 +44,7 @@ public class MainActivity extends TabActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.scanMenuItem:
-        	StartScanning();
+        	startScanning();
             return true;
         case R.id.profileMenuItem:
         	showUserProfile();
@@ -61,7 +61,7 @@ public class MainActivity extends TabActivity {
 	// Create an anonymous implementation of OnClickListener
     private OnClickListener mScanListener = new OnClickListener() {
         public void onClick(View v) {
-        	StartScanning();
+        	startScanning();
         }
     };
     
@@ -71,7 +71,7 @@ public class MainActivity extends TabActivity {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 // Handle successful scan
-                ProductRecognized(contents, format);
+                productRecognized(contents, format);
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
             	Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
@@ -79,7 +79,7 @@ public class MainActivity extends TabActivity {
         }
     }
     
-    private void ProductRecognized(String contents, String format)
+    private void productRecognized(String contents, String format)
     {
     	
     }
@@ -90,7 +90,7 @@ public class MainActivity extends TabActivity {
         startActivity(intent);
     }
     
-    private void StartScanning()
+    private void startScanning()
     {
     	Intent intent = new Intent("com.google.zxing.client.android.SCAN");
     	intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
