@@ -12,11 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends Activity {
 	private final static int SCAN_REQUEST_CODE = 0;
 	
     /** Called when the activity is first created. */
@@ -25,13 +28,13 @@ public class MainActivity extends TabActivity {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        TabHost mTabHost = getTabHost();
+        Button buttonScan = (Button) findViewById(R.id.ButtonScan);
+        buttonScan.setOnClickListener(scanListener);
         
-        mTabHost.addTab(mTabHost.newTabSpec("tab_test1").setIndicator("TAB 1").setContent(R.id.textview1));
-        mTabHost.addTab(mTabHost.newTabSpec("tab_test2").setIndicator("TAB 2").setContent(R.id.textview2));
-        mTabHost.addTab(mTabHost.newTabSpec("tab_test3").setIndicator("TAB 3").setContent(R.id.textview3));
-        
-        mTabHost.setCurrentTab(0);
+        Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,7 +62,7 @@ public class MainActivity extends TabActivity {
     }
     
 	// Create an anonymous implementation of OnClickListener
-    private OnClickListener mScanListener = new OnClickListener() {
+    private OnClickListener scanListener = new OnClickListener() {
         public void onClick(View v) {
         	startScanning();
         }
@@ -81,7 +84,19 @@ public class MainActivity extends TabActivity {
     
     private void productRecognized(String contents, String format)
     {
+    	Spinner spinner = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
     	
+    	if (format != null)
+    	{
+	    	ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+	    	spinner.setSelection(adapter.getPosition(format));
+    	}
+    	
+    	if (contents != null)
+    	{
+    		EditText editText = (EditText) findViewById(R.id.EditTextCode);
+    		editText.setText(contents);
+    	}
     }
     
     private void showUserProfile()

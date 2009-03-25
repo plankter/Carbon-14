@@ -17,6 +17,7 @@ public class ProfileActivity extends Activity {
         if (intent != null && action != null && action.equals("net.carbon14.PROFILE"))
         {        
 	        WebView webView = (WebView) findViewById(R.id.WebViewProfile);
+	        webView.getSettings().setJavaScriptEnabled(true);
 	        webView.loadUrl(getString(R.string.profile_url));
         }
     }
