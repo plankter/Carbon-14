@@ -4,25 +4,10 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /js
-  static_dir: js
 
-- url: /css
-  static_dir: css
-
-- url: /gfx
-  static_dir: gfx
-
-- url: /favicon.ico
-  static_files: gfx/favicon.ico
-  upload: gfx/favicon.ico
-
-- url: /accounts/.*
-  script: accounts.py
+- url: /profile
+  script: profile.py
   login: required
-  
-- url: /api
-  script: main.py
   
 - url: /.*
   script: main.py

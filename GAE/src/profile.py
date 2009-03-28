@@ -1,3 +1,9 @@
+'''
+Created on Mar 28, 2009
+
+@author: Anton Rau
+'''
+
 import os
 import logging
 import operator
@@ -12,13 +18,11 @@ from django.utils import simplejson
 
 import model
 
-class MainPage(webapp.RequestHandler):
+class ProfilePage(webapp.RequestHandler):
+    @util.login_required
     def get(self):
         # get the current user
         user = users.get_current_user()
-
-        # is user an admin?
-        admin = users.is_current_user_admin();
 
         # create user account if haven't already
         account = model.Account.getAccount(user)
@@ -31,35 +35,16 @@ class MainPage(webapp.RequestHandler):
 
         template_values = {
                            'user': user,
-                           'admin': admin,
                            'logout_url': logout_url,
                            }
         
-        path = os.path.join(os.path.dirname(__file__), 'templates/index.html')
+        path = os.path.join(os.path.dirname(__file__), 'templates/profile.html')
         self.response.out.write(template.render(path, template_values))
-        
-        
-class FillTestData(webapp.RequestHandler):
-    def get(self):
-        category = model.ProductCategory(name="Beverages")
-        category.put()
-        
-        producer = model.Producer(name="The Coca-Cola Company")
-        producer.put()
-        
-        fanta = model.Product(name="Fanta", producer=producer, category=category)
-        fanta.put()
-        
-        sprite = model.Product(name="Sprite", producer=producer, category=category)
-        sprite.put()
-        
-        
-        
+
 def main():
     application = webapp.WSGIApplication(
         [
-            ('/', MainPage),
-            ('/fillTestData', FillTestData),
+            ('/profile', ProfilePage),
         ],
         debug=True)
     util.run_wsgi_app(application)

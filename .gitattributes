@@ -150,12 +150,10 @@ Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCSerializable.java -text
 Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCSerializer.java -text
 GAE/.project -text
 GAE/.pydevproject -text
-GAE/src/accounts.py -text
-GAE/src/aggrogator.py -text
 GAE/src/app.yaml -text
-GAE/src/feedparser.py -text
 GAE/src/index.yaml -text
 GAE/src/main.py -text
 GAE/src/model.py -text
-GAE/src/templates/accounts.html -text
+GAE/src/profile.py -text
 GAE/src/templates/index.html -text
+GAE/src/templates/profile.html -text
