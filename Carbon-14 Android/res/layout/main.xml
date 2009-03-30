@@ -16,4 +16,5 @@
 <Button android:layout_height="wrap_content" android:id="@+id/ButtonScan" android:layout_width="fill_parent" android:text="Scan Barcode"></Button>
 
 
+<Button android:layout_height="wrap_content" android:id="@+id/ButtonSubmit" android:text="Submit" android:layout_width="fill_parent"></Button>
 </LinearLayout>

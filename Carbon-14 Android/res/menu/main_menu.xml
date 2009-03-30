@@ -4,6 +4,7 @@
           android:title="Scan" />
     <item android:id="@+id/profileMenuItem"
           android:title="Profile" />
-    <item android:id="@+id/settingsMenuItem"
+    <item android:title="Product" android:id="@+id/productMenuItem"></item><item android:id="@+id/settingsMenuItem"
           android:title="Settings" />
+
 </menu>

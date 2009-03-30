@@ -52,6 +52,9 @@ public class MainActivity extends Activity {
         case R.id.profileMenuItem:
         	showUserProfile();
             return true;
+        case R.id.productMenuItem:
+        	showProductProfile();
+            return true;
         case R.id.settingsMenuItem:
         	Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setClassName(this, PreferencesActivity.class.getName());
@@ -102,6 +105,12 @@ public class MainActivity extends Activity {
     private void showUserProfile()
     {
     	Intent intent = new Intent("net.carbon14.PROFILE");
+        startActivity(intent);
+    }
+    
+    private void showProductProfile()
+    {
+    	Intent intent = new Intent("net.carbon14.PRODUCT");
         startActivity(intent);
     }
     

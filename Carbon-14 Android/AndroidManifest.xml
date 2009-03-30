@@ -39,6 +39,10 @@
     		<category android:name="android.intent.category.DEFAULT" />
 		</intent-filter>
 	</activity>
+<activity android:name="ProductActivity"><intent-filter><action android:name="net.carbon14.PRODUCT"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
+</intent-filter>
+</activity>
 </application>
 	<uses-permission android:name="android.permission.CAMERA"/>
 	<uses-permission android:name="android.permission.READ_CONTACTS"/>
