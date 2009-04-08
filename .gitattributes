@@ -155,5 +155,6 @@ GAE/src/index.yaml -text
 GAE/src/main.py -text
 GAE/src/model.py -text
 GAE/src/profile.py -text
+GAE/src/services.py -text
 GAE/src/templates/index.html -text
 GAE/src/templates/profile.html -text
