@@ -35,7 +35,7 @@ class MainPage(webapp.RequestHandler):
                            'logout_url': logout_url,
                            }
         
-        path = os.path.join(os.path.dirname(__file__), 'templates/index.html')
+        path = os.path.join(os.path.dirname(__file__), 'main.html')
         self.response.out.write(template.render(path, template_values))
         
         
@@ -47,10 +47,11 @@ class FillTestData(webapp.RequestHandler):
         producer = model.Producer(name="The Coca-Cola Company")
         producer.put()
         
-        fanta = model.Product(name="Fanta", producer=producer, category=category)
+        fanta = model.Product(code="0000040822938", name="Fanta Orange", producer=producer, category=category)
+        fanta.description = "Orange Soft Drink with Sugar and Sweeteners"
         fanta.put()
         
-        sprite = model.Product(name="Sprite", producer=producer, category=category)
+        sprite = model.Product(code="0000497000064", name="Sprite", producer=producer, category=category)
         sprite.put()
         
         

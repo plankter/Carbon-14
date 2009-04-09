@@ -40,6 +40,7 @@ class Producer(db.Model):
     
 
 class Product(db.Model):
+    code = db.StringProperty(required=True)
     name = db.StringProperty(required=True)
     category = db.ReferenceProperty(ProductCategory, required=True)
     producer = db.ReferenceProperty(Producer, required=True)

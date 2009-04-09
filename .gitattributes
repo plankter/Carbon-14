@@ -152,9 +152,12 @@ GAE/.project -text
 GAE/.pydevproject -text
 GAE/src/app.yaml -text
 GAE/src/index.yaml -text
+GAE/src/main.html -text
 GAE/src/main.py -text
 GAE/src/model.py -text
+GAE/src/profile.html -text
 GAE/src/profile.py -text
-GAE/src/services.py -text
-GAE/src/templates/index.html -text
-GAE/src/templates/profile.html -text
+GAE/src/services/providers.py -text
+GAE/src/services/providers.xml -text
+GAE/src/services/upc/provider.py -text
+GAE/src/services/upc/widget.html -text

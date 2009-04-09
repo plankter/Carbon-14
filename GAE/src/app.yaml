@@ -5,6 +5,12 @@ api_version: 1
 
 handlers:
 
+- url: /services
+  script: services.py
+  
+- url: /services/upc/widget
+  script: services/upc/provider.py
+
 - url: /profile
   script: profile.py
   login: required

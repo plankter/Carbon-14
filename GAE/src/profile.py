@@ -38,7 +38,7 @@ class ProfilePage(webapp.RequestHandler):
                            'logout_url': logout_url,
                            }
         
-        path = os.path.join(os.path.dirname(__file__), 'templates/profile.html')
+        path = os.path.join(os.path.dirname(__file__), 'profile.html')
         self.response.out.write(template.render(path, template_values))
 
 def main():
