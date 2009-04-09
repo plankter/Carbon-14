@@ -3,6 +3,7 @@ Created on Apr 8, 2009
 
 @author: Anton Rau
 '''
+
 import os
 
 from google.appengine.api import memcache
@@ -12,44 +13,42 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
 
-class Service(db.Model):
+class Provider(db.Model):
     name = db.StringProperty(required=True)
     description = db.TextProperty()
     logo = db.BlobProperty()
-    data_url = db.LinkProperty()
     widget_url = db.LinkProperty()
     details_url = db.LinkProperty()
     
 
-class ServicesPage(webapp.RequestHandler):
+class ProvidersPage(webapp.RequestHandler):
     def get(self):
-        services = self.get_services()
-        self.response.out.write(services)
+        providers = self.get_providers()
+        self.response.out.write(providers)
         
     
     
-    def get_services(self):
-        services = memcache.get("services")
-        if services is not None:
-            return services
+    def get_providers(self):
+        providers = memcache.get("providers")
+        if providers is not None:
+            return providers
         else:
-            service = Service(name="UPC Database",
+            provider = Provider(name="UPC Database",
                               description="If you're interested in the various forms of the UPC code, how the numbers are issued, UPC bar codes, etc, then this is the place to be.",
-                              data_url="http://www.upcdatabase.com/rpc",
-                              widget_url="",
-                              details_url="")
-            service.put()
+                              widget_url="http://localhost:8080/services/upc/widget",
+                              details_url="http://localhost:8080/services/upc/details")
+            provider.put()
             
-            services = self.render_services()
-            if not memcache.add("services", services):
+            providers = self.render_providers()
+            if not memcache.add("providers", providers):
                 logging.error("Memcache set failed.")
-            return services
+            return providers
 
-    def render_services(self):
-        services = Service.all().fetch(100)
+    def render_providers(self):
+        providers = Provider.all().fetch(100)
         
         template_values = {
-                           'services': services,
+                           'providers': providers,
                            }
         
         path = os.path.join(os.path.dirname(__file__), 'providers.xml')
@@ -60,7 +59,7 @@ class ServicesPage(webapp.RequestHandler):
     
 def main():
     application = webapp.WSGIApplication([
-        ('/services', ServicesPage),
+        ('/providers', ProvidersPage),
         ], debug=True)
     util.run_wsgi_app(application)
 

@@ -10,7 +10,7 @@ from google.appengine.api import memcache
 
 from django.utils import simplejson
 
-import model
+import models
 
 class MainPage(webapp.RequestHandler):
     def get(self):
@@ -21,9 +21,9 @@ class MainPage(webapp.RequestHandler):
         admin = users.is_current_user_admin();
 
         # create user account if haven't already
-        account = model.Account.getAccount(user)
+        account = models.Account.getAccount(user)
         if account is None:
-            account = model.Account(user=user)
+            account = models.Account(user=user)
             account.put()
 
         # create logout url
@@ -41,17 +41,17 @@ class MainPage(webapp.RequestHandler):
         
 class FillTestData(webapp.RequestHandler):
     def get(self):
-        category = model.ProductCategory(name="Beverages")
+        category = models.ProductCategory(name="Beverages")
         category.put()
         
-        producer = model.Producer(name="The Coca-Cola Company")
+        producer = models.Producer(name="The Coca-Cola Company")
         producer.put()
         
-        fanta = model.Product(code="0000040822938", name="Fanta Orange", producer=producer, category=category)
+        fanta = models.Product(code="0000040822938", name="Fanta Orange", producer=producer, category=category)
         fanta.description = "Orange Soft Drink with Sugar and Sweeteners"
         fanta.put()
         
-        sprite = model.Product(code="0000497000064", name="Sprite", producer=producer, category=category)
+        sprite = models.Product(code="0000497000064", name="Sprite", producer=producer, category=category)
         sprite.put()
         
         

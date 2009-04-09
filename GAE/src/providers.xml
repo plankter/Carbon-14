@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+	{% for provider in providers %}
+	<service>
+		<name>{{ provider.name }}</name>
+		<description>{{ provider.description }}</description>
+		<widget_url>{{ provider.widget_url }}</widget_url>
+		<details_url>{{ provider.details_url }}</details_url>
+	</service>
+	{% endfor %}
+</services>

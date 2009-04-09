@@ -16,7 +16,7 @@ from google.appengine.api import memcache
 
 from django.utils import simplejson
 
-import model
+import models
 
 class ProfilePage(webapp.RequestHandler):
     @util.login_required
@@ -25,9 +25,9 @@ class ProfilePage(webapp.RequestHandler):
         user = users.get_current_user()
 
         # create user account if haven't already
-        account = model.Account.getAccount(user)
+        account = models.Account.getAccount(user)
         if account is None:
-            account = model.Account(user=user)
+            account = models.Account(user=user)
             account.put()
 
         # create logout url
