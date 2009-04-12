@@ -60,6 +60,7 @@ Carbon-14[!!-~]Android/.classpath -text
 Carbon-14[!!-~]Android/.project -text
 Carbon-14[!!-~]Android/.settings/org.eclipse.ltk.core.refactoring.prefs -text
 Carbon-14[!!-~]Android/AndroidManifest.xml -text
+Carbon-14[!!-~]Android/COPYING -text
 Carbon-14[!!-~]Android/assets/html/about1d.html -text
 Carbon-14[!!-~]Android/assets/html/about2d.html -text
 Carbon-14[!!-~]Android/assets/html/index.html -text
@@ -141,13 +142,6 @@ Carbon-14[!!-~]Android/src/com/google/zxing/client/android/result/URIResultHandl
 Carbon-14[!!-~]Android/src/net/carbon14/MainActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/ProductActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/ProfileActivity.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/Base64Coder.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/IXMLRPCSerializer.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCClient.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCException.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCFault.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCSerializable.java -text
-Carbon-14[!!-~]Android/src/org/xmlrpc/android/XMLRPCSerializer.java -text
 GAE/.project -text
 GAE/.pydevproject -text
 GAE/src/app.yaml -text
