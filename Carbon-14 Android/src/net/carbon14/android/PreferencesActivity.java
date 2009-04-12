@@ -22,41 +22,46 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceScreen;
 
-public final class PreferencesActivity extends android.preference.PreferenceActivity
-    implements OnSharedPreferenceChangeListener {
+public final class PreferencesActivity extends
+		android.preference.PreferenceActivity implements
+		OnSharedPreferenceChangeListener {
 
-  static final String KEY_DECODE_1D = "preferences_decode_1D";
-  static final String KEY_DECODE_QR = "preferences_decode_QR";
+	static final String KEY_DECODE_1D = "preferences_decode_1D";
+	static final String KEY_DECODE_QR = "preferences_decode_QR";
 
-  static final String KEY_PLAY_BEEP = "preferences_play_beep";
-  static final String KEY_VIBRATE = "preferences_vibrate";
-  static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
+	static final String KEY_PLAY_BEEP = "preferences_play_beep";
+	static final String KEY_VIBRATE = "preferences_vibrate";
+	static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
 
-  static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
+	static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
-  CheckBoxPreference mDecode1D;
-  CheckBoxPreference mDecodeQR;
+	CheckBoxPreference mDecode1D;
+	CheckBoxPreference mDecodeQR;
 
-  @Override
-  protected void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
-    addPreferencesFromResource(R.xml.preferences);
+	@Override
+	protected void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		addPreferencesFromResource(R.xml.preferences);
 
-    PreferenceScreen preferences = getPreferenceScreen();
-    preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    mDecode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
-    mDecodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);
-  }
+		PreferenceScreen preferences = getPreferenceScreen();
+		preferences.getSharedPreferences()
+				.registerOnSharedPreferenceChangeListener(this);
+		mDecode1D = (CheckBoxPreference) preferences
+				.findPreference(KEY_DECODE_1D);
+		mDecodeQR = (CheckBoxPreference) preferences
+				.findPreference(KEY_DECODE_QR);
+	}
 
-  // Prevent the user from turning off both decode options
-  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (key.equals(KEY_DECODE_1D)) {
-      mDecodeQR.setEnabled(mDecode1D.isChecked());
-      mDecodeQR.setChecked(true);
-    } else if (key.equals(KEY_DECODE_QR)) {
-      mDecode1D.setEnabled(mDecodeQR.isChecked());
-      mDecode1D.setChecked(true);
-    }
-  }
+	// Prevent the user from turning off both decode options
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		if (key.equals(KEY_DECODE_1D)) {
+			mDecodeQR.setEnabled(mDecode1D.isChecked());
+			mDecodeQR.setChecked(true);
+		} else if (key.equals(KEY_DECODE_QR)) {
+			mDecode1D.setEnabled(mDecodeQR.isChecked());
+			mDecode1D.setChecked(true);
+		}
+	}
 
 }

@@ -18,6 +18,7 @@ package net.carbon14.android.result;
 
 import net.carbon14.android.R;
 import android.app.Activity;
+
 import com.google.zxing.client.result.ParsedResult;
 
 /**
@@ -25,42 +26,40 @@ import com.google.zxing.client.result.ParsedResult;
  */
 public final class TextResultHandler extends ResultHandler {
 
-  private static final int[] mButtons = {
-      R.string.button_web_search,
-  };
+	private static final int[] mButtons = { R.string.button_web_search, };
 
-  public TextResultHandler(Activity activity, ParsedResult result) {
-    super(activity, result);
-  }
+	public TextResultHandler(Activity activity, ParsedResult result) {
+		super(activity, result);
+	}
 
-  @Override
-  public int getButtonCount() {
-    return mButtons.length;
-  }
+	@Override
+	public int getButtonCount() {
+		return mButtons.length;
+	}
 
-  @Override
-  public int getButtonText(int index) {
-    return mButtons[index];
-  }
+	@Override
+	public int getButtonText(int index) {
+		return mButtons[index];
+	}
 
-  @Override
-  public void handleButtonPress(int index) {
-    switch (index) {
-      case 0:
-        webSearch(mResult.getDisplayResult());
-        break;
-      case 1:
-        shareByEmail(mResult.getDisplayResult());
-        break;
-      case 2:
-        shareBySMS(mResult.getDisplayResult());
-        break;
-    }
-  }
+	@Override
+	public void handleButtonPress(int index) {
+		switch (index) {
+		case 0:
+			webSearch(mResult.getDisplayResult());
+			break;
+		case 1:
+			shareByEmail(mResult.getDisplayResult());
+			break;
+		case 2:
+			shareBySMS(mResult.getDisplayResult());
+			break;
+		}
+	}
 
-  @Override
-  public int getDisplayTitle() {
-    return R.string.result_text;
-  }
+	@Override
+	public int getDisplayTitle() {
+		return R.string.result_text;
+	}
 
 }

@@ -18,46 +18,45 @@ package net.carbon14.android.result;
 
 import net.carbon14.android.R;
 import android.app.Activity;
+
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 
 public final class ProductResultHandler extends ResultHandler {
 
-  private static final int[] mButtons = {
-      R.string.button_product_search,
-      R.string.button_web_search
-  };
+	private static final int[] mButtons = { R.string.button_product_search,
+			R.string.button_web_search };
 
-  public ProductResultHandler(Activity activity, ParsedResult result) {
-    super(activity, result);
-  }
+	public ProductResultHandler(Activity activity, ParsedResult result) {
+		super(activity, result);
+	}
 
-  @Override
-  public int getButtonCount() {
-    return mButtons.length;
-  }
+	@Override
+	public int getButtonCount() {
+		return mButtons.length;
+	}
 
-  @Override
-  public int getButtonText(int index) {
-    return mButtons[index];
-  }
+	@Override
+	public int getButtonText(int index) {
+		return mButtons[index];
+	}
 
-  @Override
-  public void handleButtonPress(int index) {
-    ProductParsedResult productResult = (ProductParsedResult) mResult;
-    switch (index) {
-      case 0:
-        openProductSearch(productResult.getNormalizedProductID());
-        break;
-      case 1:
-        webSearch(productResult.getNormalizedProductID());
-        break;
-    }
-  }
+	@Override
+	public void handleButtonPress(int index) {
+		ProductParsedResult productResult = (ProductParsedResult) mResult;
+		switch (index) {
+		case 0:
+			openProductSearch(productResult.getNormalizedProductID());
+			break;
+		case 1:
+			webSearch(productResult.getNormalizedProductID());
+			break;
+		}
+	}
 
-  @Override
-  public int getDisplayTitle() {
-    return R.string.result_product;
-  }
+	@Override
+	public int getDisplayTitle() {
+		return R.string.result_product;
+	}
 
 }

@@ -16,42 +16,44 @@
 
 package net.carbon14.android.result;
 
+import java.net.URISyntaxException;
+
 import android.content.Intent;
+
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 
-import java.net.URISyntaxException;
-
 /**
- * A {@link com.google.zxing.client.result.ParsedResult} derived from a URI that encodes an Android
- * {@link Intent}, and which should presumably trigger that intent on Android.
+ * A {@link com.google.zxing.client.result.ParsedResult} derived from a URI that
+ * encodes an Android {@link Intent}, and which should presumably trigger that
+ * intent on Android.
  */
 public final class AndroidIntentParsedResult extends ParsedResult {
 
-  private final Intent mIntent;
+	private final Intent mIntent;
 
-  private AndroidIntentParsedResult(Intent intent) {
-    super(ParsedResultType.ANDROID_INTENT);
-    mIntent = intent;
-  }
+	private AndroidIntentParsedResult(Intent intent) {
+		super(ParsedResultType.ANDROID_INTENT);
+		mIntent = intent;
+	}
 
-  public static AndroidIntentParsedResult parse(String rawText) {
-    try {
-      return new AndroidIntentParsedResult(Intent.getIntent(rawText));
-    } catch (URISyntaxException urise) {
-      return null;
-    } catch (IllegalArgumentException iae) {
-      return null;
-    }
-  }
+	public static AndroidIntentParsedResult parse(String rawText) {
+		try {
+			return new AndroidIntentParsedResult(Intent.getIntent(rawText));
+		} catch (URISyntaxException urise) {
+			return null;
+		} catch (IllegalArgumentException iae) {
+			return null;
+		}
+	}
 
-  public Intent getIntent() {
-    return mIntent;
-  }
+	public Intent getIntent() {
+		return mIntent;
+	}
 
-  @Override
-  public String getDisplayResult() {
-    return mIntent.toString();
-  }
+	@Override
+	public String getDisplayResult() {
+		return mIntent.toString();
+	}
 
 }

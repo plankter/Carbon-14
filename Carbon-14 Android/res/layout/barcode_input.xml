@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="wrap_content"
+	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/LinearLayoutMain"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:padding="5px">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/TextViewBarcodeFormat"
+		android:text="Barcode Format:"></TextView>
+	<Spinner android:layout_height="wrap_content" android:id="@+id/SpinnerBarcodeFormat"
+		android:layout_width="fill_parent"></Spinner>
+	<TextView android:layout_height="wrap_content" android:text="Product Code:"
+		android:id="@+id/TextViewCode" android:layout_width="fill_parent"></TextView>
+	<EditText android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/EditTextCode"></EditText>
+
+<Button android:layout_height="wrap_content" android:id="@+id/ButtonScan" android:layout_width="fill_parent" android:text="Scan Barcode"></Button>
+
+
+<Button android:layout_height="wrap_content" android:id="@+id/ButtonSubmit" android:text="Submit" android:layout_width="fill_parent"></Button>
+</LinearLayout>

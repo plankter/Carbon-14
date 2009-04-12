@@ -20,21 +20,22 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * Handles the result of barcode decoding in the context of the Android platform, by dispatching the
- * proper intents to open other activities like GMail, Maps, etc.
+ * Handles the result of barcode decoding in the context of the Android
+ * platform, by dispatching the proper intents to open other activities like
+ * GMail, Maps, etc.
  */
 public final class ResultButtonListener implements Button.OnClickListener {
 
-  final ResultHandler mResultHandler;
-  final int mIndex;
+	final ResultHandler mResultHandler;
+	final int mIndex;
 
-  public ResultButtonListener(ResultHandler resultHandler, int index) {
-    mResultHandler = resultHandler;
-    mIndex = index;
-  }
+	public ResultButtonListener(ResultHandler resultHandler, int index) {
+		mResultHandler = resultHandler;
+		mIndex = index;
+	}
 
-  public void onClick(View view) {
-    mResultHandler.handleButtonPress(mIndex);
-  }
+	public void onClick(View view) {
+		mResultHandler.handleButtonPress(mIndex);
+	}
 
 }

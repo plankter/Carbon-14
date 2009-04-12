@@ -27,6 +27,7 @@ Carbon-14[!!-~]Android/res/drawable/share_via_barcode.png -text
 Carbon-14[!!-~]Android/res/drawable/sprite.png -text
 Carbon-14[!!-~]Android/res/drawable/zxing_icon.png -text
 Carbon-14[!!-~]Android/res/layout-land/encode.xml -text
+Carbon-14[!!-~]Android/res/layout/barcode_input.xml -text
 Carbon-14[!!-~]Android/res/layout/capture.xml -text
 Carbon-14[!!-~]Android/res/layout/encode.xml -text
 Carbon-14[!!-~]Android/res/layout/help.xml -text
@@ -42,6 +43,7 @@ Carbon-14[!!-~]Android/res/values/ids.xml -text
 Carbon-14[!!-~]Android/res/values/strings.xml -text
 Carbon-14[!!-~]Android/res/xml/preferences.xml -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/AndroidHttpClient.java -text
+Carbon-14[!!-~]Android/src/net/carbon14/android/BarcodeInputActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/CameraManager.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/CaptureActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/CaptureActivityHandler.java -text

@@ -22,91 +22,96 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import com.google.zxing.Result;
 
 /**
- * This class handles all the messaging which comprises the state machine for capture.
+ * This class handles all the messaging which comprises the state machine for
+ * capture.
  */
 public final class CaptureActivityHandler extends Handler {
 
-  private final CaptureActivity mActivity;
-  private final DecodeThread mDecodeThread;
-  private State mState;
+	private final CaptureActivity mActivity;
+	private final DecodeThread mDecodeThread;
+	private State mState;
 
-  private enum State {
-    PREVIEW,
-    SUCCESS,
-    DONE
-  }
+	private enum State {
+		PREVIEW, SUCCESS, DONE
+	}
 
-  CaptureActivityHandler(CaptureActivity activity, String decodeMode,
-                                 boolean beginScanning) {
-    mActivity = activity;
-    mDecodeThread = new DecodeThread(activity, decodeMode);
-    mDecodeThread.start();
-    mState = State.SUCCESS;
+	CaptureActivityHandler(CaptureActivity activity, String decodeMode,
+			boolean beginScanning) {
+		mActivity = activity;
+		mDecodeThread = new DecodeThread(activity, decodeMode);
+		mDecodeThread.start();
+		mState = State.SUCCESS;
 
-    // Start ourselves capturing previews and decoding.
-    CameraManager.get().startPreview();
-    if (beginScanning) {
-      restartPreviewAndDecode();
-    }
-  }
+		// Start ourselves capturing previews and decoding.
+		CameraManager.get().startPreview();
+		if (beginScanning) {
+			restartPreviewAndDecode();
+		}
+	}
 
-  @Override
-  public void handleMessage(Message message) {
-    switch (message.what) {
-      case R.id.auto_focus:
-        // When one auto focus pass finishes, start another. This is the closest thing to
-        // continuous AF. It does seem to hunt a bit, but I'm not sure what else to do.
-        if (mState == State.PREVIEW) {
-          CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
-        }
-        break;
-      case R.id.restart_preview:
-        restartPreviewAndDecode();
-        break;
-      case R.id.decode_succeeded:
-        mState = State.SUCCESS;
-        Bundle bundle = message.getData();
-        Bitmap barcode = bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-        int duration = message.arg1;
-        mActivity.handleDecode((Result) message.obj, barcode, duration);
-        break;
-      case R.id.decode_failed:
-        // We're decoding as fast as possible, so when one decode fails, start another.
-        mState = State.PREVIEW;
-        CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler, R.id.decode);
-        break;
-      case R.id.return_scan_result:
-        mActivity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-        mActivity.finish();
-        break;
-    }
-  }
+	@Override
+	public void handleMessage(Message message) {
+		switch (message.what) {
+		case R.id.auto_focus:
+			// When one auto focus pass finishes, start another. This is the
+			// closest thing to
+			// continuous AF. It does seem to hunt a bit, but I'm not sure what
+			// else to do.
+			if (mState == State.PREVIEW) {
+				CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
+			}
+			break;
+		case R.id.restart_preview:
+			restartPreviewAndDecode();
+			break;
+		case R.id.decode_succeeded:
+			mState = State.SUCCESS;
+			Bundle bundle = message.getData();
+			Bitmap barcode = bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
+			int duration = message.arg1;
+			mActivity.handleDecode((Result) message.obj, barcode, duration);
+			break;
+		case R.id.decode_failed:
+			// We're decoding as fast as possible, so when one decode fails,
+			// start another.
+			mState = State.PREVIEW;
+			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler,
+					R.id.decode);
+			break;
+		case R.id.return_scan_result:
+			mActivity.setResult(Activity.RESULT_OK, (Intent) message.obj);
+			mActivity.finish();
+			break;
+		}
+	}
 
-  public void quitSynchronously() {
-    mState = State.DONE;
-    CameraManager.get().stopPreview();
-    Message quit = Message.obtain(mDecodeThread.mHandler, R.id.quit);
-    quit.sendToTarget();
-    try {
-      mDecodeThread.join();
-    } catch (InterruptedException e) {
-    }
+	public void quitSynchronously() {
+		mState = State.DONE;
+		CameraManager.get().stopPreview();
+		Message quit = Message.obtain(mDecodeThread.mHandler, R.id.quit);
+		quit.sendToTarget();
+		try {
+			mDecodeThread.join();
+		} catch (InterruptedException e) {
+		}
 
-    // Be absolutely sure we don't send any queued up messages
-    removeMessages(R.id.decode_succeeded);
-    removeMessages(R.id.decode_failed);
-  }
+		// Be absolutely sure we don't send any queued up messages
+		removeMessages(R.id.decode_succeeded);
+		removeMessages(R.id.decode_failed);
+	}
 
-  private void restartPreviewAndDecode() {
-    if (mState == State.SUCCESS) {
-      mState = State.PREVIEW;
-      CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler, R.id.decode);
-      CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
-      mActivity.drawViewfinder();
-    }
-  }
+	private void restartPreviewAndDecode() {
+		if (mState == State.SUCCESS) {
+			mState = State.PREVIEW;
+			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler,
+					R.id.decode);
+			CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
+			mActivity.drawViewfinder();
+		}
+	}
 
 }
