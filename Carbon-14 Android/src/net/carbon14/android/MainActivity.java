@@ -103,19 +103,19 @@ public class MainActivity extends Activity {
     
     private void showUserProfile()
     {
-    	Intent intent = new Intent("net.carbon14.PROFILE");
+    	Intent intent = new Intent("PROFILE");
         startActivity(intent);
     }
     
     private void showProductProfile()
     {
-    	Intent intent = new Intent("net.carbon14.PRODUCT");
+    	Intent intent = new Intent("PRODUCT");
         startActivity(intent);
     }
     
     private void startScanning()
     {
-    	Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+    	Intent intent = new Intent("SCAN");
     	intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
         startActivityForResult(intent, SCAN_REQUEST_CODE);
     }

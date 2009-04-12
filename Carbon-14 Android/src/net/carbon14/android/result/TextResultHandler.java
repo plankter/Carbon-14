@@ -27,8 +27,6 @@ public final class TextResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_web_search,
-      R.string.button_share_by_email,
-      R.string.button_share_by_sms
   };
 
   public TextResultHandler(Activity activity, ParsedResult result) {

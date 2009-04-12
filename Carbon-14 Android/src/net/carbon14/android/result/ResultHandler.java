@@ -36,7 +36,6 @@ import net.carbon14.android.Contents;
 import net.carbon14.android.Intents;
 import net.carbon14.android.LocaleManager;
 import net.carbon14.android.R;
-import net.carbon14.android.SearchBookContentsActivity;
 
 public abstract class ResultHandler {
 
@@ -261,13 +260,6 @@ public abstract class ResultHandler {
     Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" +
         isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
-  }
-
-  public final void searchBookContents(String isbn) {
-    Intent intent = new Intent(Intents.SearchBookContents.ACTION);
-    intent.setClassName(mActivity, SearchBookContentsActivity.class.getName());
-    putExtra(intent, Intents.SearchBookContents.ISBN, isbn);
-    launchIntent(intent);
   }
 
   public final void openURL(String url) {

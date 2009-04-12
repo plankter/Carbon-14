@@ -71,17 +71,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final String TAG = "CaptureActivity";
 
-  private static final int SHARE_ID = Menu.FIRST;
-  private static final int SETTINGS_ID = Menu.FIRST + 1;
-  private static final int HELP_ID = Menu.FIRST + 2;
-  private static final int ABOUT_ID = Menu.FIRST + 3;
+  private static final int SETTINGS_ID = Menu.FIRST;
+  private static final int HELP_ID = Menu.FIRST + 1;
+  private static final int ABOUT_ID = Menu.FIRST + 2;
 
   private static final int MAX_RESULT_IMAGE_SIZE = 150;
   private static final int INTENT_RESULT_DURATION = 1500;
   private static final float BEEP_VOLUME = 0.15f;
   private static final long VIBRATE_DURATION = 200;
 
-  private static final String PACKAGE_NAME = "com.google.zxing.client.android";
+  private static final String PACKAGE_NAME = "net.carbon14.android";
 
   public CaptureActivityHandler mHandler;
 
@@ -190,7 +189,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(0, SHARE_ID, 0, R.string.menu_share).setIcon(R.drawable.share_menu_item);
     menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
     menu.add(0, HELP_ID, 0, R.string.menu_help)
@@ -204,19 +202,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
-    menu.findItem(SHARE_ID).setVisible(mLastResult == null);
+    //menu.findItem(SHARE_ID).setVisible(mLastResult == null);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case SHARE_ID: {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClassName(this, ShareActivity.class.getName());
-        startActivity(intent);
-        break;
-      }
       case SETTINGS_ID: {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClassName(this, PreferencesActivity.class.getName());
