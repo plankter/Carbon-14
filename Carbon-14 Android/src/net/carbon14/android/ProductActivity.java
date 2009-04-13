@@ -20,15 +20,10 @@ public class ProductActivity extends Activity {
 
 		Intent intent = getIntent();
 		String action = intent.getAction();
-		if (intent != null && action != null
-				&& action.equals("net.carbon14.PRODUCT")) {
+		if (intent != null && action != null && action.equals("net.carbon14.PRODUCT")) {
 			ImageView imageView = (ImageView) findViewById(R.id.ImageViewBenchmark);
 			try {
-				imageView
-						.setImageBitmap(BitmapFactory
-								.decodeStream(new URL(
-										"http://chart.apis.google.com/chart?chs=250x100&cht=gom&chd=t:70&chl=70%&chf=a,s,EFEFEFF0&chtt=Benchmark")
-										.openStream()));
+				imageView.setImageBitmap(BitmapFactory.decodeStream(new URL("http://chart.apis.google.com/chart?chs=250x100&cht=gom&chd=t:70&chl=70%&chf=a,s,EFEFEFF0&chtt=Benchmark").openStream()));
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

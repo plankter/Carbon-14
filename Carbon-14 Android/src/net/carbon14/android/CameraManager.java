@@ -142,12 +142,10 @@ final class CameraManager {
 	 */
 	public Rect getFramingRect() {
 		if (mFramingRect == null) {
-			int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x
-					: mScreenResolution.y) * 3 / 4;
+			int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x : mScreenResolution.y) * 3 / 4;
 			int leftOffset = (mScreenResolution.x - size) / 2;
 			int topOffset = (mScreenResolution.y - size) / 2;
-			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size,
-					topOffset + size);
+			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
 			Log.v(TAG, "Calculated framing rect: " + mFramingRect);
 		}
 		return mFramingRect;
@@ -184,9 +182,7 @@ final class CameraManager {
 		public void onPreviewFrame(byte[] data, Camera camera) {
 			camera.setPreviewCallback(null);
 			if (mPreviewHandler != null) {
-				Message message = mPreviewHandler.obtainMessage(
-						mPreviewMessage, mScreenResolution.x,
-						mScreenResolution.y, data);
+				Message message = mPreviewHandler.obtainMessage(mPreviewMessage, mScreenResolution.x, mScreenResolution.y, data);
 				message.sendToTarget();
 				mPreviewHandler = null;
 			}
@@ -196,8 +192,7 @@ final class CameraManager {
 	private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
 			if (mAutoFocusHandler != null) {
-				Message message = mAutoFocusHandler.obtainMessage(
-						mAutoFocusMessage, success);
+				Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
 				// Simulate continuous autofocus by sending a focus request
 				// every 1.5 seconds.
 				mAutoFocusHandler.sendMessageDelayed(message, 1500);
@@ -216,17 +211,14 @@ final class CameraManager {
 		Camera.Parameters parameters = mCamera.getParameters();
 		parameters.setPreviewSize(mScreenResolution.x, mScreenResolution.y);
 		mCamera.setParameters(parameters);
-		Log.v(TAG, "Setting params for preview: width " + mScreenResolution.x
-				+ " height " + mScreenResolution.y);
+		Log.v(TAG, "Setting params for preview: width " + mScreenResolution.x + " height " + mScreenResolution.y);
 	}
 
 	private Point getScreenResolution() {
 		if (mScreenResolution == null) {
-			WindowManager manager = (WindowManager) mContext
-					.getSystemService(Context.WINDOW_SERVICE);
+			WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 			Display display = manager.getDefaultDisplay();
-			mScreenResolution = new Point(display.getWidth(), display
-					.getHeight());
+			mScreenResolution = new Point(display.getWidth(), display.getHeight());
 		}
 		return mScreenResolution;
 	}

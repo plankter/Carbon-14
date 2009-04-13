@@ -3,11 +3,15 @@ package net.carbon14.android;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -20,21 +24,40 @@ import android.widget.TabHost.TabSpec;
 
 public class MainActivity extends TabActivity {
 	private final static int SCAN_REQUEST_CODE = 0;
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	    setContentView(R.layout.main);
+		setContentView(R.layout.main);
 
-	    TabHost mTabHost = getTabHost();
-	    
-	    mTabHost.addTab(mTabHost.newTabSpec("tab_test1").setIndicator("TAB 1").setContent(R.id.webview1));
-	    mTabHost.addTab(mTabHost.newTabSpec("tab_test2").setIndicator("TAB 2").setContent(R.id.webview2));
-	    mTabHost.addTab(mTabHost.newTabSpec("tab_test3").setIndicator("TAB 3").setContent(R.id.webview3));
-	    
-	    mTabHost.setCurrentTab(0);
+		TabHost mTabHost = getTabHost();
+
+		mTabHost.addTab(mTabHost.newTabSpec("tab_input").setIndicator("Input").setContent(R.id.inputLayout));
+		mTabHost.addTab(mTabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
+		mTabHost.addTab(mTabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
+
+		mTabHost.setCurrentTab(0);
+
+		Button buttonScan = (Button) findViewById(R.id.ButtonScan);
+		buttonScan.setOnClickListener(scanListener);
+
+		Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		s.setAdapter(adapter);
 	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
+//		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
+	}
+	
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -73,8 +96,7 @@ public class MainActivity extends TabActivity {
 				productRecognized(contents, format);
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -83,11 +105,13 @@ public class MainActivity extends TabActivity {
 		Spinner spinner = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
 
 		if (format != null) {
-			
+			ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+			spinner.setSelection(adapter.getPosition(format));
 		}
 
 		if (contents != null) {
-			
+			EditText editText = (EditText) findViewById(R.id.EditTextCode);
+			editText.setText(contents);
 		}
 	}
 

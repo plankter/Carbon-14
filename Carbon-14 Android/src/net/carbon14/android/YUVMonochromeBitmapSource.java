@@ -48,8 +48,7 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
 	 * @param dataHeight
 	 *            The height of the Y data
 	 */
-	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth,
-			int dataHeight) {
+	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight) {
 		this(yuvData, dataWidth, dataHeight, 0, 0, dataHeight, dataWidth);
 	}
 
@@ -67,10 +66,8 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
 	 *            The rectangle within the yuvData to expose to
 	 *            MonochromeBitmapSource users
 	 */
-	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth,
-			int dataHeight, Rect crop) {
-		this(yuvData, dataWidth, dataHeight, crop.top, crop.left, crop.bottom,
-				crop.right);
+	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight, Rect crop) {
+		this(yuvData, dataWidth, dataHeight, crop.top, crop.left, crop.bottom, crop.right);
 	}
 
 	/**
@@ -92,12 +89,9 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
 	 * @param cropRight
 	 *            Right coordinate of rectangle to crop
 	 */
-	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth,
-			int dataHeight, int cropTop, int cropLeft, int cropBottom,
-			int cropRight) {
+	public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight, int cropTop, int cropLeft, int cropBottom, int cropRight) {
 		super(cropRight - cropLeft, cropBottom - cropTop);
-		if (cropRight - cropLeft > dataWidth
-				|| cropBottom - cropTop > dataHeight) {
+		if (cropRight - cropLeft > dataWidth || cropBottom - cropTop > dataHeight) {
 			throw new IllegalArgumentException();
 		}
 		mYUVData = yuvData;
@@ -165,13 +159,11 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
 		for (int y = 0, base = mCropTop * mDataWidth + mCropLeft; y < height; y++, base += mDataWidth) {
 			for (int x = 0; x < width; x++) {
 				int grey = yuvData[base + x] & 0xff;
-				pixels[y * width + x] = (0xff << 24) | (grey << 16)
-						| (grey << 8) | grey;
+				pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
 			}
 		}
 
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 		return bitmap;
 	}

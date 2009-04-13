@@ -124,12 +124,9 @@ public final class AndroidHttpClient implements HttpClient {
 		// Set the specified user agent and register standard protocols.
 		HttpProtocolParams.setUserAgent(params, userAgent);
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", SSLSocketFactory
-				.getSocketFactory(), 443));
-		ClientConnectionManager manager = new ThreadSafeClientConnManager(
-				params, schemeRegistry);
+		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+		schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+		ClientConnectionManager manager = new ThreadSafeClientConnManager(params, schemeRegistry);
 
 		// We use a factory method to modify superclass initialization
 		// parameters without the funny call-a-static-method dance.
@@ -138,8 +135,7 @@ public final class AndroidHttpClient implements HttpClient {
 
 	private final HttpClient delegate;
 
-	private RuntimeException mLeakedException = new IllegalStateException(
-			"AndroidHttpClient created and never closed");
+	private RuntimeException mLeakedException = new IllegalStateException("AndroidHttpClient created and never closed");
 
 	private AndroidHttpClient(ClientConnectionManager ccm, HttpParams params) {
 		this.delegate = new DefaultHttpClient(ccm, params) {
@@ -158,12 +154,9 @@ public final class AndroidHttpClient implements HttpClient {
 				// Same as DefaultHttpClient.createHttpContext() minus the
 				// cookie store.
 				HttpContext context = new BasicHttpContext();
-				context.setAttribute(ClientContext.AUTHSCHEME_REGISTRY,
-						getAuthSchemes());
-				context.setAttribute(ClientContext.COOKIESPEC_REGISTRY,
-						getCookieSpecs());
-				context.setAttribute(ClientContext.CREDS_PROVIDER,
-						getCredentialsProvider());
+				context.setAttribute(ClientContext.AUTHSCHEME_REGISTRY, getAuthSchemes());
+				context.setAttribute(ClientContext.COOKIESPEC_REGISTRY, getCookieSpecs());
+				context.setAttribute(ClientContext.CREDS_PROVIDER, getCredentialsProvider());
 				return context;
 			}
 		};
@@ -210,8 +203,7 @@ public final class AndroidHttpClient implements HttpClient {
 	 * @return the input stream to read from
 	 * @throws IOException
 	 */
-	public static InputStream getUngzippedContent(HttpEntity entity)
-			throws IOException {
+	public static InputStream getUngzippedContent(HttpEntity entity) throws IOException {
 		InputStream responseStream = entity.getContent();
 		if (responseStream == null) {
 			return responseStream;
@@ -253,40 +245,31 @@ public final class AndroidHttpClient implements HttpClient {
 		return delegate.execute(request);
 	}
 
-	public HttpResponse execute(HttpUriRequest request, HttpContext context)
-			throws IOException {
+	public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException {
 		return delegate.execute(request, context);
 	}
 
-	public HttpResponse execute(HttpHost target, HttpRequest request)
-			throws IOException {
+	public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException {
 		return delegate.execute(target, request);
 	}
 
-	public HttpResponse execute(HttpHost target, HttpRequest request,
-			HttpContext context) throws IOException {
+	public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
 		return delegate.execute(target, request, context);
 	}
 
-	public <T> T execute(HttpUriRequest request,
-			ResponseHandler<? extends T> responseHandler) throws IOException {
+	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException {
 		return delegate.execute(request, responseHandler);
 	}
 
-	public <T> T execute(HttpUriRequest request,
-			ResponseHandler<? extends T> responseHandler, HttpContext context)
-			throws IOException {
+	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException {
 		return delegate.execute(request, responseHandler, context);
 	}
 
-	public <T> T execute(HttpHost target, HttpRequest request,
-			ResponseHandler<? extends T> responseHandler) throws IOException {
+	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException {
 		return delegate.execute(target, request, responseHandler);
 	}
 
-	public <T> T execute(HttpHost target, HttpRequest request,
-			ResponseHandler<? extends T> responseHandler, HttpContext context)
-			throws IOException {
+	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException {
 		return delegate.execute(target, request, responseHandler, context);
 	}
 
@@ -298,8 +281,7 @@ public final class AndroidHttpClient implements HttpClient {
 	 *            The bytes to compress
 	 * @return Entity holding the data
 	 */
-	public static AbstractHttpEntity getCompressedEntity(byte[] data)
-			throws IOException {
+	public static AbstractHttpEntity getCompressedEntity(byte[] data) throws IOException {
 		AbstractHttpEntity entity;
 		if (data.length < getMinGzipSize()) {
 			entity = new ByteArrayEntity(data);
@@ -373,8 +355,7 @@ public final class AndroidHttpClient implements HttpClient {
 			throw new NullPointerException("name");
 		}
 		if (level < Log.VERBOSE || level > Log.ASSERT) {
-			throw new IllegalArgumentException("Level is out of range ["
-					+ Log.VERBOSE + ".." + Log.ASSERT + ']');
+			throw new IllegalArgumentException("Level is out of range [" + Log.VERBOSE + ".." + Log.ASSERT + ']');
 		}
 
 		curlConfiguration = new LoggingConfiguration(name, level);
@@ -391,11 +372,9 @@ public final class AndroidHttpClient implements HttpClient {
 	 * Logs cURL commands equivalent to requests.
 	 */
 	private final class CurlLogger implements HttpRequestInterceptor {
-		public void process(HttpRequest request, HttpContext context)
-				throws IOException {
+		public void process(HttpRequest request, HttpContext context) throws IOException {
 			LoggingConfiguration configuration = curlConfiguration;
-			if (configuration != null && configuration.isLoggable()
-					&& request instanceof HttpUriRequest) {
+			if (configuration != null && configuration.isLoggable() && request instanceof HttpUriRequest) {
 				configuration.println(toCurl((HttpUriRequest) request));
 			}
 		}
@@ -439,8 +418,7 @@ public final class AndroidHttpClient implements HttpClient {
 						entity.writeTo(stream);
 						String entityString = stream.toString();
 						// TODO: Check the content type, too.
-						builder.append(" --data-ascii \"").append(entityString)
-								.append('"');
+						builder.append(" --data-ascii \"").append(entityString).append('"');
 					} else {
 						builder.append(" [TOO MUCH DATA TO INCLUDE]");
 					}

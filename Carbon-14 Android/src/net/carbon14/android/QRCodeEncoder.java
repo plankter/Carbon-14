@@ -46,8 +46,7 @@ public final class QRCodeEncoder {
 	}
 
 	public void requestBarcode(Handler handler, int pixelResolution) {
-		Thread encodeThread = new EncodeThread(mContents, handler,
-				pixelResolution);
+		Thread encodeThread = new EncodeThread(mContents, handler, pixelResolution);
 		encodeThread.start();
 	}
 
@@ -108,8 +107,7 @@ public final class QRCodeEncoder {
 				if (name != null && name.length() > 0) {
 					mContents = "MECARD:N:" + name + ';';
 					mDisplayContents = name;
-					String address = bundle
-							.getString(Contacts.Intents.Insert.POSTAL);
+					String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
 					if (address != null && address.length() > 0) {
 						mContents += "ADR:" + address + ';';
 						mDisplayContents += '\n' + address;
@@ -118,8 +116,7 @@ public final class QRCodeEncoder {
 						String phone = bundle.getString(Contents.PHONE_KEYS[x]);
 						if (phone != null && phone.length() > 0) {
 							mContents += "TEL:" + phone + ';';
-							mDisplayContents += '\n' + PhoneNumberUtils
-									.formatNumber(phone);
+							mDisplayContents += '\n' + PhoneNumberUtils.formatNumber(phone);
 						}
 					}
 					for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
@@ -164,9 +161,7 @@ public final class QRCodeEncoder {
 
 		public void run() {
 			try {
-				ByteMatrix result = new MultiFormatWriter().encode(mContents,
-						BarcodeFormat.QR_CODE, mPixelResolution,
-						mPixelResolution);
+				ByteMatrix result = new MultiFormatWriter().encode(mContents, BarcodeFormat.QR_CODE, mPixelResolution, mPixelResolution);
 				int width = result.width();
 				int height = result.height();
 				byte[][] array = result.getArray();
@@ -180,11 +175,9 @@ public final class QRCodeEncoder {
 					}
 				}
 
-				Bitmap bitmap = Bitmap.createBitmap(width, height,
-						Bitmap.Config.ARGB_8888);
+				Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 				bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-				Message message = Message.obtain(mHandler,
-						R.id.encode_succeeded);
+				Message message = Message.obtain(mHandler, R.id.encode_succeeded);
 				message.obj = bitmap;
 				message.sendToTarget();
 			} catch (WriterException e) {

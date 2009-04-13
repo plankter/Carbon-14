@@ -38,10 +38,8 @@ import com.google.zxing.client.result.ParsedResultType;
 
 public abstract class ResultHandler {
 
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
-			"yyyyMMdd");
-	private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
-			"yyyyMMdd'T'HHmmss");
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+	private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
 	public static final int MAX_BUTTON_COUNT = 4;
 
@@ -142,36 +140,29 @@ public abstract class ResultHandler {
 			// The when string can be local time, or UTC if it ends with a Z
 			Date date;
 			synchronized (DATE_TIME_FORMAT) {
-				date = DATE_TIME_FORMAT.parse(when.substring(0, 15),
-						new ParsePosition(0));
+				date = DATE_TIME_FORMAT.parse(when.substring(0, 15), new ParsePosition(0));
 			}
 			long milliseconds = date.getTime();
 			if (when.length() == 16 && when.charAt(15) == 'Z') {
 				Calendar calendar = new GregorianCalendar();
-				int offset = (calendar.get(java.util.Calendar.ZONE_OFFSET) + calendar
-						.get(java.util.Calendar.DST_OFFSET));
+				int offset = (calendar.get(java.util.Calendar.ZONE_OFFSET) + calendar.get(java.util.Calendar.DST_OFFSET));
 				milliseconds += offset;
 			}
 			return milliseconds;
 		}
 	}
 
-	public final void addContact(String[] names, String[] phoneNumbers,
-			String[] emails, String note, String address, String org,
-			String title) {
+	public final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note, String address, String org, String title) {
 
-		Intent intent = new Intent(Contacts.Intents.Insert.ACTION,
-				Contacts.People.CONTENT_URI);
+		Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
 		putExtra(intent, Contacts.Intents.Insert.NAME, names);
 
-		int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length
-				: 0, Contents.PHONE_KEYS.length);
+		int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0, Contents.PHONE_KEYS.length);
 		for (int x = 0; x < phoneCount; x++) {
 			putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
 		}
 
-		int emailCount = Math.min((emails != null) ? emails.length : 0,
-				Contents.EMAIL_KEYS.length);
+		int emailCount = Math.min((emails != null) ? emails.length : 0, Contents.EMAIL_KEYS.length);
 		for (int x = 0; x < emailCount; x++) {
 			putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
 		}
@@ -184,8 +175,7 @@ public abstract class ResultHandler {
 	}
 
 	public final void shareByEmail(String contents) {
-		sendEmailFromUri("mailto:", mActivity
-				.getString(R.string.msg_share_subject_line), contents);
+		sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_subject_line), contents);
 	}
 
 	public final void sendEmail(String address, String subject, String body) {
@@ -203,9 +193,7 @@ public abstract class ResultHandler {
 	}
 
 	public final void shareBySMS(String contents) {
-		sendSMSFromUri("smsto:", mActivity
-				.getString(R.string.msg_share_subject_line)
-				+ ":\n" + contents);
+		sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" + contents);
 	}
 
 	public final void sendSMS(String phoneNumber, String body) {
@@ -229,8 +217,7 @@ public abstract class ResultHandler {
 		// The Messaging app needs to see a valid subject or else it will treat
 		// this an an SMS.
 		if (subject == null || subject.length() == 0) {
-			putExtra(intent, "subject", mActivity
-					.getString(R.string.msg_default_mms_subject));
+			putExtra(intent, "subject", mActivity.getString(R.string.msg_default_mms_subject));
 		} else {
 			putExtra(intent, "subject", subject);
 		}
@@ -240,8 +227,7 @@ public abstract class ResultHandler {
 	}
 
 	public final void dialPhone(String phoneNumber) {
-		launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
-				+ phoneNumber)));
+		launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber)));
 	}
 
 	public final void dialPhoneFromUri(String uri) {
@@ -266,25 +252,20 @@ public abstract class ResultHandler {
 		if (title != null && title.length() > 0) {
 			query = query + " (" + title + ')';
 		}
-		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="
-				+ Uri.encode(query))));
+		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
 	}
 
 	public final void getDirections(double latitude, double longitude) {
-		launchIntent(new Intent(Intent.ACTION_VIEW, Uri
-				.parse("http://maps.google." + LocaleManager.getCountryTLD()
-						+ "/maps?f=d&daddr=" + latitude + ',' + longitude)));
+		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." + LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
 	}
 
 	public final void openProductSearch(String upc) {
-		Uri uri = Uri.parse("http://www.google."
-				+ LocaleManager.getCountryTLD() + "/products?q=" + upc);
+		Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" + upc);
 		launchIntent(new Intent(Intent.ACTION_VIEW, uri));
 	}
 
 	public final void openBookSearch(String isbn) {
-		Uri uri = Uri.parse("http://books.google."
-				+ LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
+		Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
 		launchIntent(new Intent(Intent.ACTION_VIEW, uri));
 	}
 
@@ -305,8 +286,7 @@ public abstract class ResultHandler {
 			} catch (ActivityNotFoundException e) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 				builder.setTitle(mActivity.getString(R.string.app_name));
-				builder.setMessage(mActivity
-						.getString(R.string.msg_intent_failed));
+				builder.setMessage(mActivity.getString(R.string.msg_intent_failed));
 				builder.setPositiveButton(R.string.button_ok, null);
 				builder.show();
 			}
