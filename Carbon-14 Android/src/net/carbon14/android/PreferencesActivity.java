@@ -24,6 +24,10 @@ import android.preference.PreferenceScreen;
 
 public final class PreferencesActivity extends android.preference.PreferenceActivity implements OnSharedPreferenceChangeListener {
 
+	static final String PROVIDER_UPC = "preferences_providers_upc";
+	static final String PROVIDER_CARBON = "preferences_providers_carbon";
+	static final String PROVIDER_RATING = "preferences_providers_rating";
+	
 	static final String KEY_DECODE_1D = "preferences_decode_1D";
 	static final String KEY_DECODE_QR = "preferences_decode_QR";
 

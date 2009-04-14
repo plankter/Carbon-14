@@ -13,9 +13,10 @@
 	-->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="Providers">
-		<CheckBoxPreference android:title="UPC Database" android:key="preferences_providers_upc"></CheckBoxPreference>
-		<CheckBoxPreference android:key="preferences_providers_carbon" android:title="Carbon-14"></CheckBoxPreference>
-	</PreferenceCategory><PreferenceCategory android:title="@string/preferences_general_title">
+		<CheckBoxPreference android:key="preferences_providers_carbon" android:title="Carbon-14"></CheckBoxPreference><CheckBoxPreference android:title="UPC Database" android:key="preferences_providers_upc"></CheckBoxPreference>
+		
+	<CheckBoxPreference android:key="preferences_providers_rating" android:title="Rating"></CheckBoxPreference>
+</PreferenceCategory><PreferenceCategory android:title="@string/preferences_general_title">
 		<CheckBoxPreference android:key="preferences_decode_1D"
 			android:defaultValue="true" android:title="@string/preferences_decode_1D_title" />
 		<CheckBoxPreference android:key="preferences_decode_QR"
