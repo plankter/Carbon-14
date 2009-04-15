@@ -1,27 +1,14 @@
 package net.carbon14.android;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.app.Activity;
+import net.carbon14.android.providers.ProviderManager;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -30,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
-import android.widget.TabHost.TabSpec;
 
 public class MainActivity extends TabActivity {
 	private final static int SCAN_REQUEST_CODE = 0;
@@ -42,16 +28,8 @@ public class MainActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-//		InputStream data = null;
-//		DefaultHttpClient client = new DefaultHttpClient();
-//		HttpGet request = new HttpGet("http://10.0.2.2:8080/providers");
-//		try {
-//			HttpResponse response = client.execute(request);
-//			data = response.getEntity().getContent();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		ProviderManager providers = new ProviderManager();
+		providers.reload();
 	}
 
 	@Override
