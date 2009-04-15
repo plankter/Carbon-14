@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="/Users/Anton/Carbon-14/Eclipse Workspace/zxing/core/core.jar"/>
+	<classpathentry kind="lib" path="F:/Projects/Workspaces/Carbon-14/zxing/core/core.jar"/>
+	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
