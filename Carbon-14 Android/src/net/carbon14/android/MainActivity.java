@@ -42,16 +42,16 @@ public class MainActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		InputStream data = null;
-		DefaultHttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet("http://10.0.2.2:8080/providers");
-		try {
-			HttpResponse response = client.execute(request);
-			data = response.getEntity().getContent();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		InputStream data = null;
+//		DefaultHttpClient client = new DefaultHttpClient();
+//		HttpGet request = new HttpGet("http://10.0.2.2:8080/providers");
+//		try {
+//			HttpResponse response = client.execute(request);
+//			data = response.getEntity().getContent();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override

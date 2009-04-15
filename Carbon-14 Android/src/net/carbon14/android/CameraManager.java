@@ -16,6 +16,8 @@
 
 package net.carbon14.android;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -70,7 +72,12 @@ final class CameraManager {
 	public void openDriver(SurfaceHolder holder) {
 		if (mCamera == null) {
 			mCamera = Camera.open();
-			mCamera.setPreviewDisplay(holder);
+			try {
+				mCamera.setPreviewDisplay(holder);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			if (!mInitialized) {
 				mInitialized = true;
