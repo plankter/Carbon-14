@@ -68,6 +68,9 @@ Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultButtonListener.java
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandler.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandlerFactory.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/TextResultHandler.java -text
+Carbon-14[!!-~]Core/.classpath -text
+Carbon-14[!!-~]Core/.project -text
+Carbon-14[!!-~]Core/src/net/carbon14/core/Provider.java -text
 GAE/.project -text
 GAE/.pydevproject -text
 GAE/src/app.yaml -text
