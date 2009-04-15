@@ -1,5 +1,12 @@
 package net.carbon14.core;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Provider {
 	public Provider(String name, String description, String widgetUrl, String detailsUrl)
 	{
@@ -9,6 +16,8 @@ public class Provider {
 		this.detailsUrl = detailsUrl;
 	}
 	
+	@PrimaryKey
+	@Persistent
 	private String name;
 	public String getName() {
 	  return this.name;
@@ -17,6 +26,7 @@ public class Provider {
 	  this.name = value;
 	}
 	
+	@Persistent
 	private String description;
 	public String getDescription() {
 	  return this.description;
@@ -25,6 +35,7 @@ public class Provider {
 	  this.description = value;
 	}
 	
+	@Persistent
 	private String widgetUrl;
 	public String getWidgetUrl() {
 	  return this.widgetUrl;
@@ -33,6 +44,7 @@ public class Provider {
 	  this.widgetUrl = value;
 	}
 	
+	@Persistent
 	private String detailsUrl;
 	public String getDetailsUrl() {
 	  return this.detailsUrl;
