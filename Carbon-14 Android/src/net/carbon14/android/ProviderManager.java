@@ -1,7 +1,9 @@
-package net.carbon14.android.providers;
+package net.carbon14.android;
 
 import java.io.IOException;
 import java.util.Dictionary;
+
+import net.carbon14.core.Provider;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;

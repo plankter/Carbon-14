@@ -1,6 +1,5 @@
 package net.carbon14.android;
 
-import net.carbon14.android.providers.ProviderManager;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
