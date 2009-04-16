@@ -36,7 +36,7 @@ class ProvidersPage(webapp.RequestHandler):
             provider = Provider(name="UPC Database",
                               description="If you're interested in the various forms of the UPC code, how the numbers are issued, UPC bar codes, etc, then this is the place to be.",
                               widget_url="http://localhost:8080/services/upc/widget",
-                              details_url="http://localhost:8080/services/upc/details")
+                              details_url="http://10.0.2.2:8080/services/upc/widget?")
             provider.put()
             
             providers = self.render_providers()
