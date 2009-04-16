@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,11 @@ import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	private final static int SCAN_REQUEST_CODE = 0;
-
+	
+	private Boolean carbonEnabled;
+	private Boolean upcEnabled;
+	private Boolean ratingEnabled;
+	
 	private TabHost.TabSpec tabInput;
 
 	/** Called when the activity is first created. */
@@ -45,23 +50,26 @@ public class MainActivity extends TabActivity {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		Boolean carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
+		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
 		if (carbonEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
 		}
 		
-		Boolean upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
+		upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
 		if (upcEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
 		}
 
-		Boolean ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
+		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
 		if (ratingEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
 
 		Button buttonScan = (Button) findViewById(R.id.ButtonScan);
 		buttonScan.setOnClickListener(scanListener);
+		
+		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
+		buttonSubmit.setOnClickListener(submitListener);
 
 		Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
@@ -94,6 +102,12 @@ public class MainActivity extends TabActivity {
 	private OnClickListener scanListener = new OnClickListener() {
 		public void onClick(View v) {
 			startScanning();
+		}
+	};
+	
+	private OnClickListener submitListener = new OnClickListener() {
+		public void onClick(View v) {
+			submitBarcode();
 		}
 	};
 
@@ -139,5 +153,18 @@ public class MainActivity extends TabActivity {
 		Intent intent = new Intent("SCAN");
 		intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
 		startActivityForResult(intent, SCAN_REQUEST_CODE);
+	}
+	
+	private void submitBarcode() {
+		if (upcEnabled) {
+			Provider provider = ProviderManager.providers.get("UPC Database");
+			if (provider != null)
+			{
+				EditText editText = (EditText) findViewById(R.id.EditTextCode);
+				WebView webView = (WebView) findViewById(R.id.upcWebView);
+				String url = provider.getDetailsUrl() + "barcode=" + editText.getText();
+				webView.loadUrl(url);
+			}
+		}
 	}
 }
