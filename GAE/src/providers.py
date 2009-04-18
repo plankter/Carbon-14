@@ -19,6 +19,15 @@ class Provider(db.Model):
     logo = db.BlobProperty()
     widget_url = db.LinkProperty()
     details_url = db.LinkProperty()
+
+class ProviderLoader(Loader):
+  def __init__(self):
+    Loader.__init__(self, 'Provider',
+                    [('name', str),
+                     ('description', str),
+                     ('widget_url', str),
+                     ('details_url', str)
+                     ])
     
 
 class ProvidersPage(webapp.RequestHandler):
