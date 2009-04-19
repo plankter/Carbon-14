@@ -8,8 +8,27 @@ handlers:
 - url: /providers
   script: providers.py
   
-- url: /services/upc/widget
+  
+- url: /services/upc/css
+  static_dir: services/upc/css
+  
+- url: /services/upc/(.*)
   script: services/upc/provider.py
+  
+  
+- url: /services/rating/css
+  static_dir: services/rating/css
+  
+- url: /services/rating/(.*)
+  script: services/rating/provider.py
+  
+  
+- url: /services/environment/css
+  static_dir: services/environment/css
+  
+- url: /services/environment/(.*)
+  script: services/environment/provider.py
+
 
 - url: /profile
   script: profile.py

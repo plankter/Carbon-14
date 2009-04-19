@@ -83,5 +83,15 @@ GAE/src/profile.html -text
 GAE/src/profile.py -text
 GAE/src/providers.py -text
 GAE/src/providers.xml -text
+GAE/src/services/environment/css/provider.css -text
+GAE/src/services/environment/details.html -text
+GAE/src/services/environment/provider.py -text
+GAE/src/services/environment/widget.html -text
+GAE/src/services/rating/css/provider.css -text
+GAE/src/services/rating/details.html -text
+GAE/src/services/rating/provider.py -text
+GAE/src/services/rating/widget.html -text
+GAE/src/services/upc/css/provider.css -text
+GAE/src/services/upc/details.html -text
 GAE/src/services/upc/provider.py -text
 GAE/src/services/upc/widget.html -text

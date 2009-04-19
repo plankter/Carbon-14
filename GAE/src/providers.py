@@ -19,15 +19,6 @@ class Provider(db.Model):
     logo = db.BlobProperty()
     widget_url = db.LinkProperty()
     details_url = db.LinkProperty()
-
-class ProviderLoader(Loader):
-  def __init__(self):
-    Loader.__init__(self, 'Provider',
-                    [('name', str),
-                     ('description', str),
-                     ('widget_url', str),
-                     ('details_url', str)
-                     ])
     
 
 class ProvidersPage(webapp.RequestHandler):
@@ -41,13 +32,7 @@ class ProvidersPage(webapp.RequestHandler):
         providers = memcache.get("providers")
         if providers is not None:
             return providers
-        else:
-            provider = Provider(name="UPC Database",
-                              description="If you're interested in the various forms of the UPC code, how the numbers are issued, UPC bar codes, etc, then this is the place to be.",
-                              widget_url="http://localhost:8080/services/upc/widget",
-                              details_url="http://10.0.2.2:8080/services/upc/widget?")
-            provider.put()
-            
+        else:    
             providers = self.render_providers()
             if not memcache.add("providers", providers):
                 logging.error("Memcache set failed.")
@@ -64,11 +49,28 @@ class ProvidersPage(webapp.RequestHandler):
         result = template.render(path, template_values)
         return result
     
+class FillTestData(webapp.RequestHandler):
+    def get(self):
+        Provider(name="UPC Database",
+                 description="UPC barcodes database",
+                 widget_url="http://carbon-14.appspot.com/services/upc/widget",
+                 details_url="http://carbon-14.appspot.com/services/upc/details").put()
+                 
+        Provider(name="Rating",
+                 description="Product rating system",
+                 widget_url="http://carbon-14.appspot.com/services/rating/widget",
+                 details_url="http://carbon-14.appspot.com/services/rating/details").put()
+                 
+        Provider(name="Environment",
+                 description="Carbon footprint tracking",
+                 widget_url="http://carbon-14.appspot.com/services/environment/widget",
+                 details_url="http://carbon-14.appspot.com/services/environment/details").put()
 
     
 def main():
     application = webapp.WSGIApplication([
         ('/providers', ProvidersPage),
+        ('/providers/fillTestData', FillTestData),
         ], debug=True)
     util.run_wsgi_app(application)
 

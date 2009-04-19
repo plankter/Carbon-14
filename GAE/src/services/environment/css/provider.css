@@ -1,0 +1,25 @@
+.widget {
+	color: white;
+	background-color: black;
+	font-size: small;
+	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.details {
+	color: white;
+	background-color: black;
+	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.description {
+	font-weight: bold;
+}
+
+.data {
+}
+
+#content {
+	border-color: #666666;
+	border-style: solid;
+	border-width: 1px;
+}
