@@ -162,7 +162,7 @@ public class MainActivity extends TabActivity {
 			{
 				EditText editText = (EditText) findViewById(R.id.EditTextCode);
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
-				String url = provider.getDetailsUrl() + "barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
 		}

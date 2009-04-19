@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class ProviderManager {
 	public static HashMap<String, Provider> providers;
-	public final static String PROVIDERS_URL = "http://10.0.2.2:8080/providers";
+	public final static String PROVIDERS_URL = "http://carbon-14.appspot.com/providers";
 	
 	public void reload()
 	{
