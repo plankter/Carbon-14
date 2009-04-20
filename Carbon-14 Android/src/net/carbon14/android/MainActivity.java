@@ -156,12 +156,32 @@ public class MainActivity extends TabActivity {
 	}
 	
 	private void submitBarcode() {
+		EditText editText = (EditText) findViewById(R.id.EditTextCode);
 		if (upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null)
 			{
-				EditText editText = (EditText) findViewById(R.id.EditTextCode);
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				webView.loadUrl(url);
+			}
+		}
+		
+		if (ratingEnabled) {
+			Provider provider = ProviderManager.providers.get("Rating");
+			if (provider != null)
+			{
+				WebView webView = (WebView) findViewById(R.id.ratingWebView);
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				webView.loadUrl(url);
+			}
+		}
+		
+		if (carbonEnabled) {
+			Provider provider = ProviderManager.providers.get("Environment");
+			if (provider != null)
+			{
+				WebView webView = (WebView) findViewById(R.id.carbonWebView);
 				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
