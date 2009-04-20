@@ -2,23 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Aggrogator</title>
-    <link rel="stylesheet" href="/css/aggrogator.css" type="text/css" />
-    <script type="text/javascript" src="/js/prototype.js"></script>
-    <script type="text/javascript" src="/js/builder.js"></script>
-    <script type="text/javascript" src="/js/effects.js"></script>
-    <script type="text/javascript" src="/js/aggrogator.js"></script>
+    <title>Carbon-14</title>
   </head>
-  <body onload="initialize();">
-
-    <img id="spinner" alt="spinner" src="/gfx/spinner.gif" style="display: none; position: fixed;" />
+  <body>
 
     <div id="logout">
       {{ user.nickname }}
       <a href="{{ logout_url }}">Logout</a>
     </div>
-
-    <div class="clearboth"></div>
 
     {% if admin %}
     <div id="admin">
@@ -31,52 +22,6 @@
       </fieldset>
     </div>
     {% endif %}
-
-    <div id="cache">
-      <fieldset>
-        <legend onclick="toggleSiblings(this); return false;">Cache</legend>
-        <p>
-          <label>Hits: </label><span id="cache_hits"></span><br />
-          <label>Misses: </label><span id="cache_misses"></span>
-        </p>
-      </fieldset>
-    </div>
-
-    <div id="addService">
-      <fieldset>
-        <legend onclick="toggleSiblings(this); return false;">Add New Service</legend>
-        <form id="form_addService" onsubmit="addService(); return false;">
-          <p>
-            <label for="service">Service: </label>
-            <select name="service" id="service">
-              <option>twitter</option>
-              <option>del.icio.us</option>
-              <option>last.fm</option>
-              <option>YouTube</option>
-            </select><br/>
-            <label for="username">Username: </label>
-            <input type="text" name="username" id="username" />
-            <input type="submit" value="Add" />
-          </form>
-        </p>
-      </fieldset>
-    </div>
-
-    <div class="clearboth"></div>
-
-    <table>
-      <tbody style="vertical-align: top;">
-        <tr>
-          <td>
-            <div id="userServices"><span /></div>
-            <div id="entries"><span /></div>
-          </td>
-	  <td>
-            <table><tbody id="allEntries"></tbody></table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
   </body>
 </html>

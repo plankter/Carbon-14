@@ -5,6 +5,10 @@ api_version: 1
 
 handlers:
 
+- url: /appengine_admin_media
+  static_dir: appengine_admin/media
+  secure: never
+
 - url: /providers
   script: providers.py
   
