@@ -8,11 +8,10 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.api import memcache
 
-from django.utils import simplejson
 import appengine_admin
 
-import models
-import providers
+from django.utils import simplejson
+from services import providers
 
 class MainPage(webapp.RequestHandler):
 	def get(self):
@@ -21,12 +20,6 @@ class MainPage(webapp.RequestHandler):
 
 		# is user an admin?
 		admin = users.is_current_user_admin();
-
-		# create user account if haven't already
-		account = models.Account.getAccount(user)
-		if account is None:
-			account = models.Account(user=user)
-			account.put()
 
 		# create logout url
 		logout_url = users.create_logout_url(self.request.uri)
@@ -46,7 +39,6 @@ def main():
 	application = webapp.WSGIApplication(
 		[
 			('/', MainPage),
-			('/fillTestData', models.FillTestData),
 			(r'^(/admin)(.*)$', appengine_admin.Admin),
 		],
 		debug=True)

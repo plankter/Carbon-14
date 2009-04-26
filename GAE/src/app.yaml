@@ -10,25 +10,25 @@ handlers:
   secure: never
 
 - url: /providers
-  script: providers.py
+  script: services/providers.py
   
   
-- url: /services/upc/css
-  static_dir: services/upc/css
+- url: /services/upc/static
+  static_dir: services/upc/static
   
 - url: /services/upc/(.*)
   script: services/upc/provider.py
   
   
-- url: /services/rating/css
-  static_dir: services/rating/css
+- url: /services/rating/static
+  static_dir: services/rating/static
   
 - url: /services/rating/(.*)
   script: services/rating/provider.py
   
   
-- url: /services/environment/css
-  static_dir: services/environment/css
+- url: /services/environment/static
+  static_dir: services/environment/static
   
 - url: /services/environment/(.*)
   script: services/environment/provider.py

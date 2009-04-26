@@ -11,14 +11,14 @@
 	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
 }
 
-.description {
+.caption {
 	font-weight: bold;
 }
 
-.data {
+.content {
 }
 
-#content {
+#data {
 	border-color: #666666;
 	border-style: solid;
 	border-width: 1px;

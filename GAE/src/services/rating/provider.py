@@ -55,8 +55,8 @@ class DetailsPage(webapp.RequestHandler):
         
 def main():
     application = webapp.WSGIApplication([
-        ('/services/upc/widget', WidgetPage),
-        ('/services/upc/details', DetailsPage),
+        ('/services/rating/widget', WidgetPage),
+        ('/services/rating/details', DetailsPage),
         ], debug=True)
     util.run_wsgi_app(application)
 

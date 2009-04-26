@@ -1,24 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-  	<title>UPC Database</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-  </head>
-  <body class="widget">
-  	<table id="content">
-	  <tr>
-	    <td class="description">Description</td>
-	    <td class="data">{{ description }}</td>
-	  </tr>
-	  <tr>
-	    <td class="description">Size</td>
-	    <td class="data">{{ size }}</td>
-	  </tr>
-	  <tr>
-	    <td class="description">Country</td>
-	    <td class="data">{{ country }}</td>
-	  </tr>
-	</table>
-  </body>
+	<head>
+		<title>UPC Database</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="static/css/style.css" type="text/css" />
+	</head>
+	<body class="details">
+		<table id="data">
+			<tr>
+				<td class="caption">Description</td>
+				<td class="content">{{ description }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Size</td>
+				<td class="content">{{ size }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Country</td>
+				<td class="content">{{ country }}</td>
+			</tr>
+		</table>
+	</body>
 </html>
