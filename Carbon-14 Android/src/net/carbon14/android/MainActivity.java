@@ -162,6 +162,7 @@ public class MainActivity extends TabActivity {
 			if (provider != null)
 			{
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
+				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
@@ -172,6 +173,7 @@ public class MainActivity extends TabActivity {
 			if (provider != null)
 			{
 				WebView webView = (WebView) findViewById(R.id.ratingWebView);
+				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
@@ -182,6 +184,7 @@ public class MainActivity extends TabActivity {
 			if (provider != null)
 			{
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
+				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
