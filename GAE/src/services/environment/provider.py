@@ -47,9 +47,12 @@ class ProductCategory(db.Model):
 	averageCarbonFootprint = db.FloatProperty()
 	minCarbonFootprint = db.FloatProperty()
 	maxCarbonFootprint = db.FloatProperty()
-	averageEnergyConsumption = db.FloatProperty()
-	minEnergyConsumption = db.FloatProperty()
-	maxEnergyConsumption = db.FloatProperty()
+	averageDirectEnergyConsumption = db.FloatProperty()
+	minDirectEnergyConsumption = db.FloatProperty()
+	maxDirectEnergyConsumption = db.FloatProperty()
+	averageIndirectEnergyConsumption = db.FloatProperty()
+	minIndirectEnergyConsumption = db.FloatProperty()
+	maxIndirectEnergyConsumption = db.FloatProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
 	updated = db.DateTimeProperty("Updated", auto_now=True)
 	
@@ -57,7 +60,7 @@ class ProductCategory(db.Model):
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
 	listFields = ('name', 'created', 'updated')
-	editFields = ('name', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageEnergyConsumption', 'minEnergyConsumption', 'maxEnergyConsumption')
+	editFields = ('name', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -124,21 +127,28 @@ class AdminOrder(appengine_admin.ModelAdmin):
 appengine_admin.register(AdminAccount, AdminProductCategory, AdminProducer, AdminProduct, AdminOrder)
 
 
-class FillTestData(webapp.RequestHandler):
+class GenerateTestData(webapp.RequestHandler):
 	def get(self):
 		category = ProductCategory(name="Beverages",
-			minCarbonFootprint=20,
-			maxCarbonFootprint=110).put()
+			minCarbonFootprint=20.0,
+			maxCarbonFootprint=110.0,
+			minDirectEnergyConsumption=30.0,
+			maxDirectEnergyConsumption=400.0,
+			minIndirectEnergyConsumption=100.0,
+			maxIndirectEnergyConsumption=200.0).put()
 		
 		producer = Producer(name="The Coca-Cola Company").put()
 		
-		Product(code="0000040822938",
+		Product(code="000040822938",
 			name="Fanta Orange",
 			producer=producer,
 			category=category,
+			carbonFootprint=40.0,
+			directEnergyConsumption=150.0,
+			indirectEnergyConsumption=176.0,
 			description="Orange Soft Drink with Sugar and Sweeteners").put()
 		
-		Product(code="0000497000064",
+		Product(code="000497000064",
 			name="Sprite",
 			producer=producer,
 			category=category).put()
@@ -194,7 +204,7 @@ def main():
 	application = webapp.WSGIApplication([
 		('/services/environment/widget', WidgetPage),
 		('/services/environment/details', DetailsPage),
-		('/services/environment/fillTestData', FillTestData),
+		('/services/environment/generate', GenerateTestData),
 		(r'^(/services/environment/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)

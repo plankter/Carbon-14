@@ -9,23 +9,23 @@
 		<table id="data">
 			<tr>
 				<td class="caption">Code</td>
-				<td class="content" colspan="2">{{ product.code }}</td>
+				<td class="content">{{ product.code }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Name</td>
-				<td class="content" colspan="2">{{ product.name }}</td>
+				<td class="content">{{ product.name }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Category</td>
-				<td class="content" colspan="2">{{ product.category.name }}</td>
+				<td class="content">{{ product.category.name }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Producer</td>
-				<td class="content" colspan="2">{{ product.producer.name }}</td>
+				<td class="content">{{ product.producer.name }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Description</td>
-				<td class="content" colspan="2">{{ product.description }}</td>
+				<td class="content">{{ product.description }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Carbon Footprint</td>
@@ -37,8 +37,8 @@
 					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
 					&amp;cht=gom" 
 					alt="Carbon Benchmark" />
+					{{ product.carbonFootprint }}
 				</td>
-				<td class="content">{{ product.carbonFootprint }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Direct Energy Consumption</td>
@@ -47,11 +47,11 @@
 					chs=100x50
 					&amp;chf=bg,s,EFEFEF00
 					&amp;chd=t:{{ product.directEnergyConsumption }}
-					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
+					&amp;chds={{ product.category.minDirectEnergyConsumption }},{{ product.category.maxDirectEnergyConsumption }}
 					&amp;cht=gom" 
 					alt="Direct Energy Consumption Benchmark" />
+					{{ product.directEnergyConsumption }}
 				</td>
-				<td class="content">{{ product.directEnergyConsumption }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Indirect Energy Consumption</td>
@@ -60,11 +60,11 @@
 					chs=100x50
 					&amp;chf=bg,s,EFEFEF00
 					&amp;chd=t:{{ product.indirectEnergyConsumption }}
-					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
+					&amp;chds={{ product.category.minIndirectEnergyConsumption }},{{ product.category.maxIndirectEnergyConsumption }}
 					&amp;cht=gom" 
 					alt="Indirect Energy Consumption Benchmark" />
+					{{ product.indirectEnergyConsumption }}
 				</td>
-				<td class="content">{{ product.indirectEnergyConsumption }}</td>
 			</tr>
 		</table>
 	</body>

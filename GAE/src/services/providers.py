@@ -27,7 +27,7 @@ class Provider(db.Model):
 ## Admin views ##
 class AdminProvider(appengine_admin.ModelAdmin):
 	model = Provider
-	listFields = ('name', 'description', 'logo', 'widget_url', 'details_url')
+	listFields = ('name', 'description', 'logo')
 	editFields = ('name', 'description', 'logo', 'widget_url', 'details_url')
 	readonlyFields = ('created', 'updated')
 	
@@ -62,7 +62,7 @@ class ProvidersPage(webapp.RequestHandler):
 		return result
 	
 
-class FillTestData(webapp.RequestHandler):
+class GenerateTestData(webapp.RequestHandler):
 	def get(self):
 		Provider(name="UPC Database",
 				 description="UPC barcodes database",
@@ -82,8 +82,8 @@ class FillTestData(webapp.RequestHandler):
 	
 def main():
 	application = webapp.WSGIApplication([
-		('/providers', ProvidersPage),
-		('/providers/fillTestData', FillTestData),
+		('/services/providers/get', ProvidersPage),
+		('/services/providers/generate', GenerateTestData),
 		], debug=True)
 	util.run_wsgi_app(application)
 

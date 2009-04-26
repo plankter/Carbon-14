@@ -8,19 +8,24 @@
 .details {
 	color: white;
 	background-color: black;
-	font-size: small;
-	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+	font: small "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 .caption {
 	font-weight: bold;
+	background-color: #313131;
+	padding: 2px;
 }
 
 .content {
+	background-color: black;
+	width: 100%;
+	padding: 2px;
+}
+
+.centered {
+	vertical-align: baseline;
 }
 
 #data {
-	border-color: #666666;
-	border-style: solid;
-	border-width: 1px;
 }

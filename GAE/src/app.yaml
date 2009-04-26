@@ -9,7 +9,7 @@ handlers:
   static_dir: appengine_admin/media
   secure: never
 
-- url: /providers
+- url: /services/providers/(.*)
   script: services/providers.py
   
   
