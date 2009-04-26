@@ -103,8 +103,6 @@ GAE/src/appengine_admin/views.py -text
 GAE/src/index.yaml -text
 GAE/src/main.html -text
 GAE/src/main.py -text
-GAE/src/profile.html -text
-GAE/src/profile.py -text
 GAE/src/services/__init__.py -text
 GAE/src/services/environment/__init__.py -text
 GAE/src/services/environment/details.html -text

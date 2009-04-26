@@ -34,10 +34,6 @@ handlers:
   script: services/environment/provider.py
 
 
-- url: /profile
-  script: profile.py
-  login: required
-  
 - url: /.*
   script: main.py
   login: required

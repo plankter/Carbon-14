@@ -13,9 +13,11 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
+
 def requestData(barcode):
 	server = xmlrpclib.ServerProxy('http://www.upcdatabase.com/rpc')
 	return server.lookupUPC(barcode)
+
 
 class WidgetPage(webapp.RequestHandler):
 	def get(self):
@@ -36,6 +38,7 @@ class WidgetPage(webapp.RequestHandler):
 		
 				path = os.path.join(os.path.dirname(__file__), 'widget.html')
 				self.response.out.write(template.render(path, template_values))
+				
 				
 class DetailsPage(webapp.RequestHandler):
 	def get(self):

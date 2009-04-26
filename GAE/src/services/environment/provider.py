@@ -45,15 +45,19 @@ class AdminAccount(appengine_admin.ModelAdmin):
 class ProductCategory(db.Model):
 	name = db.StringProperty(required=True)
 	averageCarbonFootprint = db.FloatProperty()
+	minCarbonFootprint = db.FloatProperty()
+	maxCarbonFootprint = db.FloatProperty()
 	averageEnergyConsumption = db.FloatProperty()
+	minEnergyConsumption = db.FloatProperty()
+	maxEnergyConsumption = db.FloatProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
 	updated = db.DateTimeProperty("Updated", auto_now=True)
 	
 ## Admin views ##
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
-	listFields = ('name', 'averageCarbonFootprint', 'averageEnergyConsumption', 'created', 'updated')
-	editFields = ('name', 'averageCarbonFootprint', 'averageEnergyConsumption')
+	listFields = ('name', 'created', 'updated')
+	editFields = ('name', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageEnergyConsumption', 'minEnergyConsumption', 'maxEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -122,7 +126,9 @@ appengine_admin.register(AdminAccount, AdminProductCategory, AdminProducer, Admi
 
 class FillTestData(webapp.RequestHandler):
 	def get(self):
-		category = ProductCategory(name="Beverages").put()
+		category = ProductCategory(name="Beverages",
+			minCarbonFootprint=20,
+			maxCarbonFootprint=110).put()
 		
 		producer = Producer(name="The Coca-Cola Company").put()
 		
@@ -162,11 +168,11 @@ class DetailsPage(webapp.RequestHandler):
 		# get the current user
 		user = users.get_current_user()
 		
-		# create user account if haven't already
-		account = Account.getAccount(user)
-		if account is None:
-			account = Account(user=user)
-			account.put()
+#		# create user account if haven't already
+#		account = Account.getAccount(user)
+#		if account is None:
+#			account = Account(user=user)
+#			account.put()
 		
 		barcode = self.request.get('barcode')
 		result = requestData(barcode)
@@ -189,6 +195,7 @@ def main():
 		('/services/environment/widget', WidgetPage),
 		('/services/environment/details', DetailsPage),
 		('/services/environment/fillTestData', FillTestData),
+		(r'^(/services/environment/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)
 
