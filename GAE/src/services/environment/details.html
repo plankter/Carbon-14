@@ -8,16 +8,36 @@
 	<body class="details">
 		<table id="data">
 			<tr>
+				<td class="caption">Code</td>
+				<td class="content">{{ product.code }}</td>
+			</tr>
+			<tr>
 				<td class="caption">Name</td>
 				<td class="content">{{ product.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Size</td>
-				<td class="content">{{ size }}</td>
+				<td class="caption">Category</td>
+				<td class="content">{{ product.category.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Country</td>
-				<td class="content">{{ country }}</td>
+				<td class="caption">Producer</td>
+				<td class="content">{{ product.producer.name }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Description</td>
+				<td class="content">{{ product.description }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Carbon Footprint</td>
+				<td class="content">{{ product.carbonFootprint }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Direct Energy Consumption</td>
+				<td class="content">{{ product.directEnergyConsumption }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Indirect Energy Consumption</td>
+				<td class="content">{{ product.indirectEnergyConsumption }}</td>
 			</tr>
 		</table>
 	</body>
