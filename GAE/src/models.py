@@ -15,15 +15,15 @@ class Provider(db.Model):
 	logo = db.BlobProperty()
 	widget_url = db.LinkProperty()
 	details_url = db.LinkProperty()
-	whencreated = db.DateTimeProperty("Created", auto_now_add=True)
-	whenupdated = db.DateTimeProperty("Updated", auto_now=True)
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
 	
 ## Admin views ##
 class AdminProvider(appengine_admin.ModelAdmin):
 	model = Provider
 	listFields = ('name', 'description', 'logo', 'widget_url', 'details_url')
 	editFields = ('name', 'description', 'logo', 'widget_url', 'details_url')
-	readonlyFields = ('whencreated', 'whenupdated')
+	readonlyFields = ('created', 'updated')
 
 
 
@@ -31,8 +31,8 @@ class Account(db.Model):
 	user = db.UserProperty("User", required=True)
 	description = db.TextProperty("Description")
 	averageCarbonFootprint = db.FloatProperty("Average Footprint")
-	whencreated = db.DateTimeProperty("Created", auto_now_add=True)
-	whenupdated = db.DateTimeProperty("Updated", auto_now=True)
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
 	
 	@staticmethod
 	def getAccount(user):
@@ -46,9 +46,9 @@ class Account(db.Model):
 ## Admin views ##
 class AdminAccount(appengine_admin.ModelAdmin):
 	model = Account
-	listFields = ('user', 'description', 'averageCarbonFootprint', 'whencreated', 'whenupdated')
+	listFields = ('user', 'description', 'averageCarbonFootprint', 'created', 'updated')
 	editFields = ('user', 'description')
-	readonlyFields = ('averageCarbonFootprint', 'whencreated', 'whenupdated')
+	readonlyFields = ('averageCarbonFootprint', 'created', 'updated')
 	
 		
 
@@ -56,6 +56,16 @@ class ProductCategory(db.Model):
 	name = db.StringProperty(required=True)
 	averageCarbonFootprint = db.FloatProperty()
 	averageEnergyConsumption = db.FloatProperty()
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+## Admin views ##
+class AdminProductCategory(appengine_admin.ModelAdmin):
+	model = ProductCategory
+	listFields = ('name', 'averageCarbonFootprint', 'averageEnergyConsumption', 'created', 'updated')
+	editFields = ('name', 'averageCarbonFootprint', 'averageEnergyConsumption')
+	readonlyFields = ('created', 'updated')
+	
 	
 
 class Producer(db.Model):
@@ -67,6 +77,16 @@ class Producer(db.Model):
 	rating = db.RatingProperty()
 	description = db.TextProperty()
 	logo = db.BlobProperty()
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+## Admin views ##
+class AdminProducer(appengine_admin.ModelAdmin):
+	model = Producer
+	listFields = ('name', 'description', 'created', 'updated')
+	editFields = ('name', 'link', 'email', 'phone', 'address', 'rating', 'description', 'logo')
+	readonlyFields = ('created', 'updated')
+	
 	
 
 class Product(db.Model):
@@ -79,6 +99,15 @@ class Product(db.Model):
 	carbonFootprint = db.FloatProperty()
 	directEnergyConsumption = db.FloatProperty()
 	indirectEnergyConsumption = db.FloatProperty()
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+## Admin views ##
+class AdminProduct(appengine_admin.ModelAdmin):
+	model = Product
+	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
+	editFields = ('code', 'name', 'category', 'producer', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	readonlyFields = ('created', 'updated')
 	
 	
 class Order(db.Model):
@@ -86,6 +115,15 @@ class Order(db.Model):
 	customer = db.ReferenceProperty(Account, required=True)
 	product = db.ReferenceProperty(Product, required=True)
 	location = db.GeoPtProperty()
+	created = db.DateTimeProperty("Created", auto_now_add=True)
+	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+## Admin views ##
+class AdminOrder(appengine_admin.ModelAdmin):
+	model = Order
+	listFields = ('time', 'customer', 'product', 'location', 'created', 'updated')
+	editFields = ('time', 'customer', 'product', 'location')
+	readonlyFields = ('created', 'updated')
 
 
 
@@ -125,6 +163,6 @@ class FillTestData(webapp.RequestHandler):
 
 	
 # Register to admin site
-appengine_admin.register(AdminProvider, AdminAccount)
+appengine_admin.register(AdminProvider, AdminAccount, AdminProductCategory, AdminProducer, AdminProduct, AdminOrder)
 	
 	
