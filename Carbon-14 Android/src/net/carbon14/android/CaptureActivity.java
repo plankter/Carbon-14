@@ -67,8 +67,7 @@ import com.google.zxing.ResultPoint;
  * The barcode reader activity itself. This is loosely based on the
  * CameraPreview example included in the Android SDK.
  */
-public final class CaptureActivity extends Activity implements
-		SurfaceHolder.Callback {
+public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
 	private static final String TAG = "CaptureActivity";
 
