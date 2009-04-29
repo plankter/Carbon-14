@@ -39,8 +39,7 @@ public final class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	CaptureActivityHandler(CaptureActivity activity, String decodeMode,
-			boolean beginScanning) {
+	CaptureActivityHandler(CaptureActivity activity, String decodeMode,	boolean beginScanning) {
 		mActivity = activity;
 		mDecodeThread = new DecodeThread(activity, decodeMode);
 		mDecodeThread.start();
@@ -79,8 +78,7 @@ public final class CaptureActivityHandler extends Handler {
 			// We're decoding as fast as possible, so when one decode fails,
 			// start another.
 			mState = State.PREVIEW;
-			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler,
-					R.id.decode);
+			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler,	R.id.decode);
 			break;
 		case R.id.return_scan_result:
 			mActivity.setResult(Activity.RESULT_OK, (Intent) message.obj);
@@ -107,8 +105,7 @@ public final class CaptureActivityHandler extends Handler {
 	private void restartPreviewAndDecode() {
 		if (mState == State.SUCCESS) {
 			mState = State.PREVIEW;
-			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler,
-					R.id.decode);
+			CameraManager.get().requestPreviewFrame(mDecodeThread.mHandler, R.id.decode);
 			CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
 			mActivity.drawViewfinder();
 		}

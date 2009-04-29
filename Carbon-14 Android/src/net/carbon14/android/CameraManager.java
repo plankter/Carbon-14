@@ -153,8 +153,7 @@ final class CameraManager {
 					: mScreenResolution.y) * 3 / 4;
 			int leftOffset = (mScreenResolution.x - size) / 2;
 			int topOffset = (mScreenResolution.y - size) / 2;
-			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size,
-					topOffset + size);
+			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
 			Log.v(TAG, "Calculated framing rect: " + mFramingRect);
 		}
 		return mFramingRect;
@@ -203,8 +202,7 @@ final class CameraManager {
 	private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
 			if (mAutoFocusHandler != null) {
-				Message message = mAutoFocusHandler.obtainMessage(
-						mAutoFocusMessage, success);
+				Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
 				// Simulate continuous autofocus by sending a focus request
 				// every 1.5 seconds.
 				mAutoFocusHandler.sendMessageDelayed(message, 1500);
@@ -229,11 +227,9 @@ final class CameraManager {
 
 	private Point getScreenResolution() {
 		if (mScreenResolution == null) {
-			WindowManager manager = (WindowManager) mContext
-					.getSystemService(Context.WINDOW_SERVICE);
+			WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 			Display display = manager.getDefaultDisplay();
-			mScreenResolution = new Point(display.getWidth(), display
-					.getHeight());
+			mScreenResolution = new Point(display.getWidth(), display.getHeight());
 		}
 		return mScreenResolution;
 	}
