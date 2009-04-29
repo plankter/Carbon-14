@@ -11,6 +11,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.widget.Toast;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -18,7 +22,17 @@ public class ProviderManager {
 	public static HashMap<String, Provider> providers;
 	public final static String PROVIDERS_URL = "http://carbon-14.appspot.com/services/providers/get";
 
-	public void reload() {
+	private ConnectivityManager connectivityManager;
+	
+	public ProviderManager(ConnectivityManager connectivityManager) {
+		// TODO Auto-generated constructor stub
+		this.connectivityManager = connectivityManager;
+	}
+
+	public Boolean reload() {
+		if (!connectivityManager.getActiveNetworkInfo().isAvailable())
+			return false;
+		
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpGet request = new HttpGet(PROVIDERS_URL);
 
@@ -30,8 +44,7 @@ public class ProviderManager {
 			xstream.alias("provider", Provider.class);
 			xstream.alias("providers", Provider[].class);
 
-			Provider[] providersArray = (Provider[]) xstream
-					.fromXML(responseBody);
+			Provider[] providersArray = (Provider[]) xstream.fromXML(responseBody);
 			providers = new HashMap<String, Provider>(providersArray.length);
 			for (Provider provider : providersArray) {
 				providers.put(provider.getName(), provider);
@@ -46,5 +59,6 @@ public class ProviderManager {
 		}
 
 		httpClient.getConnectionManager().shutdown();
+		return true;
 	}
 }

@@ -1,8 +1,10 @@
 package net.carbon14.android;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -32,8 +34,10 @@ public class MainActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ProviderManager providers = new ProviderManager();
-		providers.reload();
+		ConnectivityManager connectivityManager = (ConnectivityManager)this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		ProviderManager providers = new ProviderManager(connectivityManager);
+		if (!providers.reload())
+			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -44,32 +48,25 @@ public class MainActivity extends TabActivity {
 
 		TabHost tabHost = getTabHost();
 
-		tabInput = tabHost.newTabSpec("tab_input").setIndicator("Input")
-				.setContent(R.id.inputLayout);
+		tabInput = tabHost.newTabSpec("tab_input").setIndicator("Input").setContent(R.id.inputLayout);
 		tabHost.addTab(tabInput);
 		setDefaultTab("tab_input");
 
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON,
-				false);
+		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
 		if (carbonEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator(
-					"Carbon").setContent(R.id.carbonLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
 		}
 
 		upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
 		if (upcEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC")
-					.setContent(R.id.upcLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
 		}
 
-		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING,
-				false);
+		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
 		if (ratingEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator(
-					"Rating").setContent(R.id.ratingLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
 
 		Button buttonScan = (Button) findViewById(R.id.ButtonScan);
@@ -79,10 +76,8 @@ public class MainActivity extends TabActivity {
 		buttonSubmit.setOnClickListener(submitListener);
 
 		Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
-				R.array.barcode_format, android.R.layout.simple_spinner_item);
-		adapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		s.setAdapter(adapter);
 	}
 
@@ -126,8 +121,7 @@ public class MainActivity extends TabActivity {
 				productRecognized(contents, format);
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
