@@ -139,7 +139,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
 		Intent intent = getIntent();
 		String action = intent.getAction();
-		if (intent != null && action != null && (action.equals(Intents.Scan.ACTION) || action.equals(Intents.Scan.DEPRECATED_ACTION))) {
+		if ((intent != null) && (action != null) && (action.equals(Intents.Scan.ACTION))) {
 			mScanIntent = true;
 			mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
 			resetStatusView();

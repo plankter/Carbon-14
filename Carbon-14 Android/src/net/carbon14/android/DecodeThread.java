@@ -16,21 +16,20 @@
 
 package net.carbon14.android;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This thread does all the heavy lifting of decoding the images.
@@ -50,9 +49,12 @@ final class DecodeThread extends Thread {
 		// The prefs can't change while the thread is running, so pick them up
 		// once here.
 		if (mode == null || mode.length() == 0) {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-			boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
-			boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(activity);
+			boolean decode1D = prefs.getBoolean(
+					PreferencesActivity.KEY_DECODE_1D, true);
+			boolean decodeQR = prefs.getBoolean(
+					PreferencesActivity.KEY_DECODE_QR, true);
 			if (decode1D && decodeQR) {
 				setDecodeAllMode();
 			} else if (decode1D) {
@@ -93,7 +95,8 @@ final class DecodeThread extends Thread {
 	}
 
 	private void setDecodeProductMode() {
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
+				3);
 		Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
 		vector.addElement(BarcodeFormat.UPC_A);
 		vector.addElement(BarcodeFormat.UPC_E);
@@ -103,11 +106,12 @@ final class DecodeThread extends Thread {
 		mMultiFormatReader.setHints(hints);
 	}
 
-	// TODO: This is fragile in case we add new formats. It would be better to
-	// have a new enum
-	// value which represented all 1D formats.
+	/**
+	 * Select the 1D formats we want this client to decode by hand.
+	 */
 	private void setDecode1DMode() {
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
+				3);
 		Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
 		vector.addElement(BarcodeFormat.UPC_A);
 		vector.addElement(BarcodeFormat.UPC_E);
@@ -121,7 +125,8 @@ final class DecodeThread extends Thread {
 	}
 
 	private void setDecodeQRMode() {
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
+				3);
 		Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
 		vector.addElement(BarcodeFormat.QR_CODE);
 		hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
@@ -133,7 +138,8 @@ final class DecodeThread extends Thread {
 	 * in, we explicitly set which formats are available.
 	 */
 	private void setDecodeAllMode() {
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
+				3);
 		Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
 		vector.addElement(BarcodeFormat.UPC_A);
 		vector.addElement(BarcodeFormat.UPC_E);
@@ -163,7 +169,8 @@ final class DecodeThread extends Thread {
 		long start = System.currentTimeMillis();
 		boolean success;
 		Result rawResult = null;
-		YUVMonochromeBitmapSource source = new YUVMonochromeBitmapSource(data, width, height, CameraManager.get().getFramingRect());
+		YUVMonochromeBitmapSource source = new YUVMonochromeBitmapSource(data,
+				width, height, CameraManager.get().getFramingRect());
 		try {
 			rawResult = mMultiFormatReader.decodeWithState(source);
 			success = true;
@@ -173,14 +180,16 @@ final class DecodeThread extends Thread {
 		long end = System.currentTimeMillis();
 
 		if (success) {
-			Message message = Message.obtain(mActivity.mHandler, R.id.decode_succeeded, rawResult);
+			Message message = Message.obtain(mActivity.mHandler,
+					R.id.decode_succeeded, rawResult);
 			message.arg1 = (int) (end - start);
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(BARCODE_BITMAP, source.renderToBitmap());
 			message.setData(bundle);
 			message.sendToTarget();
 		} else {
-			Message message = Message.obtain(mActivity.mHandler, R.id.decode_failed);
+			Message message = Message.obtain(mActivity.mHandler,
+					R.id.decode_failed);
 			message.arg1 = (int) (end - start);
 			message.sendToTarget();
 		}

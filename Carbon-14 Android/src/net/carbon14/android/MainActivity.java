@@ -126,9 +126,8 @@ public class MainActivity extends TabActivity {
 	}
 
 	private void productRecognized(String contents, String format) {
-		Spinner spinner = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
-
 		if (format != null) {
+			Spinner spinner = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
 			ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
 			spinner.setSelection(adapter.getPosition(format));
 		}

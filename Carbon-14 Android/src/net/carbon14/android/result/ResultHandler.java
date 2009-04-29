@@ -16,14 +16,6 @@
 
 package net.carbon14.android.result;
 
-import java.text.DateFormat;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import net.carbon14.android.Contents;
 import net.carbon14.android.LocaleManager;
 import net.carbon14.android.R;
 import android.app.Activity;
@@ -31,16 +23,11 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.Contacts;
 
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 
 public abstract class ResultHandler {
-
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-	private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
-
 	public static final int MAX_BUTTON_COUNT = 4;
 
 	protected final ParsedResult mResult;
@@ -102,138 +89,6 @@ public abstract class ResultHandler {
 		return mResult.getType();
 	}
 
-	/**
-	 * Sends an intent to create a new calendar event by prepopulating the Add
-	 * Event UI. Older versions of the system have a bug where the event title
-	 * will not be filled out.
-	 * 
-	 * @param summary
-	 *            A description of the event
-	 * @param start
-	 *            The start time as yyyyMMdd or yyyyMMdd'T'HHmmss or
-	 *            yyyyMMdd'T'HHmmss'Z'
-	 * @param end
-	 *            The end time as yyyyMMdd or yyyyMMdd'T'HHmmss or
-	 *            yyyyMMdd'T'HHmmss'Z'
-	 */
-	public final void addCalendarEvent(String summary, String start, String end) {
-		Intent intent = new Intent(Intent.ACTION_EDIT);
-		intent.setType("vnd.android.cursor.item/event");
-		intent.putExtra("beginTime", calculateMilliseconds(start));
-		if (start.length() == 8) {
-			intent.putExtra("allDay", true);
-		}
-		intent.putExtra("endTime", calculateMilliseconds(end));
-		intent.putExtra("title", summary);
-		launchIntent(intent);
-	}
-
-	private static long calculateMilliseconds(String when) {
-		if (when.length() == 8) {
-			// Only contains year/month/day
-			Date date;
-			synchronized (DATE_FORMAT) {
-				date = DATE_FORMAT.parse(when, new ParsePosition(0));
-			}
-			return date.getTime();
-		} else {
-			// The when string can be local time, or UTC if it ends with a Z
-			Date date;
-			synchronized (DATE_TIME_FORMAT) {
-				date = DATE_TIME_FORMAT.parse(when.substring(0, 15), new ParsePosition(0));
-			}
-			long milliseconds = date.getTime();
-			if (when.length() == 16 && when.charAt(15) == 'Z') {
-				Calendar calendar = new GregorianCalendar();
-				int offset = (calendar.get(java.util.Calendar.ZONE_OFFSET) + calendar.get(java.util.Calendar.DST_OFFSET));
-				milliseconds += offset;
-			}
-			return milliseconds;
-		}
-	}
-
-	public final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note, String address, String org, String title) {
-
-		Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-		putExtra(intent, Contacts.Intents.Insert.NAME, names);
-
-		int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0, Contents.PHONE_KEYS.length);
-		for (int x = 0; x < phoneCount; x++) {
-			putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
-		}
-
-		int emailCount = Math.min((emails != null) ? emails.length : 0, Contents.EMAIL_KEYS.length);
-		for (int x = 0; x < emailCount; x++) {
-			putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
-		}
-
-		putExtra(intent, Contacts.Intents.Insert.NOTES, note);
-		putExtra(intent, Contacts.Intents.Insert.POSTAL, address);
-		putExtra(intent, Contacts.Intents.Insert.COMPANY, org);
-		putExtra(intent, Contacts.Intents.Insert.JOB_TITLE, title);
-		launchIntent(intent);
-	}
-
-	public final void shareByEmail(String contents) {
-		sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_subject_line), contents);
-	}
-
-	public final void sendEmail(String address, String subject, String body) {
-		sendEmailFromUri("mailto:" + address, subject, body);
-	}
-
-	// Use public Intent fields rather than private GMail app fields to specify
-	// subject and body.
-	public final void sendEmailFromUri(String uri, String subject, String body) {
-		Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(uri));
-		putExtra(intent, Intent.EXTRA_SUBJECT, subject);
-		putExtra(intent, Intent.EXTRA_TEXT, body);
-		intent.setType("text/plain");
-		launchIntent(intent);
-	}
-
-	public final void shareBySMS(String contents) {
-		sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" + contents);
-	}
-
-	public final void sendSMS(String phoneNumber, String body) {
-		sendSMSFromUri("smsto:" + phoneNumber, body);
-	}
-
-	public final void sendSMSFromUri(String uri, String body) {
-		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
-		putExtra(intent, "sms_body", body);
-		// Exit the app once the SMS is sent
-		intent.putExtra("compose_mode", true);
-		launchIntent(intent);
-	}
-
-	public final void sendMMS(String phoneNumber, String subject, String body) {
-		sendMMSFromUri("mmsto:" + phoneNumber, subject, body);
-	}
-
-	public final void sendMMSFromUri(String uri, String subject, String body) {
-		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
-		// The Messaging app needs to see a valid subject or else it will treat
-		// this an an SMS.
-		if (subject == null || subject.length() == 0) {
-			putExtra(intent, "subject", mActivity.getString(R.string.msg_default_mms_subject));
-		} else {
-			putExtra(intent, "subject", subject);
-		}
-		putExtra(intent, "sms_body", body);
-		intent.putExtra("compose_mode", true);
-		launchIntent(intent);
-	}
-
-	public final void dialPhone(String phoneNumber) {
-		launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber)));
-	}
-
-	public final void dialPhoneFromUri(String uri) {
-		launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse(uri)));
-	}
-
 	public final void openMap(String geoURI) {
 		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(geoURI)));
 	}
@@ -252,20 +107,19 @@ public abstract class ResultHandler {
 		if (title != null && title.length() > 0) {
 			query = query + " (" + title + ')';
 		}
-		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
+		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="
+				+ Uri.encode(query))));
 	}
 
 	public final void getDirections(double latitude, double longitude) {
-		launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." + LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
+		launchIntent(new Intent(Intent.ACTION_VIEW, Uri
+				.parse("http://maps.google." + LocaleManager.getCountryTLD()
+						+ "/maps?f=d&daddr=" + latitude + ',' + longitude)));
 	}
 
 	public final void openProductSearch(String upc) {
-		Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" + upc);
-		launchIntent(new Intent(Intent.ACTION_VIEW, uri));
-	}
-
-	public final void openBookSearch(String isbn) {
-		Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
+		Uri uri = Uri.parse("http://www.google."
+				+ LocaleManager.getCountryTLD() + "/products?q=" + upc);
 		launchIntent(new Intent(Intent.ACTION_VIEW, uri));
 	}
 
@@ -286,24 +140,11 @@ public abstract class ResultHandler {
 			} catch (ActivityNotFoundException e) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 				builder.setTitle(mActivity.getString(R.string.app_name));
-				builder.setMessage(mActivity.getString(R.string.msg_intent_failed));
+				builder.setMessage(mActivity
+						.getString(R.string.msg_intent_failed));
 				builder.setPositiveButton(R.string.button_ok, null);
 				builder.show();
 			}
-		}
-	}
-
-	private static void putExtra(Intent intent, String key, String value) {
-		if (value != null && value.length() > 0) {
-			intent.putExtra(key, value);
-		}
-	}
-
-	// TODO: This is only used by the names field, and only the first name will
-	// be taken.
-	private static void putExtra(Intent intent, String key, String[] value) {
-		if (value != null && value.length > 0) {
-			putExtra(intent, key, value[0]);
 		}
 	}
 

@@ -47,7 +47,7 @@ public final class EncodeActivity extends Activity {
 		super.onCreate(icicle);
 
 		Intent intent = getIntent();
-		if (intent != null && (intent.getAction().equals(Intents.Encode.ACTION) || intent.getAction().equals(Intents.Encode.DEPRECATED_ACTION))) {
+		if (intent != null && (intent.getAction().equals(Intents.Encode.ACTION))) {
 			setContentView(R.layout.encode);
 		} else {
 			finish();

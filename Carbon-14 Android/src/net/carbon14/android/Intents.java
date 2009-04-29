@@ -26,10 +26,7 @@ public final class Intents {
 		 * Send this intent to open the Barcodes app in scanning mode, find a
 		 * barcode, and return the results.
 		 */
-		public static final String ACTION = "com.google.zxing.client.android.SCAN";
-
-		// For compatibility only - do not use in new code, this will go away!
-		public static final String DEPRECATED_ACTION = "com.android.barcodes.SCAN";
+		public static final String ACTION = "net.carbon14.android.SCAN";
 
 		/**
 		 * By default, sending Scan.ACTION will decode all barcodes that we
@@ -80,10 +77,7 @@ public final class Intents {
 		 * it full screen, so that another person can scan the barcode from your
 		 * screen.
 		 */
-		public static final String ACTION = "com.google.zxing.client.android.ENCODE";
-
-		// For compatibility only - do not use in new code, this will go away!
-		public static final String DEPRECATED_ACTION = "com.android.barcodes.ENCODE";
+		public static final String ACTION = "net.carbon14.android.ENCODE";
 
 		/**
 		 * The data to encode. Use Intent.putExtra(DATA, data) where data is
@@ -101,40 +95,4 @@ public final class Intents {
 		private Encode() {
 		}
 	}
-
-	public static final class SearchBookContents {
-		/**
-		 * Use Google Book Search to search the contents of the book provided.
-		 */
-		public static final String ACTION = "com.google.zxing.client.android.SEARCH_BOOK_CONTENTS";
-
-		// For compatibility only - do not use in new code, this will go away!
-		public static final String DEPRECATED_ACTION = "com.android.barcodes.SEARCH_BOOK_CONTENTS";
-
-		/**
-		 * The book to search, identified by ISBN number.
-		 */
-		public static final String ISBN = "ISBN";
-
-		/**
-		 * An optional field which is the text to search for.
-		 */
-		public static final String QUERY = "QUERY";
-
-		private SearchBookContents() {
-		}
-	}
-
-	public static final class Share {
-		/**
-		 * Give the user a choice of items to encode as a barcode, then render
-		 * it as a QR Code and display onscreen for a friend to scan with their
-		 * phone.
-		 */
-		public static final String ACTION = "com.google.zxing.client.android.SHARE";
-
-		private Share() {
-		}
-	}
-
 }

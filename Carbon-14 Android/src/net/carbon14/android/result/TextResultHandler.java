@@ -48,12 +48,6 @@ public final class TextResultHandler extends ResultHandler {
 		case 0:
 			webSearch(mResult.getDisplayResult());
 			break;
-		case 1:
-			shareByEmail(mResult.getDisplayResult());
-			break;
-		case 2:
-			shareBySMS(mResult.getDisplayResult());
-			break;
 		}
 	}
 
