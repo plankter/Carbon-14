@@ -33,8 +33,6 @@ Carbon-14[!!-~]Android/res/layout/capture.xml -text
 Carbon-14[!!-~]Android/res/layout/encode.xml -text
 Carbon-14[!!-~]Android/res/layout/help.xml -text
 Carbon-14[!!-~]Android/res/layout/main.xml -text
-Carbon-14[!!-~]Android/res/layout/product.xml -text
-Carbon-14[!!-~]Android/res/layout/profile.xml -text
 Carbon-14[!!-~]Android/res/menu/main_menu.xml -text
 Carbon-14[!!-~]Android/res/raw/beep.ogg -text
 Carbon-14[!!-~]Android/res/values/arrays.xml -text
@@ -55,8 +53,6 @@ Carbon-14[!!-~]Android/src/net/carbon14/android/Intents.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/LocaleManager.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/MainActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/PreferencesActivity.java -text
-Carbon-14[!!-~]Android/src/net/carbon14/android/ProductActivity.java -text
-Carbon-14[!!-~]Android/src/net/carbon14/android/ProfileActivity.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/Provider.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/ProviderManager.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/QRCodeEncoder.java -text

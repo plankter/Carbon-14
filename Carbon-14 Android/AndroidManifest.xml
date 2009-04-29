@@ -28,18 +28,8 @@
 					android:path="/scan" />
 			</intent-filter>
 		</activity>
-		<activity android:name="ProfileActivity">
-			<intent-filter>
-				<action android:name="PROFILE" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity android:name="ProductActivity">
-			<intent-filter>
-				<action android:name="PRODUCT"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
-			</intent-filter>
-		</activity>
+		
+		
 		<activity android:name="PreferencesActivity" android:label="@string/preferences_name">
 		</activity>
 		<activity android:name="HelpActivity"

@@ -86,9 +86,6 @@ public class MainActivity extends TabActivity {
 	/* Handles item selections */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.scanMenuItem:
-			startScanning();
-			return true;
 		case R.id.settingsMenuItem:
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setClassName(this, PreferencesActivity.class.getName());
@@ -136,16 +133,6 @@ public class MainActivity extends TabActivity {
 			EditText editText = (EditText) findViewById(R.id.EditTextCode);
 			editText.setText(contents);
 		}
-	}
-
-	private void showUserProfile() {
-		Intent intent = new Intent("PROFILE");
-		startActivity(intent);
-	}
-
-	private void showProductProfile() {
-		Intent intent = new Intent("PRODUCT");
-		startActivity(intent);
 	}
 
 	private void startScanning() {
