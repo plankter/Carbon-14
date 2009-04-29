@@ -74,11 +74,6 @@ public class MainActivity extends TabActivity {
 
 		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
 		buttonSubmit.setOnClickListener(submitListener);
-
-		Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		s.setAdapter(adapter);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,12 +122,6 @@ public class MainActivity extends TabActivity {
 	}
 
 	private void productRecognized(String contents, String format) {
-		if (format != null) {
-			Spinner spinner = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
-			ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
-			spinner.setSelection(adapter.getPosition(format));
-		}
-
 		if (contents != null) {
 			EditText editText = (EditText) findViewById(R.id.EditTextCode);
 			editText.setText(contents);
