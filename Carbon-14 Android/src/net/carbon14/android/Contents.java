@@ -102,8 +102,10 @@ public final class Contents {
 	 * When using Type.CONTACT, these arrays provide the keys for adding or
 	 * retrieving multiple phone numbers and addresses.
 	 */
-	public static final String[] PHONE_KEYS = { Contacts.Intents.Insert.PHONE, SECONDARY_PHONE, TERTIARY_PHONE };
+	public static final String[] PHONE_KEYS = { Contacts.Intents.Insert.PHONE,
+			SECONDARY_PHONE, TERTIARY_PHONE };
 
-	public static final String[] EMAIL_KEYS = { Contacts.Intents.Insert.EMAIL, SECONDARY_EMAIL, TERTIARY_EMAIL };
+	public static final String[] EMAIL_KEYS = { Contacts.Intents.Insert.EMAIL,
+			SECONDARY_EMAIL, TERTIARY_EMAIL };
 
 }

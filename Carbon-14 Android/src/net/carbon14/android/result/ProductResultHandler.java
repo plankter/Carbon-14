@@ -24,7 +24,8 @@ import com.google.zxing.client.result.ProductParsedResult;
 
 public final class ProductResultHandler extends ResultHandler {
 
-	private static final int[] mButtons = { R.string.button_product_search, R.string.button_web_search };
+	private static final int[] mButtons = { R.string.button_product_search,
+			R.string.button_web_search };
 
 	public ProductResultHandler(Activity activity, ParsedResult result) {
 		super(activity, result);

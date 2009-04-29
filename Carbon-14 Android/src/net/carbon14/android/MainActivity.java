@@ -20,18 +20,18 @@ import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	private final static int SCAN_REQUEST_CODE = 0;
-	
+
 	private Boolean carbonEnabled;
 	private Boolean upcEnabled;
 	private Boolean ratingEnabled;
-	
+
 	private TabHost.TabSpec tabInput;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		ProviderManager providers = new ProviderManager();
 		providers.reload();
 	}
@@ -44,36 +44,45 @@ public class MainActivity extends TabActivity {
 
 		TabHost tabHost = getTabHost();
 
-		tabInput = tabHost.newTabSpec("tab_input").setIndicator("Input").setContent(R.id.inputLayout);
+		tabInput = tabHost.newTabSpec("tab_input").setIndicator("Input")
+				.setContent(R.id.inputLayout);
 		tabHost.addTab(tabInput);
 		setDefaultTab("tab_input");
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
 
-		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
+		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON,
+				false);
 		if (carbonEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator(
+					"Carbon").setContent(R.id.carbonLayout));
 		}
-		
+
 		upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
 		if (upcEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC")
+					.setContent(R.id.upcLayout));
 		}
 
-		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
+		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING,
+				false);
 		if (ratingEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
+			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator(
+					"Rating").setContent(R.id.ratingLayout));
 		}
 
 		Button buttonScan = (Button) findViewById(R.id.ButtonScan);
 		buttonScan.setOnClickListener(scanListener);
-		
+
 		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
 		buttonSubmit.setOnClickListener(submitListener);
 
 		Spinner s = (Spinner) findViewById(R.id.SpinnerBarcodeFormat);
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.barcode_format, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
+				R.array.barcode_format, android.R.layout.simple_spinner_item);
+		adapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		s.setAdapter(adapter);
 	}
 
@@ -101,7 +110,7 @@ public class MainActivity extends TabActivity {
 			startScanning();
 		}
 	};
-	
+
 	private OnClickListener submitListener = new OnClickListener() {
 		public void onClick(View v) {
 			submitBarcode();
@@ -117,7 +126,8 @@ public class MainActivity extends TabActivity {
 				productRecognized(contents, format);
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT)
+						.show();
 			}
 		}
 	}
@@ -140,38 +150,38 @@ public class MainActivity extends TabActivity {
 		intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
 		startActivityForResult(intent, SCAN_REQUEST_CODE);
 	}
-	
+
 	private void submitBarcode() {
 		EditText editText = (EditText) findViewById(R.id.EditTextCode);
 		if (upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
-			if (provider != null)
-			{
+			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode="
+						+ editText.getText();
 				webView.loadUrl(url);
 			}
 		}
-		
+
 		if (ratingEnabled) {
 			Provider provider = ProviderManager.providers.get("Rating");
-			if (provider != null)
-			{
+			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.ratingWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode="
+						+ editText.getText();
 				webView.loadUrl(url);
 			}
 		}
-		
+
 		if (carbonEnabled) {
 			Provider provider = ProviderManager.providers.get("Environment");
-			if (provider != null)
-			{
+			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode="
+						+ editText.getText();
 				webView.loadUrl(url);
 			}
 		}

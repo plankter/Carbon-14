@@ -47,7 +47,8 @@ public final class EncodeActivity extends Activity {
 		super.onCreate(icicle);
 
 		Intent intent = getIntent();
-		if (intent != null && (intent.getAction().equals(Intents.Encode.ACTION))) {
+		if (intent != null
+				&& (intent.getAction().equals(Intents.Encode.ACTION))) {
 			setContentView(R.layout.encode);
 		} else {
 			finish();
@@ -78,10 +79,14 @@ public final class EncodeActivity extends Activity {
 
 				Intent intent = getIntent();
 				try {
-					mQRCodeEncoder = new QRCodeEncoder(EncodeActivity.this, intent);
-					setTitle(getString(R.string.app_name) + " - " + mQRCodeEncoder.getTitle());
+					mQRCodeEncoder = new QRCodeEncoder(EncodeActivity.this,
+							intent);
+					setTitle(getString(R.string.app_name) + " - "
+							+ mQRCodeEncoder.getTitle());
 					mQRCodeEncoder.requestBarcode(mHandler, smallerDimension);
-					mProgressDialog = ProgressDialog.show(EncodeActivity.this, null, getString(R.string.msg_encode_in_progress), true, true, mCancelListener);
+					mProgressDialog = ProgressDialog.show(EncodeActivity.this,
+							null, getString(R.string.msg_encode_in_progress),
+							true, true, mCancelListener);
 				} catch (IllegalArgumentException e) {
 					showErrorMessage(R.string.msg_encode_contents_failed);
 				}

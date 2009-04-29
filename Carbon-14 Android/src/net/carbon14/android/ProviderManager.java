@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -18,24 +17,23 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class ProviderManager {
 	public static HashMap<String, Provider> providers;
 	public final static String PROVIDERS_URL = "http://carbon-14.appspot.com/services/providers/get";
-	
-	public void reload()
-	{
+
+	public void reload() {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpGet request = new HttpGet(PROVIDERS_URL);
-		
+
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        try {
+		try {
 			String responseBody = httpClient.execute(request, responseHandler);
-			
+
 			XStream xstream = new XStream(new DomDriver());
 			xstream.alias("provider", Provider.class);
 			xstream.alias("providers", Provider[].class);
-			
-			Provider[] providersArray = (Provider[])xstream.fromXML(responseBody);
+
+			Provider[] providersArray = (Provider[]) xstream
+					.fromXML(responseBody);
 			providers = new HashMap<String, Provider>(providersArray.length);
-			for (Provider provider : providersArray)
-			{
+			for (Provider provider : providersArray) {
 				providers.put(provider.getName(), provider);
 			}
 
@@ -47,6 +45,6 @@ public class ProviderManager {
 			e.printStackTrace();
 		}
 
-        httpClient.getConnectionManager().shutdown();
+		httpClient.getConnectionManager().shutdown();
 	}
 }
