@@ -31,7 +31,7 @@ import com.google.zxing.Result;
  */
 public final class CaptureActivityHandler extends Handler {
 
-	private final CaptureActivity mActivity;
+	private final MainActivity mActivity;
 	private final DecodeThread mDecodeThread;
 	private State mState;
 
@@ -39,9 +39,9 @@ public final class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	CaptureActivityHandler(CaptureActivity activity, String decodeMode,	boolean beginScanning) {
-		mActivity = activity;
-		mDecodeThread = new DecodeThread(activity, decodeMode);
+	CaptureActivityHandler(MainActivity mainActivity, String decodeMode,	boolean beginScanning) {
+		mActivity = mainActivity;
+		mDecodeThread = new DecodeThread(mainActivity, decodeMode);
 		mDecodeThread.start();
 		mState = State.SUCCESS;
 
