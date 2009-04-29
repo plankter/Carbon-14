@@ -17,7 +17,6 @@
 package net.carbon14.android;
 
 import java.io.IOException;
-
 import net.carbon14.android.result.ResultButtonListener;
 import net.carbon14.android.result.ResultHandler;
 import net.carbon14.android.result.ResultHandlerFactory;
@@ -92,8 +91,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	private String mDecodeMode;
 	private String versionName;
 
-	private final OnCompletionListener mBeepListener = new BeepListener();
-	
+	private final OnCompletionListener mBeepListener = new BeepListener();	
 	
 	private final static int SCAN_REQUEST_CODE = 0;
 
@@ -415,16 +413,14 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 			formatTextView.setText(getString(R.string.msg_default_format)
 					+ ": " + rawResult.getBarcodeFormat().toString());
 
-			ResultHandler resultHandler = ResultHandlerFactory
-					.makeResultHandler(this, rawResult);
+			ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
 			TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
 			typeTextView.setText(getString(R.string.msg_default_type) + ": "
 					+ resultHandler.getType().toString());
 
 			TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
 			CharSequence title = getString(resultHandler.getDisplayTitle());
-			SpannableStringBuilder styled = new SpannableStringBuilder(title
-					+ "\n\n");
+			SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
 			styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
 			CharSequence displayContents = resultHandler.getDisplayContents();
 			styled.append(displayContents);

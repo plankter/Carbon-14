@@ -32,8 +32,7 @@ import android.view.View;
  */
 public final class ViewfinderView extends View {
 
-	private static final int[] SCANNER_ALPHA = { 0, 64, 128, 192, 255, 192,
-			128, 64 };
+	private static final int[] SCANNER_ALPHA = { 0, 64, 128, 192, 255, 192,	128, 64 };
 	private static final int ANIMATION_DELAY = 100;
 
 	private final Paint mPaint;
@@ -87,14 +86,11 @@ public final class ViewfinderView extends View {
 			mPaint.setColor(mFrameColor);
 			mBox.set(frame.left, frame.top, frame.right + 1, frame.top + 2);
 			canvas.drawRect(mBox, mPaint);
-			mBox.set(frame.left, frame.top + 2, frame.left + 2,
-					frame.bottom - 1);
+			mBox.set(frame.left, frame.top + 2, frame.left + 2,	frame.bottom - 1);
 			canvas.drawRect(mBox, mPaint);
-			mBox.set(frame.right - 1, frame.top, frame.right + 1,
-					frame.bottom - 1);
+			mBox.set(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1);
 			canvas.drawRect(mBox, mPaint);
-			mBox.set(frame.left, frame.bottom - 1, frame.right + 1,
-					frame.bottom + 1);
+			mBox.set(frame.left, frame.bottom - 1, frame.right + 1,	frame.bottom + 1);
 			canvas.drawRect(mBox, mPaint);
 
 			// Draw a red "laser scanner" line through the middle to show
@@ -109,8 +105,7 @@ public final class ViewfinderView extends View {
 			// Request another update at the animation interval, but only
 			// repaint the laser line,
 			// not the entire viewfinder mask.
-			postInvalidateDelayed(ANIMATION_DELAY, mBox.left, mBox.top,
-					mBox.right, mBox.bottom);
+			postInvalidateDelayed(ANIMATION_DELAY, mBox.left, mBox.top,	mBox.right, mBox.bottom);
 		}
 	}
 
