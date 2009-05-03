@@ -46,6 +46,7 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -68,13 +69,22 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
-public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
+public class MainActivity extends TabActivity implements SurfaceHolder.Callback {
+	private static final String TAG = "MainActivity";
+
 	private static final int MAX_RESULT_IMAGE_SIZE = 150;
 	private static final int INTENT_RESULT_DURATION = 1500;
 	private static final float BEEP_VOLUME = 0.15f;
 	private static final long VIBRATE_DURATION = 200;
 
 	private static final String PACKAGE_NAME = "net.carbon14.android";
+	private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
+	private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
+	private static final String ZXING_URL = "http://zxing.appspot.com/scan";
+
+	private enum Source {
+		NATIVE_APP_INTENT, PRODUCT_SEARCH_LINK, ZXING_LINK, NONE
+	}
 
 	public CaptureActivityHandler mHandler;
 
@@ -87,12 +97,12 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	private boolean mPlayBeep;
 	private boolean mVibrate;
 	private boolean mCopyToClipboard;
-	private boolean mScanIntent;
+	private Source mSource;
 	private String mDecodeMode;
-	private String versionName;
+	private String mVersionName;
 
-	private final OnCompletionListener mBeepListener = new BeepListener();	
-	
+	private final OnCompletionListener mBeepListener = new BeepListener();
+
 	private final static int SCAN_REQUEST_CODE = 0;
 
 	private Boolean carbonEnabled;
@@ -105,18 +115,18 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		mHandler = null;
 		mLastResult = null;
 		mHasSurface = false;
-		
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		
-		CameraManager.init(getApplication());
-		
-		showHelpOnFirstLaunch();		
 
-		ConnectivityManager connectivityManager = (ConnectivityManager)this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		CameraManager.init(getApplication());
+
+		showHelpOnFirstLaunch();
+
+		ConnectivityManager connectivityManager = (ConnectivityManager) this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		ProviderManager providers = new ProviderManager(connectivityManager);
 		if (!providers.reload())
 			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
@@ -156,16 +166,11 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 
 		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
 		buttonSubmit.setOnClickListener(submitListener);
-		
-		
-		
-		
+
 		mViewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		mResultView = findViewById(R.id.result_view);
 		mStatusView = findViewById(R.id.status_view);
-		
-		
-		
+
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		if (mHasSurface) {
@@ -181,13 +186,37 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 		}
 
 		Intent intent = getIntent();
-		String action = intent.getAction();
-		if ((intent != null) && (action != null) && (action.equals(Intents.Scan.ACTION))) {
-			mScanIntent = true;
-			mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
-			resetStatusView();
+		String action = intent == null ? null : intent.getAction();
+		String dataString = intent == null ? null : intent.getDataString();
+		if (intent != null && action != null) {
+			if (action.equals(Intents.Scan.ACTION)) {
+				// Scan the formats the intent requested, and return the result
+				// to the calling activity.
+				mSource = Source.NATIVE_APP_INTENT;
+				mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
+				resetStatusView();
+			} else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) && dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
+				// Scan only products and send the result to mobile Product
+				// Search.
+				mSource = Source.PRODUCT_SEARCH_LINK;
+				mDecodeMode = Intents.Scan.PRODUCT_MODE;
+				resetStatusView();
+			} else if (dataString != null && dataString.equals(ZXING_URL)) {
+				// Scan all formats and handle the results ourselves.
+				// TODO: In the future we could allow the hyperlink to include a
+				// URL to send the results to.
+				mSource = Source.ZXING_LINK;
+				mDecodeMode = null;
+				resetStatusView();
+			} else {
+				// Scan all formats and handle the results ourselves (launched
+				// from Home).
+				mSource = Source.NONE;
+				mDecodeMode = null;
+				resetStatusView();
+			}
 		} else {
-			mScanIntent = false;
+			mSource = Source.NONE;
 			mDecodeMode = null;
 			if (mLastResult == null) {
 				resetStatusView();
@@ -212,28 +241,29 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.settingsMenuItem:
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setClassName(this, PreferencesActivity.class.getName());
-				startActivity(intent);
-				break;			
-			case R.id.helpMenuItem: {
-				intent = new Intent(Intent.ACTION_VIEW);
-				intent.setClassName(this, HelpActivity.class.getName());
-				startActivity(intent);
-				break;
-			}
-			case R.id.aboutMenuItem:
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(getString(R.string.title_about) + versionName);
-				builder.setMessage(getString(R.string.msg_about) + "\n\n"
-						+ getString(R.string.zxing_url));
-				builder.setIcon(R.drawable.zxing_icon);
-				builder.setPositiveButton(R.string.button_open_browser,	mAboutListener);
-				builder.setNegativeButton(R.string.button_cancel, null);
-				builder.show();
-				break;
+		case R.id.settingsMenuItem: {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+	        intent.setClassName(this, PreferencesActivity.class.getName());
+	        startActivity(intent);
+			break;
 		}
+		case R.id.helpMenuItem: {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+	        intent.setClassName(this, HelpActivity.class.getName());
+	        startActivity(intent);
+			break;
+		}
+		case R.id.aboutMenuItem:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(getString(R.string.title_about) + mVersionName);
+	        builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
+	        builder.setIcon(R.drawable.zxing_icon);
+	        builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
+	        builder.setNegativeButton(R.string.button_cancel, null);
+	        builder.show();
+			break;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -284,8 +314,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode="
-						+ editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
 		}
@@ -295,8 +324,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.ratingWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode="
-						+ editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
 		}
@@ -306,15 +334,12 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode="
-						+ editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
 				webView.loadUrl(url);
 			}
 		}
 	}
-	
-	
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -328,11 +353,11 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (mScanIntent) {
+			if (mSource == Source.NATIVE_APP_INTENT) {
 				setResult(RESULT_CANCELED);
 				finish();
 				return true;
-			} else if (mLastResult != null) {
+			} else if ((mSource == Source.NONE || mSource == Source.ZXING_LINK) && mLastResult != null) {
 				resetStatusView();
 				mHandler.sendEmptyMessage(R.id.restart_preview);
 				return true;
@@ -344,7 +369,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 		return super.onKeyDown(keyCode, event);
 	}
 
-	
 	// Don't display the share menu item if the result overlay is showing.
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -389,219 +413,224 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback{
 	 *            The contents of the barcode.
 	 * @param barcode
 	 *            A greyscale bitmap of the camera data which was decoded.
-	 * @param duration
-	 *            How long the decoding took in milliseconds.
 	 */
-	public void handleDecode(Result rawResult, Bitmap barcode, int duration) {
+	public void handleDecode(Result rawResult, Bitmap barcode) {
 		mLastResult = rawResult;
 		playBeepSoundAndVibrate();
 		drawResultPoints(barcode, rawResult);
 
-		if (mScanIntent) {
-			handleDecodeForScanIntent(rawResult, barcode, duration);
-		} else {
-			mStatusView.setVisibility(View.GONE);
-			mViewfinderView.setVisibility(View.GONE);
-			mResultView.setVisibility(View.VISIBLE);
-
-			ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
-			barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
-			barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
-			barcodeImageView.setImageBitmap(barcode);
-
-			TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-			formatTextView.setText(getString(R.string.msg_default_format)
-					+ ": " + rawResult.getBarcodeFormat().toString());
-
-			ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-			TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
-			typeTextView.setText(getString(R.string.msg_default_type) + ": "
-					+ resultHandler.getType().toString());
-
-			TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
-			CharSequence title = getString(resultHandler.getDisplayTitle());
-			SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
-			styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
-			CharSequence displayContents = resultHandler.getDisplayContents();
-			styled.append(displayContents);
-			contentsTextView.setText(styled);
-
-			int buttonCount = resultHandler.getButtonCount();
-			ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
-			buttonView.requestFocus();
-			for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
-				Button button = (Button) buttonView.getChildAt(x);
-				if (x < buttonCount) {
-					button.setVisibility(View.VISIBLE);
-					button.setText(resultHandler.getButtonText(x));
-					button.setOnClickListener(new ResultButtonListener(resultHandler, x));
-				} else {
-					button.setVisibility(View.GONE);
-				}
-			}
-
-			if (mCopyToClipboard) {
-				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-				clipboard.setText(displayContents);
-			}
+		switch (mSource) {
+		case NATIVE_APP_INTENT:
+		case PRODUCT_SEARCH_LINK:
+			handleDecodeExternally(rawResult, barcode);
+			break;
+		case ZXING_LINK:
+		case NONE:
+			handleDecodeInternally(rawResult, barcode);
+			break;
 		}
 	}
 
 	/**
-	 * Superimpose a line for 1D or dots for 2D to highlight the key features of
-	 * the barcode.
-	 * 
-	 * @param barcode
-	 *            A bitmap of the captured image.
-	 * @param rawResult
-	 *            The decoded results which contains the points to draw.
-	 */
-	private void drawResultPoints(Bitmap barcode, Result rawResult) {
-		ResultPoint[] points = rawResult.getResultPoints();
-		if (points != null && points.length > 0) {
-			Canvas canvas = new Canvas(barcode);
-			Paint paint = new Paint();
-			paint.setColor(getResources().getColor(R.color.result_image_border));
-			paint.setStrokeWidth(3);
-			paint.setStyle(Paint.Style.STROKE);
-			Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
-			canvas.drawRect(border, paint);
+	   * Superimpose a line for 1D or dots for 2D to highlight the key features of the barcode.
+	   *
+	   * @param barcode   A bitmap of the captured image.
+	   * @param rawResult The decoded results which contains the points to draw.
+	   */
+	  private void drawResultPoints(Bitmap barcode, Result rawResult) {
+	    ResultPoint[] points = rawResult.getResultPoints();
+	    if (points != null && points.length > 0) {
+	      Canvas canvas = new Canvas(barcode);
+	      Paint paint = new Paint();
+	      paint.setColor(getResources().getColor(R.color.result_image_border));
+	      paint.setStrokeWidth(3);
+	      paint.setStyle(Paint.Style.STROKE);
+	      Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
+	      canvas.drawRect(border, paint);
 
-			paint.setColor(getResources().getColor(R.color.result_points));
-			if (points.length == 2) {
-				paint.setStrokeWidth(4);
-				canvas.drawLine(points[0].getX(), points[0].getY(), points[1].getX(), points[1].getY(), paint);
-			} else {
-				paint.setStrokeWidth(10);
-				for (int x = 0; x < points.length; x++) {
-					canvas.drawPoint(points[x].getX(), points[x].getY(), paint);
-				}
-			}
-		}
-	}
+	      paint.setColor(getResources().getColor(R.color.result_points));
+	      if (points.length == 2) {
+	        paint.setStrokeWidth(4);
+	        canvas.drawLine(points[0].getX(), points[0].getY(), points[1].getX(),
+	            points[1].getY(), paint);
+	      } else {
+	        paint.setStrokeWidth(10);
+	        for (int x = 0; x < points.length; x++) {
+	          canvas.drawPoint(points[x].getX(), points[x].getY(), paint);
+	        }
+	      }
+	    }
+	  }
 
-	private void handleDecodeForScanIntent(Result rawResult, Bitmap barcode,
-			int duration) {
-		mViewfinderView.drawResultBitmap(barcode);
+	// Put up our own UI for how to handle the decoded contents.
+	  private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
+	    mStatusView.setVisibility(View.GONE);
+	    mViewfinderView.setVisibility(View.GONE);
+	    mResultView.setVisibility(View.VISIBLE);
 
-		// Since this message will only be shown for a second, just tell the
-		// user what kind of
-		// barcode was found (e.g. contact info) rather than the full contents,
-		// which they won't
-		// have time to read.
-		ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-		TextView textView = (TextView) findViewById(R.id.status_text_view);
-		textView.setGravity(Gravity.CENTER);
-		textView.setTextSize(18.0f);
-		textView.setText(getString(resultHandler.getDisplayTitle()));
+	    ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
+	    barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
+	    barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
+	    barcodeImageView.setImageBitmap(barcode);
 
-		mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
+	    TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
+	    formatTextView.setText(getString(R.string.msg_default_format) + ": " +
+	        rawResult.getBarcodeFormat().toString());
 
-		if (mCopyToClipboard) {
-			ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-			clipboard.setText(resultHandler.getDisplayContents());
-		}
+	    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
+	    TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
+	    typeTextView.setText(getString(R.string.msg_default_type) + ": " +
+	        resultHandler.getType().toString());
 
-		// Hand back whatever action they requested - this can be changed to
-		// Intents.Scan.ACTION when
-		// the deprecated intent is retired.
-		Intent intent = new Intent(getIntent().getAction());
-		intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-		intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-		Message message = Message.obtain(mHandler, R.id.return_scan_result);
-		message.obj = intent;
-		mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-	}
+	    TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
+	    CharSequence title = getString(resultHandler.getDisplayTitle());
+	    SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
+	    styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
+	    CharSequence displayContents = resultHandler.getDisplayContents();
+	    styled.append(displayContents);
+	    contentsTextView.setText(styled);
 
-	/**
-	 * We want the help screen to be shown automatically the first time a new
-	 * version of the app is run. The easiest way to do this is to check
-	 * android:versionCode from the manifest, and compare it to a value stored
-	 * as a preference.
-	 */
-	private void showHelpOnFirstLaunch() {
-		try {
-			PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME,	0);
-			int currentVersion = info.versionCode;
-			// Since we're paying to talk to the PackageManager anyway, it makes
-			// sense to cache the app
-			// version name here for display in the about box later.
-			this.versionName = info.versionName;
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
-			if (currentVersion > lastVersion) {
-				prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN,	currentVersion).commit();
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setClassName(this, HelpActivity.class.getName());
-				startActivity(intent);
-			}
-		} catch (PackageManager.NameNotFoundException e) {
-		}
-	}
+	    int buttonCount = resultHandler.getButtonCount();
+	    ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
+	    buttonView.requestFocus();
+	    for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
+	      Button button = (Button) buttonView.getChildAt(x);
+	      if (x < buttonCount) {
+	        button.setVisibility(View.VISIBLE);
+	        button.setText(resultHandler.getButtonText(x));
+	        button.setOnClickListener(new ResultButtonListener(resultHandler, x));
+	      } else {
+	        button.setVisibility(View.GONE);
+	      }
+	    }
 
-	/**
-	 * Creates the beep MediaPlayer in advance so that the sound can be
-	 * triggered with the least latency possible.
-	 */
-	private void initBeepSound() {
-		if (mPlayBeep && mMediaPlayer == null) {
-			mMediaPlayer = new MediaPlayer();
-			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
-			mMediaPlayer.setOnCompletionListener(mBeepListener);
+	    if (mCopyToClipboard) {
+	      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+	      clipboard.setText(displayContents);
+	    }
+	  }
 
-			AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
-			try {
-				mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-				file.close();
-				mMediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-				mMediaPlayer.prepare();
-			} catch (IOException e) {
-				mMediaPlayer = null;
-			}
-		}
-	}
+	  // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
+	  private void handleDecodeExternally(Result rawResult, Bitmap barcode) {
+	    mViewfinderView.drawResultBitmap(barcode);
 
-	private void playBeepSoundAndVibrate() {
-		if (mPlayBeep && mMediaPlayer != null) {
-			mMediaPlayer.start();
-		}
-		if (mVibrate) {
-			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-			vibrator.vibrate(VIBRATE_DURATION);
-		}
-	}
+	    // Since this message will only be shown for a second, just tell the user what kind of
+	    // barcode was found (e.g. contact info) rather than the full contents, which they won't
+	    // have time to read.
+	    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
+	    TextView textView = (TextView) findViewById(R.id.status_text_view);
+	    textView.setGravity(Gravity.CENTER);
+	    textView.setTextSize(18.0f);
+	    textView.setText(getString(resultHandler.getDisplayTitle()));
 
-	private void initCamera(SurfaceHolder surfaceHolder) {
-		CameraManager.get().openDriver(surfaceHolder);
-		if (mHandler == null) {
-			boolean beginScanning = mLastResult == null;
-			mHandler = new CaptureActivityHandler(this, mDecodeMode, beginScanning);
-		}
-	}
+	    mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
 
-	private void resetStatusView() {
-		mResultView.setVisibility(View.GONE);
-		mStatusView.setVisibility(View.VISIBLE);
-		mStatusView.setBackgroundColor(getResources().getColor(R.color.status_view));
-		mViewfinderView.setVisibility(View.VISIBLE);
+	    if (mCopyToClipboard) {
+	      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+	      clipboard.setText(resultHandler.getDisplayContents());
+	    }
 
-		TextView textView = (TextView) findViewById(R.id.status_text_view);
-		textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-		textView.setTextSize(14.0f);
-		textView.setText(R.string.msg_default_status);
-		mLastResult = null;
-	}
+	    if (mSource == Source.NATIVE_APP_INTENT) {
+	      // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
+	      // the deprecated intent is retired.
+	      Intent intent = new Intent(getIntent().getAction());
+	      intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
+	      intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
+	      Message message = Message.obtain(mHandler, R.id.return_scan_result);
+	      message.obj = intent;
+	      mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+	    }
+	  }
 
-	public void drawViewfinder() {
-		mViewfinderView.drawViewfinder();
-	}
+	  /**
+	   * We want the help screen to be shown automatically the first time a new version of the app is
+	   * run. The easiest way to do this is to check android:versionCode from the manifest, and compare
+	   * it to a value stored as a preference.
+	   */
+	  private void showHelpOnFirstLaunch() {
+	    try {
+	      PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
+	      int currentVersion = info.versionCode;
+	      // Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
+	      // version name here for display in the about box later.
+	      this.mVersionName = info.versionName;
+	      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	      int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
+	      if (currentVersion > lastVersion) {
+	        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
+	        Intent intent = new Intent(Intent.ACTION_VIEW);
+	        intent.setClassName(this, HelpActivity.class.getName());
+	        startActivity(intent);
+	      }
+	    } catch (PackageManager.NameNotFoundException e) {
+	      Log.w(TAG, e);
+	    }
+	  }
 
-	/**
-	 * When the beep has finished playing, rewind to queue up another one.
-	 */
-	private static class BeepListener implements OnCompletionListener {
-		public void onCompletion(MediaPlayer mediaPlayer) {
-			mediaPlayer.seekTo(0);
-		}
-	}
+	  /**
+	   * Creates the beep MediaPlayer in advance so that the sound can be triggered with the least
+	   * latency possible.
+	   */
+	  private void initBeepSound() {
+	    if (mPlayBeep && mMediaPlayer == null) {
+	      mMediaPlayer = new MediaPlayer();
+	      mMediaPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
+	      mMediaPlayer.setOnCompletionListener(mBeepListener);
+
+	      AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
+	      try {
+	        mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
+	            file.getLength());
+	        file.close();
+	        mMediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+	        mMediaPlayer.prepare();
+	      } catch (IOException e) {
+	        mMediaPlayer = null;
+	      }
+	    }
+	  }
+
+	  private void playBeepSoundAndVibrate() {
+	    if (mPlayBeep && mMediaPlayer != null) {
+	      mMediaPlayer.start();
+	    }
+	    if (mVibrate) {
+	      Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+	      vibrator.vibrate(VIBRATE_DURATION);
+	    }
+	  }
+
+	  private void initCamera(SurfaceHolder surfaceHolder) {
+	    CameraManager.get().openDriver(surfaceHolder);
+	    if (mHandler == null) {
+	      boolean beginScanning = mLastResult == null;
+	      mHandler = new CaptureActivityHandler(this, mDecodeMode, beginScanning);
+	    }
+	  }
+
+	  private void resetStatusView() {
+	    mResultView.setVisibility(View.GONE);
+	    mStatusView.setVisibility(View.VISIBLE);
+	    mStatusView.setBackgroundColor(getResources().getColor(R.color.status_view));
+	    mViewfinderView.setVisibility(View.VISIBLE);
+
+	    TextView textView = (TextView) findViewById(R.id.status_text_view);
+	    textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+	    textView.setTextSize(14.0f);
+	    textView.setText(R.string.msg_default_status);
+	    mLastResult = null;
+	  }
+
+	  public void drawViewfinder() {
+	    mViewfinderView.drawViewfinder();
+	  }
+
+	  /**
+	   * When the beep has finished playing, rewind to queue up another one.
+	   */
+	  private static class BeepListener implements OnCompletionListener {
+	    public void onCompletion(MediaPlayer mediaPlayer) {
+	      mediaPlayer.seekTo(0);
+	    }
+	  }
 }
