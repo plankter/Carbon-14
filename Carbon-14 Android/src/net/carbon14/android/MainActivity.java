@@ -233,36 +233,30 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case SCAN_REQUEST_CODE: {
-			if (resultCode == RESULT_OK) {
-				String barcode = data.getStringExtra(Intents.Scan.RESULT);
-				String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-				// Handle successful scan
-				productRecognized(barcode, format);
-			} else if (resultCode == RESULT_CANCELED) {
-				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+			case SCAN_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra(Intents.Scan.RESULT);
+					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
+					// Handle successful scan
+					submitBarcode(barcode);
+				} else if (resultCode == RESULT_CANCELED) {
+					// Handle cancel
+					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+				}
+				break;
 			}
-			break;
-		}
-		case INPUT_REQUEST_CODE: {
-			if (resultCode == RESULT_OK) {
-				String barcode = data.getStringExtra("BARCODE");
-				// Handle successful scan
-				submitBarcode(barcode);
+			case INPUT_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra("BARCODE");
+					// Handle successful scan
+					submitBarcode(barcode);
+				}
+				break;
 			}
-			break;
-		}
-		case PREFERENCES_REQUEST_CODE: {
-			Initialize();
-			break;
-		}
-		}
-	}
-
-	private void productRecognized(String barcode, String format) {
-		if (barcode != null) {
-			submitBarcode(barcode);
+			case PREFERENCES_REQUEST_CODE: {
+				Initialize();
+				break;
+			}
 		}
 	}
 
@@ -273,6 +267,8 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	}
 
 	private void submitBarcode(String barcode) {
+		if (barcode == null) return;
+		
 		if (upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null) {

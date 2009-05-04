@@ -10,7 +10,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textColor="#FFF"
-		android:text="Please enter barcode:" />
+		android:text="Please enter barcode number:" />
 	<EditText
 		android:id="@+id/barcodeInputEditText"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"/>
