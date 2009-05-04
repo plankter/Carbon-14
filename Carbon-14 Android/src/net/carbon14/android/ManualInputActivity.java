@@ -41,7 +41,8 @@ public final class ManualInputActivity extends Activity {
 			EditText editor = (EditText) findViewById(R.id.barcodeInputEditText);
 			
 			Intent result = new Intent(getIntent().getAction());
-			result.putExtra("BARCODE", editor.getText());
+			String barcode = editor.getText().toString();
+			result.putExtra("BARCODE", barcode);
 		    setResult(RESULT_OK, result);
 
 			finish();

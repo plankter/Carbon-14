@@ -172,13 +172,8 @@
 								android.textSize="14sp" />
 
 						</LinearLayout>
+
 					</LinearLayout>
-					
-					<Button
-						android:layout_height="wrap_content"
-						android:id="@+id/ButtonSubmit"
-						android:text="Submit"
-						android:layout_width="fill_parent"></Button>
 
 				</FrameLayout>
 

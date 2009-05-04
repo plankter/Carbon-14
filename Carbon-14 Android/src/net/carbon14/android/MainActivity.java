@@ -58,7 +58,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -84,7 +83,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	}
 
 	public CaptureActivityHandler mHandler;
-	
+
 	public static String activeBarcode;
 
 	private ViewfinderView mViewfinderView;
@@ -96,8 +95,8 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private boolean mPlayBeep;
 	private boolean mVibrate;
 	private boolean mCopyToClipboard;
-	private Source mSource;
-	private String mDecodeMode;
+	private Source mSource = Source.NONE;
+	private String mDecodeMode = Intents.Scan.PRODUCT_MODE;
 	private String mVersionName;
 
 	private final OnCompletionListener mBeepListener = new BeepListener();
@@ -111,10 +110,8 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private Boolean ratingEnabled;
 
 	private TabHost.TabSpec tabInput;
-	
-	
-	private void Initialize()
-	{
+
+	private void Initialize() {
 		setContentView(R.layout.main);
 
 		TabHost tabHost = getTabHost();
@@ -140,22 +137,15 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
 
-		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
-		buttonSubmit.setOnClickListener(submitListener);
-
 		mViewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		mResultView = findViewById(R.id.result_view);
 		mStatusView = findViewById(R.id.status_view);
-
-		
 
 		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
 		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
 		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
 		initBeepSound();
 	}
-	
-	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -172,14 +162,14 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		ProviderManager providers = new ProviderManager(connectivityManager);
 		if (!providers.reload())
 			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
-		
+
 		Initialize();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		if (mHasSurface) {
@@ -194,8 +184,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
 
-		mSource = Source.NONE;
-		mDecodeMode = Intents.Scan.PRODUCT_MODE;
 		resetStatusView();
 	}
 
@@ -211,77 +199,64 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.inputMenuItem: {
-				Intent intent = new Intent(this, ManualInputActivity.class);
-				startActivityForResult(intent, INPUT_REQUEST_CODE);
-				break;
-			}
-			case R.id.preferencesMenuItem: {
-				Intent intent = new Intent(this, PreferencesActivity.class);
-				startActivityForResult(intent, PREFERENCES_REQUEST_CODE);
-				break;
-			}
-			case R.id.helpMenuItem: {
-				Intent intent = new Intent(this, HelpActivity.class);
-				startActivity(intent);
-				break;
-			}
-			case R.id.aboutMenuItem: {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(getString(R.string.title_about) + mVersionName);
-				builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
-				builder.setIcon(R.drawable.zxing_icon);
-				builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
-				builder.setNegativeButton(R.string.button_cancel, null);
-				builder.show();
-				break;
-			}
+		case R.id.inputMenuItem: {
+			Intent intent = new Intent(this, ManualInputActivity.class);
+			startActivityForResult(intent, INPUT_REQUEST_CODE);
+			break;
+		}
+		case R.id.preferencesMenuItem: {
+			Intent intent = new Intent(this, PreferencesActivity.class);
+			startActivityForResult(intent, PREFERENCES_REQUEST_CODE);
+			break;
+		}
+		case R.id.helpMenuItem: {
+			Intent intent = new Intent(this, HelpActivity.class);
+			startActivity(intent);
+			break;
+		}
+		case R.id.aboutMenuItem: {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.title_about) + mVersionName);
+			builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
+			builder.setIcon(R.drawable.zxing_icon);
+			builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
+			builder.setNegativeButton(R.string.button_cancel, null);
+			builder.show();
+			break;
+		}
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 
-	// Create an anonymous implementation of OnClickListener
-	private OnClickListener scanListener = new OnClickListener() {
-		public void onClick(View v) {
-			startScanning();
-		}
-	};
-
-	private OnClickListener submitListener = new OnClickListener() {
-		public void onClick(View v) {
-			submitBarcode("666666666");
-		}
-	};
-
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-			case SCAN_REQUEST_CODE: {
-				if (resultCode == RESULT_OK) {
-					String barcode = data.getStringExtra(Intents.Scan.RESULT);
-					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-					// Handle successful scan
-					productRecognized(barcode, format);
-				} else if (resultCode == RESULT_CANCELED) {
-					// Handle cancel
-					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
-				}
-				break;
+		case SCAN_REQUEST_CODE: {
+			if (resultCode == RESULT_OK) {
+				String barcode = data.getStringExtra(Intents.Scan.RESULT);
+				String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
+				// Handle successful scan
+				productRecognized(barcode, format);
+			} else if (resultCode == RESULT_CANCELED) {
+				// Handle cancel
+				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
 			}
-			case INPUT_REQUEST_CODE: {
-				if (resultCode == RESULT_OK) {
-					String barcode = data.getStringExtra("BARCODE");
-					// Handle successful scan
-					submitBarcode(barcode);
-				}
-				break;
+			break;
+		}
+		case INPUT_REQUEST_CODE: {
+			if (resultCode == RESULT_OK) {
+				String barcode = data.getStringExtra("BARCODE");
+				// Handle successful scan
+				submitBarcode(barcode);
 			}
-			case PREFERENCES_REQUEST_CODE: {
-				Initialize();
-				break;
-			}
+			break;
+		}
+		case PREFERENCES_REQUEST_CODE: {
+			Initialize();
+			break;
+		}
 		}
 	}
 
