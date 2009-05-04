@@ -139,6 +139,8 @@
 						</LinearLayout>
 					</LinearLayout>
 
+
+
 					<LinearLayout
 						android:orientation="vertical"
 						android:layout_width="fill_parent"
@@ -160,6 +162,36 @@
 							android:background="@color/status_view"
 							android:baselineAligned="false"
 							android:padding="4px">
+
+							<ScrollView
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:layout_weight="1">
+
+								<LinearLayout
+									android:layout_height="wrap_content"
+									android:orientation="vertical"
+									android:layout_width="fill_parent"
+									android:padding="5px">
+
+									<WebView
+										android:id="@+id/carbonWidgetWebView"
+										android:layout_width="fill_parent"
+										android:layout_height="fill_parent" />
+
+									<WebView
+										android:id="@+id/upcWidgetWebView"
+										android:layout_width="fill_parent"
+										android:layout_height="fill_parent" />
+										
+									<WebView
+										android:id="@+id/ratingWidgetWebView"
+										android:layout_width="fill_parent"
+										android:layout_height="fill_parent" />
+
+								</LinearLayout>
+
+							</ScrollView>
 
 							<TextView
 								android:id="@+id/status_text_view"

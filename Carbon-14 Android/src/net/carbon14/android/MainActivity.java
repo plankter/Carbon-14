@@ -276,6 +276,10 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
+				
+				WebView widgerWebView = (WebView) findViewById(R.id.upcWidgetWebView);
+				widgerWebView.setVerticalScrollbarOverlay(true);
+				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
@@ -286,6 +290,10 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
+				
+				WebView widgerWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
+				widgerWebView.setVerticalScrollbarOverlay(true);
+				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
@@ -296,6 +304,10 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
+				
+				WebView widgerWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
+				widgerWebView.setVerticalScrollbarOverlay(true);
+				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 	}
