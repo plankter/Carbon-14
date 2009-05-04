@@ -25,6 +25,15 @@
 			</intent-filter>
 		</activity>
 		
+		<activity android:name="ManualInputActivity"
+			android:theme="@android:style/Theme.Dialog"
+			android:screenOrientation="user">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
 	</application>
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.INTERNET" />

@@ -84,6 +84,8 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	}
 
 	public CaptureActivityHandler mHandler;
+	
+	public static String activeBarcode;
 
 	private ViewfinderView mViewfinderView;
 	private View mStatusView;
@@ -101,6 +103,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private final OnCompletionListener mBeepListener = new BeepListener();
 
 	private final static int SCAN_REQUEST_CODE = 0;
+	private final static int INPUT_REQUEST_CODE = 1;
 
 	private Boolean carbonEnabled;
 	private Boolean upcEnabled;
@@ -112,10 +115,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mHandler = null;
-		mLastResult = null;
-		mHasSurface = false;
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -241,27 +240,33 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.settingsMenuItem: {
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setClassName(this, PreferencesActivity.class.getName());
-			startActivity(intent);
-			break;
-		}
-		case R.id.helpMenuItem: {
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setClassName(this, HelpActivity.class.getName());
-			startActivity(intent);
-			break;
-		}
-		case R.id.aboutMenuItem:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(getString(R.string.title_about) + mVersionName);
-			builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
-			builder.setIcon(R.drawable.zxing_icon);
-			builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
-			builder.setNegativeButton(R.string.button_cancel, null);
-			builder.show();
-			break;
+			case R.id.inputMenuItem: {
+				Intent intent = new Intent(this, ManualInputActivity.class);
+				startActivityForResult(intent, INPUT_REQUEST_CODE);
+				break;
+			}
+			case R.id.settingsMenuItem: {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setClassName(this, PreferencesActivity.class.getName());
+				startActivity(intent);
+				break;
+			}
+			case R.id.helpMenuItem: {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setClassName(this, HelpActivity.class.getName());
+				startActivity(intent);
+				break;
+			}
+			case R.id.aboutMenuItem: {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getString(R.string.title_about) + mVersionName);
+				builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
+				builder.setIcon(R.drawable.zxing_icon);
+				builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
+				builder.setNegativeButton(R.string.button_cancel, null);
+				builder.show();
+				break;
+			}
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -276,27 +281,39 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 	private OnClickListener submitListener = new OnClickListener() {
 		public void onClick(View v) {
-//			submitBarcode();
+			submitBarcode("666666666");
 		}
 	};
 
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (requestCode == SCAN_REQUEST_CODE) {
-			if (resultCode == RESULT_OK) {
-				String contents = intent.getStringExtra("SCAN_RESULT");
-				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-				// Handle successful scan
-				productRecognized(contents, format);
-			} else if (resultCode == RESULT_CANCELED) {
-				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case SCAN_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra(Intents.Scan.RESULT);
+					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
+					// Handle successful scan
+					productRecognized(barcode, format);
+				} else if (resultCode == RESULT_CANCELED) {
+					// Handle cancel
+					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			}
+			case INPUT_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra("BARCODE");
+					// Handle successful scan
+					submitBarcode(barcode);
+				}
+				break;
 			}
 		}
 	}
 
-	private void productRecognized(String contents, String format) {
-		if (contents != null) {
-			
+	private void productRecognized(String barcode, String format) {
+		if (barcode != null) {
+			submitBarcode(barcode);
 		}
 	}
 
