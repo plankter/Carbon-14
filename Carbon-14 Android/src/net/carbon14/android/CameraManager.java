@@ -152,7 +152,7 @@ final class CameraManager {
 			int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x
 					: mScreenResolution.y) * 3 / 4;
 			int leftOffset = (mScreenResolution.x - size) / 2;
-			int topOffset = (mScreenResolution.y - size) / 2;
+			int topOffset = (mScreenResolution.y - size) / 2 - 50;
 			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
 			Log.v(TAG, "Calculated framing rect: " + mFramingRect);
 		}

@@ -18,7 +18,6 @@
 			android:layout_height="fill_parent">
 			<LinearLayout
 				android:layout_height="wrap_content"
-				xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/inputLayout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
@@ -174,27 +173,20 @@
 
 						</LinearLayout>
 					</LinearLayout>
+					
+					<Button
+						android:layout_height="wrap_content"
+						android:id="@+id/ButtonSubmit"
+						android:text="Submit"
+						android:layout_width="fill_parent"></Button>
+
 				</FrameLayout>
 
-				<EditText
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:id="@+id/EditTextCode"></EditText>
-				<Button
-					android:layout_height="wrap_content"
-					android:id="@+id/ButtonScan"
-					android:layout_width="fill_parent"
-					android:text="Scan Barcode"></Button>
-				<Button
-					android:layout_height="wrap_content"
-					android:id="@+id/ButtonSubmit"
-					android:text="Submit"
-					android:layout_width="fill_parent"></Button>
 			</LinearLayout>
+
 
 			<LinearLayout
 				android:layout_height="wrap_content"
-				xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/carbonLayout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
@@ -205,9 +197,9 @@
 					android:layout_height="fill_parent" />
 			</LinearLayout>
 
+
 			<LinearLayout
 				android:layout_height="wrap_content"
-				xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/upcLayout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
@@ -218,9 +210,9 @@
 					android:layout_height="fill_parent" />
 			</LinearLayout>
 
+
 			<LinearLayout
 				android:layout_height="wrap_content"
-				xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/ratingLayout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"

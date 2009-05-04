@@ -17,6 +17,7 @@
 package net.carbon14.android;
 
 import java.io.IOException;
+
 import net.carbon14.android.result.ResultButtonListener;
 import net.carbon14.android.result.ResultHandler;
 import net.carbon14.android.result.ResultHandlerFactory;
@@ -60,7 +61,6 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -157,9 +157,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		if (ratingEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
-
-		Button buttonScan = (Button) findViewById(R.id.ButtonScan);
-		buttonScan.setOnClickListener(scanListener);
 
 		Button buttonSubmit = (Button) findViewById(R.id.ButtonSubmit);
 		buttonSubmit.setOnClickListener(submitListener);
@@ -279,7 +276,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 	private OnClickListener submitListener = new OnClickListener() {
 		public void onClick(View v) {
-			submitBarcode();
+//			submitBarcode();
 		}
 	};
 
@@ -299,8 +296,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 	private void productRecognized(String contents, String format) {
 		if (contents != null) {
-			EditText editText = (EditText) findViewById(R.id.EditTextCode);
-			editText.setText(contents);
+			
 		}
 	}
 
@@ -310,14 +306,13 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		startActivityForResult(intent, SCAN_REQUEST_CODE);
 	}
 
-	private void submitBarcode() {
-		EditText editText = (EditText) findViewById(R.id.EditTextCode);
+	private void submitBarcode(String barcode) {
 		if (upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
 		}
@@ -327,7 +322,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.ratingWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
 		}
@@ -337,7 +332,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
 				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + editText.getText();
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
 		}
