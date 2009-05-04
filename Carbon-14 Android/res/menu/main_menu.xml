@@ -8,8 +8,8 @@
 		android:icon="@android:drawable/ic_menu_view" />
 
 	<item
-		android:id="@+id/settingsMenuItem"
-		android:title="Settings"
+		android:id="@+id/preferencesMenuItem"
+		android:title="Preferences"
 		android:icon="@android:drawable/ic_menu_preferences" />
 
 	<item

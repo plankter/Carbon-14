@@ -104,34 +104,17 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 	private final static int SCAN_REQUEST_CODE = 0;
 	private final static int INPUT_REQUEST_CODE = 1;
+	private final static int PREFERENCES_REQUEST_CODE = 2;
 
 	private Boolean carbonEnabled;
 	private Boolean upcEnabled;
 	private Boolean ratingEnabled;
 
 	private TabHost.TabSpec tabInput;
-
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-		CameraManager.init(getApplication());
-
-		showHelpOnFirstLaunch();
-
-		ConnectivityManager connectivityManager = (ConnectivityManager) this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-		ProviderManager providers = new ProviderManager(connectivityManager);
-		if (!providers.reload())
-			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
+	
+	
+	private void Initialize()
+	{
 		setContentView(R.layout.main);
 
 		TabHost tabHost = getTabHost();
@@ -164,6 +147,39 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		mResultView = findViewById(R.id.result_view);
 		mStatusView = findViewById(R.id.status_view);
 
+		
+
+		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
+		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
+		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
+		initBeepSound();
+	}
+	
+	
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		CameraManager.init(getApplication());
+
+		showHelpOnFirstLaunch();
+
+		ConnectivityManager connectivityManager = (ConnectivityManager) this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		ProviderManager providers = new ProviderManager(connectivityManager);
+		if (!providers.reload())
+			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
+		
+		Initialize();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		if (mHasSurface) {
@@ -178,54 +194,9 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
 
-		// Intent intent = getIntent();
-		// String action = intent == null ? null : intent.getAction();
-		// String dataString = intent == null ? null : intent.getDataString();
-		// if (intent != null && action != null) {
-		// if (action.equals(Intents.Scan.ACTION)) {
-		// // Scan the formats the intent requested, and return the result
-		// // to the calling activity.
-		// mSource = Source.NATIVE_APP_INTENT;
-		// mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
-		// resetStatusView();
-		// } else if (dataString != null &&
-		// dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-		// dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
-		// // Scan only products and send the result to mobile Product
-		// // Search.
-		// mSource = Source.PRODUCT_SEARCH_LINK;
-		// mDecodeMode = Intents.Scan.PRODUCT_MODE;
-		// resetStatusView();
-		// } else if (dataString != null && dataString.equals(ZXING_URL)) {
-		// // Scan all formats and handle the results ourselves.
-		// // TODO: In the future we could allow the hyperlink to include a
-		// // URL to send the results to.
-		// mSource = Source.ZXING_LINK;
-		// mDecodeMode = null;
-		// resetStatusView();
-		// } else {
-		// // Scan all formats and handle the results ourselves (launched
-		// // from Home).
-		// mSource = Source.NONE;
-		// mDecodeMode = null;
-		// resetStatusView();
-		// }
-		// } else {
-		// mSource = Source.NONE;
-		// mDecodeMode = null;
-		// if (mLastResult == null) {
-		// resetStatusView();
-		// }
-		// }
-
 		mSource = Source.NONE;
 		mDecodeMode = Intents.Scan.PRODUCT_MODE;
 		resetStatusView();
-
-		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
-		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
-		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
-		initBeepSound();
 	}
 
 	@Override
@@ -245,15 +216,13 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				startActivityForResult(intent, INPUT_REQUEST_CODE);
 				break;
 			}
-			case R.id.settingsMenuItem: {
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setClassName(this, PreferencesActivity.class.getName());
-				startActivity(intent);
+			case R.id.preferencesMenuItem: {
+				Intent intent = new Intent(this, PreferencesActivity.class);
+				startActivityForResult(intent, PREFERENCES_REQUEST_CODE);
 				break;
 			}
 			case R.id.helpMenuItem: {
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setClassName(this, HelpActivity.class.getName());
+				Intent intent = new Intent(this, HelpActivity.class);
 				startActivity(intent);
 				break;
 			}
@@ -285,6 +254,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		}
 	};
 
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
@@ -306,6 +276,10 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 					// Handle successful scan
 					submitBarcode(barcode);
 				}
+				break;
+			}
+			case PREFERENCES_REQUEST_CODE: {
+				Initialize();
 				break;
 			}
 		}
