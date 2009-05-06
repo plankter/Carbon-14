@@ -22,6 +22,7 @@ import net.carbon14.android.result.ResultButtonListener;
 import net.carbon14.android.result.ResultHandler;
 import net.carbon14.android.result.ResultHandlerFactory;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -154,12 +155,15 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 		showHelpOnFirstLaunch();
 
+		Initialize();
+		
 		ConnectivityManager connectivityManager = (ConnectivityManager) this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		ProviderManager providers = new ProviderManager(connectivityManager);
-		if (!providers.reload())
+		ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "Loading providers. Please wait...", true);
+		Boolean ready = providers.reload();
+		dialog.dismiss();
+		if (!ready)
 			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
-
-		Initialize();
 	}
 
 	@Override
