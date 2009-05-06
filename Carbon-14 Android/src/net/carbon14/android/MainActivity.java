@@ -21,9 +21,9 @@ import java.io.IOException;
 import net.carbon14.android.result.ResultButtonListener;
 import net.carbon14.android.result.ResultHandler;
 import net.carbon14.android.result.ResultHandlerFactory;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -59,17 +59,15 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
-public class MainActivity extends TabActivity implements SurfaceHolder.Callback {
+public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	private static final String TAG = "MainActivity";
 
 	private static final int MAX_RESULT_IMAGE_SIZE = 150;
@@ -106,44 +104,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private final static int INPUT_REQUEST_CODE = 1;
 	private final static int PREFERENCES_REQUEST_CODE = 2;
 
-	private TabHost.TabSpec tabInput;
-
-	private void Initialize() {
-		setContentView(R.layout.main);
-
-		TabHost tabHost = getTabHost();
-
-		tabInput = tabHost.newTabSpec("tab_input").setIndicator("Input").setContent(R.id.inputLayout);
-		tabHost.addTab(tabInput);
-		setDefaultTab("tab_input");
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
-		if (ProviderManager.carbonEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
-		}
-
-		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
-		if (ProviderManager.upcEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
-		}
-
-		ProviderManager.ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
-		if (ProviderManager.ratingEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
-		}
-
-		mViewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-		mResultView = findViewById(R.id.result_view);
-		mStatusView = findViewById(R.id.status_view);
-
-		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
-		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
-		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
-		initBeepSound();
-	}
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -151,12 +111,18 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+		setContentView(R.layout.main);
+
 		CameraManager.init(getApplication());
+		mViewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+		mResultView = findViewById(R.id.result_view);
+		mStatusView = findViewById(R.id.status_view);
+		mHandler = null;
+		mLastResult = null;
+		mHasSurface = false;
 
 		showHelpOnFirstLaunch();
 
-		Initialize();
-		
 		ConnectivityManager connectivityManager = (ConnectivityManager) this.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		ProviderManager providers = new ProviderManager(connectivityManager);
 		ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "Loading providers. Please wait...", true);
@@ -185,6 +151,17 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		}
 
 		resetStatusView();
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
+		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
+		ProviderManager.ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
+		
+		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
+		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
+		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
+		initBeepSound();
 	}
 
 	@Override
@@ -206,7 +183,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 		}
 		case R.id.preferencesMenuItem: {
 			Intent intent = new Intent(this, PreferencesActivity.class);
-			startActivityForResult(intent, PREFERENCES_REQUEST_CODE);
+			startActivity(intent);
 			break;
 		}
 		case R.id.helpMenuItem: {
@@ -233,30 +210,26 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-			case SCAN_REQUEST_CODE: {
-				if (resultCode == RESULT_OK) {
-					String barcode = data.getStringExtra(Intents.Scan.RESULT);
-					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-					// Handle successful scan
-					submitBarcode(barcode);
-				} else if (resultCode == RESULT_CANCELED) {
-					// Handle cancel
-					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
-				}
-				break;
+		case SCAN_REQUEST_CODE: {
+			if (resultCode == RESULT_OK) {
+				String barcode = data.getStringExtra(Intents.Scan.RESULT);
+				String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
+				// Handle successful scan
+				submitBarcode(barcode);
+			} else if (resultCode == RESULT_CANCELED) {
+				// Handle cancel
+				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
 			}
-			case INPUT_REQUEST_CODE: {
-				if (resultCode == RESULT_OK) {
-					String barcode = data.getStringExtra("BARCODE");
-					// Handle successful scan
-					submitBarcode(barcode);
-				}
-				break;
+			break;
+		}
+		case INPUT_REQUEST_CODE: {
+			if (resultCode == RESULT_OK) {
+				String barcode = data.getStringExtra("BARCODE");
+				// Handle successful scan
+				submitBarcode(barcode);
 			}
-			case PREFERENCES_REQUEST_CODE: {
-				Initialize();
-				break;
-			}
+			break;
+		}
 		}
 	}
 
@@ -267,49 +240,43 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	}
 
 	private void submitBarcode(String barcode) {
-		if (barcode == null) return;
-		
+		if (barcode == null)
+			return;
+
 		if (ProviderManager.upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null) {
-				WebView webView = (WebView) findViewById(R.id.upcWebView);
-				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
-				webView.loadUrl(url);
-				
-//				WebView widgerWebView = (WebView) findViewById(R.id.upcWidgetWebView);
-//				widgerWebView.setVerticalScrollbarOverlay(true);
-//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				// WebView widgetWebView = (WebView)
+				// findViewById(R.id.upcWidgetWebView);
+				// widgetWebView.setVerticalScrollbarOverlay(true);
+				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
 		if (ProviderManager.ratingEnabled) {
 			Provider provider = ProviderManager.providers.get("Rating");
 			if (provider != null) {
-				WebView webView = (WebView) findViewById(R.id.ratingWebView);
-				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
-				webView.loadUrl(url);
-				
-//				WebView widgerWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
-//				widgerWebView.setVerticalScrollbarOverlay(true);
-//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				// WebView widgetWebView = (WebView)
+				// findViewById(R.id.ratingWidgetWebView);
+				// widgetWebView.setVerticalScrollbarOverlay(true);
+				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
 		if (ProviderManager.carbonEnabled) {
 			Provider provider = ProviderManager.providers.get("Environment");
 			if (provider != null) {
-				WebView webView = (WebView) findViewById(R.id.carbonWebView);
-				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
-				webView.loadUrl(url);
-				
-//				WebView widgerWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
-//				widgerWebView.setVerticalScrollbarOverlay(true);
-//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				// WebView widgetWebView = (WebView)
+				// findViewById(R.id.carbonWidgetWebView);
+				// widgetWebView.setVerticalScrollbarOverlay(true);
+				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
+		
+		
+		Intent intent = new Intent(this, DetailsActivity.class);
+		intent.putExtra("barcode", barcode);
+		startActivity(intent);
 	}
 
 	@Override
@@ -482,7 +449,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 			clipboard.setText(displayContents);
 		}
-		
+
 		submitBarcode(displayContents.toString());
 	}
 
