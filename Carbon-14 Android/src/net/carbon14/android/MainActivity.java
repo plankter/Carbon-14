@@ -105,10 +105,6 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private final static int INPUT_REQUEST_CODE = 1;
 	private final static int PREFERENCES_REQUEST_CODE = 2;
 
-	private Boolean carbonEnabled;
-	private Boolean upcEnabled;
-	private Boolean ratingEnabled;
-
 	private TabHost.TabSpec tabInput;
 
 	private void Initialize() {
@@ -122,18 +118,18 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
-		if (carbonEnabled) {
+		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
+		if (ProviderManager.carbonEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
 		}
 
-		upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
-		if (upcEnabled) {
+		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
+		if (ProviderManager.upcEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
 		}
 
-		ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
-		if (ratingEnabled) {
+		ProviderManager.ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
+		if (ProviderManager.ratingEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
 
@@ -269,7 +265,7 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 	private void submitBarcode(String barcode) {
 		if (barcode == null) return;
 		
-		if (upcEnabled) {
+		if (ProviderManager.upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.upcWebView);
@@ -277,13 +273,13 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 				
-				WebView widgerWebView = (WebView) findViewById(R.id.upcWidgetWebView);
-				widgerWebView.setVerticalScrollbarOverlay(true);
-				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+//				WebView widgerWebView = (WebView) findViewById(R.id.upcWidgetWebView);
+//				widgerWebView.setVerticalScrollbarOverlay(true);
+//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
-		if (ratingEnabled) {
+		if (ProviderManager.ratingEnabled) {
 			Provider provider = ProviderManager.providers.get("Rating");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.ratingWebView);
@@ -291,13 +287,13 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 				
-				WebView widgerWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
-				widgerWebView.setVerticalScrollbarOverlay(true);
-				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+//				WebView widgerWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
+//				widgerWebView.setVerticalScrollbarOverlay(true);
+//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 
-		if (carbonEnabled) {
+		if (ProviderManager.carbonEnabled) {
 			Provider provider = ProviderManager.providers.get("Environment");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
@@ -305,9 +301,9 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 				
-				WebView widgerWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
-				widgerWebView.setVerticalScrollbarOverlay(true);
-				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+//				WebView widgerWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
+//				widgerWebView.setVerticalScrollbarOverlay(true);
+//				widgerWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
 			}
 		}
 	}
@@ -482,6 +478,8 @@ public class MainActivity extends TabActivity implements SurfaceHolder.Callback 
 			ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 			clipboard.setText(displayContents);
 		}
+		
+		submitBarcode(displayContents.toString());
 	}
 
 	// Briefly show the contents of the barcode, then handle the result outside

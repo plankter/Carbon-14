@@ -16,8 +16,6 @@
 
 package net.carbon14.android;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -74,7 +72,7 @@ final class CameraManager {
 			mCamera = Camera.open();
 			try {
 				mCamera.setPreviewDisplay(holder);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -152,7 +150,7 @@ final class CameraManager {
 			int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x
 					: mScreenResolution.y) * 3 / 4;
 			int leftOffset = (mScreenResolution.x - size) / 2;
-			int topOffset = (mScreenResolution.y - size) / 2 - 50;
+			int topOffset = (mScreenResolution.y - size) / 2;
 			mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
 			Log.v(TAG, "Calculated framing rect: " + mFramingRect);
 		}
