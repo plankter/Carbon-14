@@ -29,18 +29,17 @@ public final class BarcodeResultHandler extends ResultHandler {
 
 	@Override
 	public void handleButtonPress(int index) {
-		ProductParsedResult productResult = (ProductParsedResult) mResult;
 		switch (index) {
 			case 0:
 				showDetails(mResult.getDisplayResult());
 				break;
 				
 			case 1:
-				openProductSearch(productResult.getNormalizedProductID());
+				openProductSearch(mResult.getDisplayResult());
 				break;
 				
 			case 2:
-				webSearch(productResult.getNormalizedProductID());
+				webSearch(mResult.getDisplayResult());
 				break;
 		}
 	}

@@ -222,7 +222,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	{
 		if (barcode == null) return;
 		
-		Intent intent = new Intent(this, DetailsActivity.class);
+		Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 		intent.putExtra("barcode", barcode);
 		startActivity(intent);
 	}
