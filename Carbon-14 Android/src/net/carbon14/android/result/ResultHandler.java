@@ -25,8 +25,8 @@ import java.util.GregorianCalendar;
 
 import net.carbon14.android.Contents;
 import net.carbon14.android.LocaleManager;
+import net.carbon14.android.MainActivity;
 import net.carbon14.android.R;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -44,9 +44,9 @@ public abstract class ResultHandler {
   public static final int MAX_BUTTON_COUNT = 4;
 
   protected final ParsedResult mResult;
-  private final Activity mActivity;
+  protected final MainActivity mActivity;
 
-  protected ResultHandler(Activity activity, ParsedResult result) {
+  protected ResultHandler(MainActivity activity, ParsedResult result) {
     mResult = result;
     mActivity = activity;
   }
@@ -273,6 +273,11 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
     intent.putExtra("query", query);
     launchIntent(intent);
+  }
+  
+  public final void showDetails(String barcode)
+  {
+	  mActivity.showDetails(barcode);
   }
 
   private void launchIntent(Intent intent) {

@@ -12,6 +12,7 @@
 	<string name="button_open_browser">Open browser</string>
 	<string name="button_show_map">Show map</string>
 	<string name="button_web_search">Web search</string>
+	<string name="button_details">Details</string>
 	<string name="contents_contact">Contact info</string>
 	<string name="contents_email">Email address</string>
 	<string name="contents_location">Geographic coordinates</string>

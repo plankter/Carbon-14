@@ -42,7 +42,6 @@ Carbon-14[!!-~]Android/res/values/colors.xml -text
 Carbon-14[!!-~]Android/res/values/ids.xml -text
 Carbon-14[!!-~]Android/res/values/strings.xml -text
 Carbon-14[!!-~]Android/res/xml/preferences.xml -text
-Carbon-14[!!-~]Android/src/net/carbon14/android/AndroidHttpClient.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/CameraManager.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/CaptureActivityHandler.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/Contents.java -text
@@ -61,11 +60,10 @@ Carbon-14[!!-~]Android/src/net/carbon14/android/QRCodeEncoder.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/ViewfinderView.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/YUVMonochromeBitmapSource.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/AndroidIntentParsedResult.java -text
-Carbon-14[!!-~]Android/src/net/carbon14/android/result/ProductResultHandler.java -text
+Carbon-14[!!-~]Android/src/net/carbon14/android/result/BarcodeResultHandler.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultButtonListener.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandler.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandlerFactory.java -text
-Carbon-14[!!-~]Android/src/net/carbon14/android/result/TextResultHandler.java -text
 GAE/.project -text
 GAE/.pydevproject -text
 GAE/data/providers.csv -text

@@ -42,7 +42,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
@@ -72,7 +71,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	private static final String TAG = "MainActivity";
 
 	private static final int MAX_RESULT_IMAGE_SIZE = 150;
-	private static final int INTENT_RESULT_DURATION = 1500;
 	private static final float BEEP_VOLUME = 0.15f;
 	private static final long VIBRATE_DURATION = 200;
 
@@ -101,8 +99,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
 	private final OnCompletionListener mBeepListener = new BeepListener();
 
-	private final static int SCAN_REQUEST_CODE = 0;
-	private final static int INPUT_REQUEST_CODE = 1;
+	private final static int INPUT_REQUEST_CODE = 0;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -210,33 +207,24 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-			case SCAN_REQUEST_CODE: {
-				if (resultCode == RESULT_OK) {
-					String barcode = data.getStringExtra(Intents.Scan.RESULT);
-					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-					// Handle successful scan
-					submitBarcode(barcode);
-				} else if (resultCode == RESULT_CANCELED) {
-					// Handle cancel
-					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
-				}
-				break;
-			}
 			case INPUT_REQUEST_CODE: {
 				if (resultCode == RESULT_OK) {
 					String barcode = data.getStringExtra("BARCODE");
 					// Handle successful scan
-					submitBarcode(barcode);
+					showDetails(barcode);
 				}
 				break;
 			}
 		}
 	}
-
-	private void startScanning() {
-		Intent intent = new Intent("SCAN");
-		intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
-		startActivityForResult(intent, SCAN_REQUEST_CODE);
+	
+	public void showDetails(String barcode)
+	{
+		if (barcode == null) return;
+		
+		Intent intent = new Intent(this, DetailsActivity.class);
+		intent.putExtra("barcode", barcode);
+		startActivity(intent);
 	}
 
 	private void submitBarcode(String barcode) {
@@ -272,10 +260,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 				widgetWebView.loadUrl(url);
 			}
 		}
-
-		Intent intent = new Intent(this, DetailsActivity.class);
-		intent.putExtra("barcode", barcode);
-		startActivity(intent);
 	}
 
 	@Override
@@ -450,42 +434,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		}
 
 		submitBarcode(displayContents.toString());
-	}
-
-	// Briefly show the contents of the barcode, then handle the result outside
-	// Barcode Scanner.
-	private void handleDecodeExternally(Result rawResult, Bitmap barcode) {
-		mViewfinderView.drawResultBitmap(barcode);
-
-		// Since this message will only be shown for a second, just tell the
-		// user what kind of
-		// barcode was found (e.g. contact info) rather than the full contents,
-		// which they won't
-		// have time to read.
-		ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-		TextView textView = (TextView) findViewById(R.id.status_text_view);
-		textView.setGravity(Gravity.CENTER);
-		textView.setTextSize(18.0f);
-		textView.setText(getString(resultHandler.getDisplayTitle()));
-
-		mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
-
-		if (mCopyToClipboard) {
-			ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-			clipboard.setText(resultHandler.getDisplayContents());
-		}
-
-		if (mSource == Source.NATIVE_APP_INTENT) {
-			// Hand back whatever action they requested - this can be changed to
-			// Intents.Scan.ACTION when
-			// the deprecated intent is retired.
-			Intent intent = new Intent(getIntent().getAction());
-			intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-			intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-			Message message = Message.obtain(mHandler, R.id.return_scan_result);
-			message.obj = intent;
-			mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-		}
 	}
 
 	/**
