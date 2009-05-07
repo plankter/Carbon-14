@@ -59,6 +59,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -102,7 +103,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
 	private final static int SCAN_REQUEST_CODE = 0;
 	private final static int INPUT_REQUEST_CODE = 1;
-	private final static int PREFERENCES_REQUEST_CODE = 2;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -153,11 +153,11 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		resetStatusView();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		
+
 		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
 		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
 		ProviderManager.ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
-		
+
 		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
 		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
 		mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
@@ -176,31 +176,31 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.inputMenuItem: {
-			Intent intent = new Intent(this, ManualInputActivity.class);
-			startActivityForResult(intent, INPUT_REQUEST_CODE);
-			break;
-		}
-		case R.id.preferencesMenuItem: {
-			Intent intent = new Intent(this, PreferencesActivity.class);
-			startActivity(intent);
-			break;
-		}
-		case R.id.helpMenuItem: {
-			Intent intent = new Intent(this, HelpActivity.class);
-			startActivity(intent);
-			break;
-		}
-		case R.id.aboutMenuItem: {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(getString(R.string.title_about) + mVersionName);
-			builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
-			builder.setIcon(R.drawable.zxing_icon);
-			builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
-			builder.setNegativeButton(R.string.button_cancel, null);
-			builder.show();
-			break;
-		}
+			case R.id.inputMenuItem: {
+				Intent intent = new Intent(this, ManualInputActivity.class);
+				startActivityForResult(intent, INPUT_REQUEST_CODE);
+				break;
+			}
+			case R.id.preferencesMenuItem: {
+				Intent intent = new Intent(this, PreferencesActivity.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.helpMenuItem: {
+				Intent intent = new Intent(this, HelpActivity.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.aboutMenuItem: {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getString(R.string.title_about) + mVersionName);
+				builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
+				builder.setIcon(R.drawable.zxing_icon);
+				builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
+				builder.setNegativeButton(R.string.button_cancel, null);
+				builder.show();
+				break;
+			}
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -210,26 +210,26 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case SCAN_REQUEST_CODE: {
-			if (resultCode == RESULT_OK) {
-				String barcode = data.getStringExtra(Intents.Scan.RESULT);
-				String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-				// Handle successful scan
-				submitBarcode(barcode);
-			} else if (resultCode == RESULT_CANCELED) {
-				// Handle cancel
-				Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+			case SCAN_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra(Intents.Scan.RESULT);
+					String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
+					// Handle successful scan
+					submitBarcode(barcode);
+				} else if (resultCode == RESULT_CANCELED) {
+					// Handle cancel
+					Toast.makeText(this, "Scanning Cancelled", Toast.LENGTH_SHORT).show();
+				}
+				break;
 			}
-			break;
-		}
-		case INPUT_REQUEST_CODE: {
-			if (resultCode == RESULT_OK) {
-				String barcode = data.getStringExtra("BARCODE");
-				// Handle successful scan
-				submitBarcode(barcode);
+			case INPUT_REQUEST_CODE: {
+				if (resultCode == RESULT_OK) {
+					String barcode = data.getStringExtra("BARCODE");
+					// Handle successful scan
+					submitBarcode(barcode);
+				}
+				break;
 			}
-			break;
-		}
 		}
 	}
 
@@ -246,34 +246,33 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		if (ProviderManager.upcEnabled) {
 			Provider provider = ProviderManager.providers.get("UPC Database");
 			if (provider != null) {
-				// WebView widgetWebView = (WebView)
-				// findViewById(R.id.upcWidgetWebView);
-				// widgetWebView.setVerticalScrollbarOverlay(true);
-				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				WebView widgetWebView = (WebView) findViewById(R.id.upcWidgetWebView);
+				widgetWebView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				widgetWebView.loadUrl(url);
 			}
 		}
 
 		if (ProviderManager.ratingEnabled) {
 			Provider provider = ProviderManager.providers.get("Rating");
 			if (provider != null) {
-				// WebView widgetWebView = (WebView)
-				// findViewById(R.id.ratingWidgetWebView);
-				// widgetWebView.setVerticalScrollbarOverlay(true);
-				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				WebView widgetWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
+				widgetWebView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				widgetWebView.loadUrl(url);
 			}
 		}
 
 		if (ProviderManager.carbonEnabled) {
 			Provider provider = ProviderManager.providers.get("Environment");
 			if (provider != null) {
-				// WebView widgetWebView = (WebView)
-				// findViewById(R.id.carbonWidgetWebView);
-				// widgetWebView.setVerticalScrollbarOverlay(true);
-				// widgetWebView.loadUrl("http://carbon-14.appspot.com/services/upc/details?barcode=000040822938");
+				WebView widgetWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
+				widgetWebView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				widgetWebView.loadUrl(url);
 			}
 		}
-		
-		
+
 		Intent intent = new Intent(this, DetailsActivity.class);
 		intent.putExtra("barcode", barcode);
 		startActivity(intent);
