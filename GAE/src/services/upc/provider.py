@@ -59,6 +59,8 @@ class DetailsPage(webapp.RequestHandler):
 		
 				path = os.path.join(os.path.dirname(__file__), 'details.html')
 				self.response.out.write(template.render(path, template_values))
+			else:
+				self.response.out.write("Product not found.")
 		
 		
 		

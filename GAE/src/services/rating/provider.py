@@ -28,7 +28,7 @@ class WidgetPage(webapp.RequestHandler):
             data = result.content
             
             template_values = {
-                        'data': data,
+                        'rating': range(5),
                          }
         
             path = os.path.join(os.path.dirname(__file__), 'widget.html')
@@ -44,11 +44,13 @@ class DetailsPage(webapp.RequestHandler):
             data = result.content
             
             template_values = {
-                        'data': data,
+                        'rating': range(5),
                          }
         
             path = os.path.join(os.path.dirname(__file__), 'details.html')
             self.response.out.write(template.render(path, template_values))
+        else:
+            self.response.out.write("Product not found.")
         
         
         

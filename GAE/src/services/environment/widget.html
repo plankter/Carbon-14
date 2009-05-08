@@ -8,16 +8,17 @@
 	<body class="widget">
 		<table id="data">
 			<tr>
-				<td class="caption">Name</td>
-				<td class="content">{{ product.name }}</td>
-			</tr>
-			<tr>
-				<td class="caption">Size</td>
-				<td class="content">{{ size }}</td>
-			</tr>
-			<tr>
-				<td class="caption">Country</td>
-				<td class="content">{{ country }}</td>
+				<td class="caption">Carbon Footprint</td>
+				<td class="content">
+					<img src="http://chart.apis.google.com/chart?
+					chs=100x50
+					&amp;chf=bg,s,EFEFEF00
+					&amp;chd=t:{{ product.carbonFootprint }}
+					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
+					&amp;cht=gom" 
+					alt="Carbon Benchmark" />
+					{{ product.carbonFootprint }}
+				</td>
 			</tr>
 		</table>
 	</body>
