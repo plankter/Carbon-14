@@ -407,12 +407,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		typeTextView.setText(getString(R.string.msg_default_type) + ": " + resultHandler.getType().toString());
 
 		TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
-		CharSequence title = getString(resultHandler.getDisplayTitle());
-		SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
-		styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
-		CharSequence displayContents = resultHandler.getDisplayContents();
-		styled.append(displayContents);
-		contentsTextView.setText(styled);
+		String displayContents = resultHandler.getDisplayContents().toString();
+		contentsTextView.setText(getString(R.string.msg_default_code) + ": " + displayContents);
 
 		int buttonCount = resultHandler.getButtonCount();
 		ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
@@ -433,7 +429,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 			clipboard.setText(displayContents);
 		}
 
-		submitBarcode(displayContents.toString());
+		submitBarcode(displayContents);
 	}
 
 	/**

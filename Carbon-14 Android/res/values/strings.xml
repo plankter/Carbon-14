@@ -28,6 +28,7 @@
 	<string name="msg_default_mms_subject">Hi</string>
 	<string name="msg_default_status">Place a barcode inside the viewfinder	rectangle to scan it.</string>
 	<string name="msg_default_type">Type</string>
+	<string name="msg_default_code">Code</string>
 	<string name="msg_encode_barcode_failed">Could not generate the requested barcode.</string>
 	<string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
 	<string name="msg_encode_in_progress">Generating a barcode\u2026</string>
@@ -49,6 +50,6 @@
 	<string name="preferences_vibrate_title">Vibrate</string>
 	<string name="result_product">Found product</string>
 	<string name="result_text">Found plain text</string>
-	<string name="title_about">Barcode Scanner v</string>
+	<string name="title_about">Carbon-14</string>
 	<string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -43,6 +43,7 @@ public class ProviderManager {
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		try {
 			String responseBody = httpClient.execute(request, responseHandler);
+			httpClient.getConnectionManager().shutdown();
 
 			XStream xstream = new XStream(new DomDriver());
 			xstream.alias("provider", Provider.class);
@@ -54,15 +55,12 @@ public class ProviderManager {
 				providers.put(provider.getName(), provider);
 			}
 
-		} catch (ClientProtocolException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return false;
 		}
 
-		httpClient.getConnectionManager().shutdown();
 		return true;
 	}
 }

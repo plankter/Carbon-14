@@ -70,6 +70,15 @@
 					android:textColor="@color/result_minor_text"
 					android:textSize="14sp" />
 
+				<TextView
+					android:id="@+id/contents_text_view"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="left"
+					android:text="@string/msg_default_contents"
+					android:textColor="@color/result_minor_text"
+					android:textSize="14sp" />
+
 			</LinearLayout>
 
 			<ScrollView
@@ -84,15 +93,6 @@
 					android:gravity="left|top"
 					android:paddingLeft="12px"
 					android:background="@color/transparent">
-
-					<TextView
-						android:id="@+id/contents_text_view"
-						android:layout_width="fill_parent"
-						android:layout_height="fill_parent"
-						android:text="@string/msg_default_contents"
-						android:textColor="@color/result_text"
-						android:textSize="22sp"
-						android:autoLink="web" />
 
 					<WebView
 						android:id="@+id/carbonWidgetWebView"
