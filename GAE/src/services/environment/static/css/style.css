@@ -3,6 +3,8 @@
 	background-color: black;
 	font-size: small;
 	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+	border: 1px;
+	padding: 2px;
 }
 
 .details {
