@@ -126,7 +126,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		Boolean ready = providers.reload();
 		dialog.dismiss();
 		if (!ready)
-			Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Network is not available.", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -236,7 +236,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 			if (provider != null) {
 				WebView widgetWebView = (WebView) findViewById(R.id.upcWidgetWebView);
 				widgetWebView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
 				widgetWebView.loadUrl(url);
 			}
 		}
@@ -246,7 +246,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 			if (provider != null) {
 				WebView widgetWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
 				widgetWebView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
 				widgetWebView.loadUrl(url);
 			}
 		}
@@ -256,7 +256,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 			if (provider != null) {
 				WebView widgetWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
 				widgetWebView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
 				widgetWebView.loadUrl(url);
 			}
 		}
