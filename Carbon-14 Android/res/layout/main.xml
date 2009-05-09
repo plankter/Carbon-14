@@ -71,6 +71,38 @@
 					android:textSize="14sp" />
 
 			</LinearLayout>
+			
+			<ScrollView
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:background="@color/transparent">
+
+						<WebView
+							android:id="@+id/carbonWidgetWebView"
+							android:background="@color/transparent"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+
+						<WebView
+							android:id="@+id/upcWidgetWebView"
+							android:background="@color/transparent"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+
+						<WebView
+							android:id="@+id/ratingWidgetWebView"
+							android:background="@color/transparent"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+					</LinearLayout>
+
+				</ScrollView>
 
 			<ScrollView
 				android:layout_width="fill_parent"
@@ -120,38 +152,6 @@
 				android:visibility="gone" />
 
 		</LinearLayout>
-
-		<ScrollView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1">
-			
-			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:background="@color/transparent">
-				
-				<WebView
-					android:id="@+id/carbonWidgetWebView"
-					android:background="@color/transparent"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
-					
-				<WebView
-					android:id="@+id/upcWidgetWebView"
-					android:background="@color/transparent"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
-					
-				<WebView
-					android:id="@+id/ratingWidgetWebView"
-					android:background="@color/transparent"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
-			</LinearLayout>
-			
-		</ScrollView>
 
 	</LinearLayout>
 
