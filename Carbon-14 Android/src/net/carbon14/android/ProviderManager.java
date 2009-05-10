@@ -58,9 +58,8 @@ public class ProviderManager {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
 		}
 
-		return true;
+		return (providers != null);
 	}
 }

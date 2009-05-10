@@ -8,7 +8,7 @@
 	<string name="button_done">Done</string>
 	<string name="button_get_directions">Get directions</string>
 	<string name="button_ok">OK</string>
-	<string name="button_product_search">Open Product Search</string>
+	<string name="button_product_search">Product Search</string>
 	<string name="button_open_browser">Open browser</string>
 	<string name="button_show_map">Show map</string>
 	<string name="button_web_search">Web search</string>

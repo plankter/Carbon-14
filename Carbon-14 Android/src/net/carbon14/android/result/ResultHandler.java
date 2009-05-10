@@ -255,7 +255,7 @@ public abstract class ResultHandler {
   // Uses the mobile-specific version of Product Search, which is formatted for small screens.
   public final void openProductSearch(String upc) {
     Uri uri = Uri.parse("http://www.google." + LocaleManager.getProductSearchCountryTLD() +
-        "/m/products?q=" + upc + "&source=zxing");
+        "/m/products?q=" + upc + "&source=carbon-14");
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
