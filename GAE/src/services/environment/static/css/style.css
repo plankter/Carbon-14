@@ -3,8 +3,8 @@
 	background-color: black;
 	font-size: small;
 	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
-	border: 1px;
 	padding: 2px;
+	border: 1px groove #b2b2b2;
 }
 
 .details {
@@ -16,13 +16,15 @@
 .caption {
 	font-weight: bold;
 	background-color: #313131;
-	padding: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 .content {
 	background-color: black;
 	width: 100%;
-	padding: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 .centered {
