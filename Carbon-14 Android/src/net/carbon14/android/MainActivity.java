@@ -45,8 +45,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
-import android.text.SpannableStringBuilder;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
