@@ -38,6 +38,12 @@ class WidgetPage(webapp.RequestHandler):
 		
 				path = os.path.join(os.path.dirname(__file__), 'widget.html')
 				self.response.out.write(template.render(path, template_values))
+			else:
+				path = os.path.join(os.path.dirname(__file__), '404.html')
+				self.response.out.write(template.render(path, None))
+		else:
+			path = os.path.join(os.path.dirname(__file__), '404.html')
+			self.response.out.write(template.render(path, None))
 				
 				
 class DetailsPage(webapp.RequestHandler):

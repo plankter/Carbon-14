@@ -15,52 +15,55 @@ from google.appengine.api import urlfetch
 
 
 def requestData(barcode):
-    url = "http://cocoa.ethz.ch:8081/RecommendationServer-war/ProductDataGateway?barcode="+barcode+"&user=2"
-    return urlfetch.fetch(url)
+	url = "http://cocoa.ethz.ch:8081/RecommendationServer-war/ProductDataGateway?barcode=" + barcode + "&user=2"
+	return urlfetch.fetch(url)
 
 
 class WidgetPage(webapp.RequestHandler):
-    def get(self):
-        barcode = self.request.get('barcode')
-        result = requestData(barcode)
-        
-        if result.status_code == 200:
-            data = result.content
-            
-            template_values = {
-                        'rating': range(5),
-                         }
-        
-            path = os.path.join(os.path.dirname(__file__), 'widget.html')
-            self.response.out.write(template.render(path, template_values))
-                
-                
+	def get(self):
+		barcode = self.request.get('barcode')
+		result = requestData(barcode)
+		
+		if result.status_code == 200:
+			data = result.content
+			
+			template_values = {
+						'rating': range(5),
+						 }
+		
+			path = os.path.join(os.path.dirname(__file__), 'widget.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			path = os.path.join(os.path.dirname(__file__), '404.html')
+			self.response.out.write(template.render(path, None))
+				
+				
 class DetailsPage(webapp.RequestHandler):
-    def get(self):
-        barcode = self.request.get('barcode')
-        result = requestData(barcode)
-        
-        if result.status_code == 200:
-            data = result.content
-            
-            template_values = {
-                        'rating': range(5),
-                         }
-        
-            path = os.path.join(os.path.dirname(__file__), 'details.html')
-            self.response.out.write(template.render(path, template_values))
-        else:
-            self.response.out.write("Product not found.")
-        
-        
-        
-        
+	def get(self):
+		barcode = self.request.get('barcode')
+		result = requestData(barcode)
+		
+		if result.status_code == 200:
+			data = result.content
+			
+			template_values = {
+						'rating': range(5),
+						 }
+		
+			path = os.path.join(os.path.dirname(__file__), 'details.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			self.response.out.write("Product not found.")
+		
+		
+		
+		
 def main():
-    application = webapp.WSGIApplication([
-        ('/services/rating/widget', WidgetPage),
-        ('/services/rating/details', DetailsPage),
-        ], debug=True)
-    util.run_wsgi_app(application)
+	application = webapp.WSGIApplication([
+		('/services/rating/widget', WidgetPage),
+		('/services/rating/details', DetailsPage),
+		], debug=True)
+	util.run_wsgi_app(application)
 
 if __name__ == '__main__':
-    main()
+	main()
