@@ -13,11 +13,23 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.api import urlfetch
 
+from xml.dom.minidom import parse, parseString
+
 
 def requestData(barcode):
-	url = "http://cocoa.ethz.ch:8081/RecommendationServer-war/ProductDataGateway?barcode=" + barcode + "&user=2"
+	url = "http://cocoa.ethz.ch:8081/RecommendationServer-war/ProductDataGatewayAndroid1?barcode=" + barcode + "&user=2"
 	return urlfetch.fetch(url)
 
+def getText(nodelist):
+	rc = ""
+	for node in nodelist:
+		if node.nodeType == node.TEXT_NODE:
+			rc = rc + node.data
+	return rc
+
+def handle404(self):
+	path = os.path.join(os.path.dirname(__file__), '404.html')
+	self.response.out.write(template.render(path, None))
 
 class WidgetPage(webapp.RequestHandler):
 	def get(self):
@@ -25,17 +37,25 @@ class WidgetPage(webapp.RequestHandler):
 		result = requestData(barcode)
 		
 		if result.status_code == 200:
-			data = result.content
+			dom = parseString(result.content)
 			
-			template_values = {
-						'rating': range(5),
-						 }
-		
-			path = os.path.join(os.path.dirname(__file__), 'widget.html')
-			self.response.out.write(template.render(path, template_values))
+			productId = int(getText(dom.getElementsByTagName("productId")[0].childNodes))
+			if (productId == 0):
+				handle404(self)
+			else:
+				nodelist = dom.getElementsByTagName("productOverallScore")[0].childNodes
+				rating = float(getText(nodelist))
+				
+				showHalfStar = True
+				template_values = {
+							'rating': range(int(rating)),
+							'showHalfStar': showHalfStar
+							 }
+			
+				path = os.path.join(os.path.dirname(__file__), 'widget.html')
+				self.response.out.write(template.render(path, template_values))
 		else:
-			path = os.path.join(os.path.dirname(__file__), '404.html')
-			self.response.out.write(template.render(path, None))
+			handle404(self)
 				
 				
 class DetailsPage(webapp.RequestHandler):
@@ -44,16 +64,23 @@ class DetailsPage(webapp.RequestHandler):
 		result = requestData(barcode)
 		
 		if result.status_code == 200:
-			data = result.content
+			dom = parseString(result.content)
 			
-			template_values = {
-						'rating': range(5),
-						 }
-		
-			path = os.path.join(os.path.dirname(__file__), 'details.html')
-			self.response.out.write(template.render(path, template_values))
+			productId = int(getText(dom.getElementsByTagName("productId")[0].childNodes))
+			if (productId == 0):
+				handle404(self)
+			else:
+				nodelist = dom.getElementsByTagName("productOverallScore")[0].childNodes
+				rating = float(getText(nodelist))
+				
+				template_values = {
+							'rating': range(round(rating)),
+							 }
+			
+				path = os.path.join(os.path.dirname(__file__), 'details.html')
+				self.response.out.write(template.render(path, template_values))
 		else:
-			self.response.out.write("Product not found.")
+			handle404(self)
 		
 		
 		

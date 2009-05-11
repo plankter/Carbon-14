@@ -13,6 +13,9 @@
 					{% for i in rating %}
 					<img src="static/images/star.png" alt="Rating star" />
 					{% endfor %}
+					{% if showHalfStar %}
+					<img src="static/images/half-star.png" alt="Rating star" />
+					{% endif %}
 				</td>
 			</tr>
 		</table>
