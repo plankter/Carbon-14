@@ -1,8 +1,9 @@
-'''
-Created on Apr 9, 2009
-
-@author: Anton Rau
-'''
+__author__ = "Anton Rau"
+__email__ = "contact@antonrau.net"
+__copyright__ = "Copyright 2009, Anton Rau"
+__license__ = "Apache License 2.0"
+__version__ = "2009.05.14"
+__status__ = "Development"
 
 import os
 

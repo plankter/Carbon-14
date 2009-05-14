@@ -66,7 +66,6 @@ Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandler.java -text
 Carbon-14[!!-~]Android/src/net/carbon14/android/result/ResultHandlerFactory.java -text
 GAE/.project -text
 GAE/.pydevproject -text
-GAE/data/providers.csv -text
 GAE/src/app.yaml -text
 GAE/src/appengine_admin/__init__.py -text
 GAE/src/appengine_admin/admin_forms.py -text
