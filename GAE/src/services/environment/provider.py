@@ -1,7 +1,7 @@
 '''
 Created on Apr 9, 2009
 
-@author: Anton
+@author: Anton Rau
 '''
 
 import os

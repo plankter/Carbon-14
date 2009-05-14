@@ -1,7 +1,7 @@
 '''
 Created on Apr 9, 2009
 
-@author: Anton
+@author: Anton Rau
 '''
 
 import os
@@ -43,13 +43,23 @@ class WidgetPage(webapp.RequestHandler):
 			if (productId == 0):
 				handle404(self)
 			else:
-				nodelist = dom.getElementsByTagName("productOverallScore")[0].childNodes
-				rating = float(getText(nodelist))
+				productOverallScore = float(getText(dom.getElementsByTagName("productOverallScore")[0].childNodes))
 				
-				showHalfStar = True
+				rating = int(productOverallScore)
+				diff = productOverallScore - rating				
+				showHalfStar = False
+				
+				if (diff < 0.25):
+					showHalfStar = False
+				elif ((diff >= 0.25) and (diff < 0.75)):
+					showHalfStar = True
+				else:
+					rating = rating + 1
+					showHalfStar = False
+				
 				template_values = {
-							'rating': range(int(rating)),
-							'showHalfStar': showHalfStar
+							'rating': range(rating),
+							'showHalfStar': showHalfStar,
 							 }
 			
 				path = os.path.join(os.path.dirname(__file__), 'widget.html')
@@ -70,11 +80,32 @@ class DetailsPage(webapp.RequestHandler):
 			if (productId == 0):
 				handle404(self)
 			else:
-				nodelist = dom.getElementsByTagName("productOverallScore")[0].childNodes
-				rating = float(getText(nodelist))
+				productId = int(getText(dom.getElementsByTagName("productId")[0].childNodes))
+				productName = getText(dom.getElementsByTagName("productName")[0].childNodes)
+				productOverallScore = float(getText(dom.getElementsByTagName("productOverallScore")[0].childNodes))
+				totalNoOfRatings = int(getText(dom.getElementsByTagName("totalNoOfRatings")[0].childNodes))
+				ownScore = float(getText(dom.getElementsByTagName("ownScore")[0].childNodes))
+				
+				rating = int(productOverallScore)
+				diff = productOverallScore - rating				
+				showHalfStar = False
+				
+				if (diff < 0.25):
+					showHalfStar = False
+				elif ((diff >= 0.25) and (diff < 0.75)):
+					showHalfStar = True
+				else:
+					rating = rating + 1
+					showHalfStar = False
 				
 				template_values = {
-							'rating': range(round(rating)),
+							'productId': productId,
+							'productName': productName,
+							'productOverallScore': productOverallScore,
+							'totalNoOfRatings': totalNoOfRatings,
+							'ownScore': ownScore,
+							'rating': range(rating),
+							'showHalfStar': showHalfStar,
 							 }
 			
 				path = os.path.join(os.path.dirname(__file__), 'details.html')

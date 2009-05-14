@@ -8,11 +8,34 @@
 	<body class="details">
 		<table id="data">
 			<tr>
+				<td class="caption">Product&nbsp;ID</td>
+				<td class="content">{{ productId }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Name</td>
+				<td class="content">{{ productName }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Overall&nbsp;Score</td>
+				<td class="content">{{ productOverallScore }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Number&nbsp;Of&nbsp;Ratings</td>
+				<td class="content">{{ totalNoOfRatings }}</td>
+			</tr>
+			<tr>
+				<td class="caption">Own&nbsp;Score</td>
+				<td class="content">{{ ownScore }}</td>
+			</tr>
+			<tr>
 				<td class="caption">Rating</td>
 				<td class="content">
 					{% for i in rating %}
 					<img src="static/images/star.png" alt="Rating star" />
 					{% endfor %}
+					{% if showHalfStar %}
+					<img src="static/images/half-star.png" alt="Rating half-star" />
+					{% endif %}
 				</td>
 			</tr>
 		</table>
