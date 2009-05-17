@@ -45,6 +45,7 @@ class AdminAccount(appengine_admin.ModelAdmin):
 
 class ProductCategory(db.Model):
 	name = db.StringProperty(required=True)
+	unit = db.StringProperty()
 	averageCarbonFootprint = db.FloatProperty()
 	minCarbonFootprint = db.FloatProperty()
 	maxCarbonFootprint = db.FloatProperty()
@@ -61,7 +62,7 @@ class ProductCategory(db.Model):
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
 	listFields = ('name', 'created', 'updated')
-	editFields = ('name', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
+	editFields = ('name', 'unit', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -92,6 +93,7 @@ class Product(db.Model):
 	name = db.StringProperty(required=True)
 	category = db.ReferenceProperty(ProductCategory, required=True)
 	producer = db.ReferenceProperty(Producer, required=True)
+	quantity = db.FloatProperty()
 	description = db.TextProperty()
 	rating = db.RatingProperty()
 	carbonFootprint = db.FloatProperty()
@@ -104,12 +106,11 @@ class Product(db.Model):
 class AdminProduct(appengine_admin.ModelAdmin):
 	model = Product
 	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
-	editFields = ('code', 'name', 'category', 'producer', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	editFields = ('code', 'name', 'category', 'producer', 'quantity', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
 class Order(db.Model):
-	time = db.DateTimeProperty(required=True)
 	customer = db.ReferenceProperty(Account, required=True)
 	product = db.ReferenceProperty(Product, required=True)
 	location = db.GeoPtProperty()
@@ -119,8 +120,8 @@ class Order(db.Model):
 ## Admin views ##
 class AdminOrder(appengine_admin.ModelAdmin):
 	model = Order
-	listFields = ('time', 'customer', 'product', 'location', 'created', 'updated')
-	editFields = ('time', 'customer', 'product', 'location')
+	listFields = ('customer', 'product', 'location', 'created', 'updated')
+	editFields = ('customer', 'product', 'location')
 	readonlyFields = ('created', 'updated')
 			
 	
@@ -155,6 +156,11 @@ class GenerateTestData(webapp.RequestHandler):
 			category=category).put()
 
 
+def handle404(self):
+	path = os.path.join(os.path.dirname(__file__), '404.html')
+	self.response.out.write(template.render(path, None))
+
+
 def requestData(barcode):
 	product = Product.gql("WHERE code = :1", barcode).get()
 	return product
@@ -173,35 +179,48 @@ class WidgetPage(webapp.RequestHandler):
 			path = os.path.join(os.path.dirname(__file__), 'widget.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
-			path = os.path.join(os.path.dirname(__file__), '404.html')
-			self.response.out.write(template.render(path, None))
+			handle404(self)
 				
 				
 class DetailsPage(webapp.RequestHandler):
 	def get(self):
-		# get the current user
-		user = users.get_current_user()
-		
-#		# create user account if haven't already
-#		account = Account.getAccount(user)
-#		if account is None:
-#			account = Account(user=user)
-#			account.put()
-		
 		barcode = self.request.get('barcode')
 		result = requestData(barcode)
 		
 		if result is not None:
 			template_values = {
 						'product': result,
+						'url': '/services/environment/submit?barcode=' + barcode,
 						 }
 		
 			path = os.path.join(os.path.dirname(__file__), 'details.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
-			self.response.out.write("Product not found.")
+			handle404(self)
 		
-		
+
+class SubmitPage(webapp.RequestHandler):
+	def get(self):
+		# get the current user
+		user = users.get_current_user()
+		if not user:
+			greeting = ("<a href=\"%s\">Sign in or register</a>." %
+					users.create_login_url(self.request))
+			
+			self.response.out.write("<html><body>%s</body></html>" % greeting)
+			
+		else:		
+			# create user account if haven't already
+			account = Account.getAccount(user)
+			if account is None:
+				account = Account(user=user)
+				account.put()
+			
+			barcode = self.request.get('barcode')
+			product = requestData(barcode)
+			order = Order(customer=account, product=product)
+			order.put()
+			
 		
 		
 def main():
@@ -209,6 +228,7 @@ def main():
 		('/services/environment/widget', WidgetPage),
 		('/services/environment/details', DetailsPage),
 		('/services/environment/generate', GenerateTestData),
+		('/services/environment/submit', SubmitPage),
 		(r'^(/services/environment/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)

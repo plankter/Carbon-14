@@ -37,7 +37,7 @@
 					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
 					&amp;cht=gom" 
 					alt="Carbon Benchmark" />
-					{{ product.carbonFootprint }}
+					{{ product.carbonFootprint|floatformat }}
 				</td>
 			</tr>
 			<tr>
@@ -50,7 +50,7 @@
 					&amp;chds={{ product.category.minDirectEnergyConsumption }},{{ product.category.maxDirectEnergyConsumption }}
 					&amp;cht=gom" 
 					alt="Direct Energy Consumption Benchmark" />
-					{{ product.directEnergyConsumption }}
+					{{ product.directEnergyConsumption|floatformat }}
 				</td>
 			</tr>
 			<tr>
@@ -63,9 +63,12 @@
 					&amp;chds={{ product.category.minIndirectEnergyConsumption }},{{ product.category.maxIndirectEnergyConsumption }}
 					&amp;cht=gom" 
 					alt="Indirect Energy Consumption Benchmark" />
-					{{ product.indirectEnergyConsumption }}
+					{{ product.indirectEnergyConsumption|floatformat }}
 				</td>
 			</tr>
 		</table>
+		<div class="centered">
+			<a class="button" href="{{ url }}"><span>Add&nbsp;to&nbsp;Profile</span></a>
+		</div>
 	</body>
 </html>
