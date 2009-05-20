@@ -29,10 +29,14 @@
 			</tr>
 			<tr>
 				<td class="caption">Unit&nbsp;Size</td>
-				<td class="content">{{ product.quantity }} {{ product.category.unit }}</td>
+				<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
 			</tr>
 			<tr>
 				<td class="caption">Carbon Footprint</td>
+				<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub></td>
+			</tr>
+			<tr>
+				<td class="caption">Normalized Footprint</td>
 				<td class="content">
 					<img src="http://chart.apis.google.com/chart?
 					chs=100x50
@@ -41,7 +45,7 @@
 					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
 					&amp;cht=gom" 
 					alt="Carbon Benchmark" />
-					{{ product.carbonFootprint|floatformat }}
+					{{ product.carbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
 				</td>
 			</tr>
 		</table>

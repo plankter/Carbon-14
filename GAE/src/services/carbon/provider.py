@@ -93,7 +93,7 @@ class Product(db.Model):
 	name = db.StringProperty(required=True)
 	category = db.ReferenceProperty(ProductCategory, required=True)
 	producer = db.ReferenceProperty(Producer, required=True)
-	quantity = db.FloatProperty()
+	unitSize = db.FloatProperty()
 	description = db.TextProperty()
 	rating = db.RatingProperty()
 	carbonFootprint = db.FloatProperty()
@@ -106,7 +106,7 @@ class Product(db.Model):
 class AdminProduct(appengine_admin.ModelAdmin):
 	model = Product
 	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
-	editFields = ('code', 'name', 'category', 'producer', 'quantity', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -175,11 +175,11 @@ def requestData(barcode):
 class WidgetCarbonPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
-		result = requestData(barcode)
+		product = requestData(barcode)
 		
-		if result is not None:
+		if product is not None:
 			template_values = {
-						'product': result,
+						'product': product,
 						 }
 		
 			path = os.path.join(os.path.dirname(__file__), 'widget_carbon.html')
@@ -191,11 +191,13 @@ class WidgetCarbonPage(webapp.RequestHandler):
 class DetailsCarbonPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
-		result = requestData(barcode)
+		product = requestData(barcode)
 		
-		if result is not None:
+		if product is not None:
+			footprint = product.carbonFootprint * product.unitSize
 			template_values = {
-						'product': result,
+						'product': product,
+						'footprint': footprint,
 						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }
 		
@@ -210,11 +212,11 @@ class DetailsCarbonPage(webapp.RequestHandler):
 class WidgetEnergyPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
-		result = requestData(barcode)
+		product = requestData(barcode)
 		
-		if result is not None:
+		if product is not None:
 			template_values = {
-						'product': result,
+						'product': product,
 						 }
 		
 			path = os.path.join(os.path.dirname(__file__), 'widget_energy.html')
@@ -226,11 +228,11 @@ class WidgetEnergyPage(webapp.RequestHandler):
 class DetailsEnergyPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
-		result = requestData(barcode)
+		product = requestData(barcode)
 		
-		if result is not None:
+		if product is not None:
 			template_values = {
-						'product': result,
+						'product': product,
 						 }
 		
 			path = os.path.join(os.path.dirname(__file__), 'details_energy.html')

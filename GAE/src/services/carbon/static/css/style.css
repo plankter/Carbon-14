@@ -66,7 +66,7 @@ a.button:active span {
 #charts {
 	margin-top: 10px;
 	text-align: center;
-	border-style: double;
+	border-style: single;
 	border-color: gray;
 	margin-left: auto;
 	margin-right: auto;
