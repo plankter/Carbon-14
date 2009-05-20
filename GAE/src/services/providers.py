@@ -65,20 +65,25 @@ class ProvidersPage(webapp.RequestHandler):
 
 class GenerateTestData(webapp.RequestHandler):
 	def get(self):
-		Provider(name="UPC Database",
+		Provider(name="Carbon",
+				 description="Carbon footprint tracking",
+				 widget_url="http://carbon-14.appspot.com/services/carbon/widget",
+				 details_url="http://carbon-14.appspot.com/services/carbon/details").put()
+				 
+		Provider(name="Energy",
+				 description="Energy tracking",
+				 widget_url="http://carbon-14.appspot.com/services/energy/widget",
+				 details_url="http://carbon-14.appspot.com/services/energy/details").put()
+				 
+		Provider(name="APriori",
+				 description="Product rating system",
+				 widget_url="http://carbon-14.appspot.com/services/apriori/widget",
+				 details_url="http://carbon-14.appspot.com/services/apriori/details").put()
+				 
+		Provider(name="UPC",
 				 description="UPC barcodes database",
 				 widget_url="http://carbon-14.appspot.com/services/upc/widget",
 				 details_url="http://carbon-14.appspot.com/services/upc/details").put()
-				 
-		Provider(name="Rating",
-				 description="Product rating system",
-				 widget_url="http://carbon-14.appspot.com/services/rating/widget",
-				 details_url="http://carbon-14.appspot.com/services/rating/details").put()
-				 
-		Provider(name="Environment",
-				 description="Carbon footprint tracking",
-				 widget_url="http://carbon-14.appspot.com/services/environment/widget",
-				 details_url="http://carbon-14.appspot.com/services/environment/details").put()
 
 	
 def main():
