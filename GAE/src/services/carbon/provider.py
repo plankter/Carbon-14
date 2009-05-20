@@ -225,11 +225,11 @@ class SubmitPage(webapp.RequestHandler):
 		
 def main():
 	application = webapp.WSGIApplication([
-		('/services/environment/widget', WidgetPage),
-		('/services/environment/details', DetailsPage),
-		('/services/environment/generate', GenerateTestData),
-		('/services/environment/submit', SubmitPage),
-		(r'^(/services/environment/admin)(.*)$', appengine_admin.Admin),
+		('/services/carbon/widget', WidgetPage),
+		('/services/carbon/details', DetailsPage),
+		('/services/carbon/generate', GenerateTestData),
+		('/services/carbon/submit', SubmitPage),
+		(r'^(/services/carbon/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)
 

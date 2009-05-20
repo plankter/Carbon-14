@@ -119,8 +119,8 @@ class DetailsPage(webapp.RequestHandler):
 		
 def main():
 	application = webapp.WSGIApplication([
-		('/services/rating/widget', WidgetPage),
-		('/services/rating/details', DetailsPage),
+		('/services/apriori/widget', WidgetPage),
+		('/services/apriori/details', DetailsPage),
 		], debug=True)
 	util.run_wsgi_app(application)
 

@@ -20,18 +20,25 @@ handlers:
   script: services/upc/provider.py
   
   
-- url: /services/rating/static
-  static_dir: services/rating/static
+- url: /services/apriori/static
+  static_dir: services/apriori/static
   
-- url: /services/rating/(.*)
-  script: services/rating/provider.py
+- url: /services/apriori/(.*)
+  script: services/apriori/provider.py
   
   
-- url: /services/environment/static
-  static_dir: services/environment/static
+- url: /services/carbon/static
+  static_dir: services/carbon/static
   
-- url: /services/environment/(.*)
-  script: services/environment/provider.py
+- url: /services/carbon/(.*)
+  script: services/carbon/provider.py
+  
+
+- url: /services/energy/static
+  static_dir: services/energy/static
+
+- url: /services/energy/(.*)
+  script: services/energy/provider.py
 
 
 - url: /.*
