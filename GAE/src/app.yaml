@@ -35,10 +35,10 @@ handlers:
   
 
 - url: /services/energy/static
-  static_dir: services/energy/static
+  static_dir: services/carbon/static
 
 - url: /services/energy/(.*)
-  script: services/energy/provider.py
+  script: services/carbon/provider.py
 
 
 - url: /.*

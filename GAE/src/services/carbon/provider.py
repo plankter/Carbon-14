@@ -166,7 +166,7 @@ def requestData(barcode):
 	return product
 
 
-class WidgetPage(webapp.RequestHandler):
+class WidgetCarbonPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
 		result = requestData(barcode)
@@ -176,13 +176,13 @@ class WidgetPage(webapp.RequestHandler):
 						'product': result,
 						 }
 		
-			path = os.path.join(os.path.dirname(__file__), 'widget.html')
+			path = os.path.join(os.path.dirname(__file__), 'widget_carbon.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
 			handle404(self)
 				
 				
-class DetailsPage(webapp.RequestHandler):
+class DetailsCarbonPage(webapp.RequestHandler):
 	def get(self):
 		barcode = self.request.get('barcode')
 		result = requestData(barcode)
@@ -193,10 +193,46 @@ class DetailsPage(webapp.RequestHandler):
 						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }
 		
-			path = os.path.join(os.path.dirname(__file__), 'details.html')
+			path = os.path.join(os.path.dirname(__file__), 'details_carbon.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
 			handle404(self)
+			
+
+
+
+class WidgetEnergyPage(webapp.RequestHandler):
+	def get(self):
+		barcode = self.request.get('barcode')
+		result = requestData(barcode)
+		
+		if result is not None:
+			template_values = {
+						'product': result,
+						 }
+		
+			path = os.path.join(os.path.dirname(__file__), 'widget_energy.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			handle404(self)
+				
+				
+class DetailsEnergyPage(webapp.RequestHandler):
+	def get(self):
+		barcode = self.request.get('barcode')
+		result = requestData(barcode)
+		
+		if result is not None:
+			template_values = {
+						'product': result,
+						 }
+		
+			path = os.path.join(os.path.dirname(__file__), 'details_energy.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			handle404(self)
+
+
 		
 
 class SubmitPage(webapp.RequestHandler):
@@ -229,6 +265,8 @@ def main():
 		('/services/carbon/details', DetailsPage),
 		('/services/carbon/generate', GenerateTestData),
 		('/services/carbon/submit', SubmitPage),
+		('/services/energy/widget', WidgetPage),
+		('/services/energy/details', DetailsPage),
 		(r'^(/services/carbon/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)
