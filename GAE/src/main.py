@@ -45,6 +45,7 @@ class MainPage(webapp.RequestHandler):
 class Reset(webapp.RequestHandler):
 	def get(self):
 		memcache.flush_all()
+		self.response.out.write("Memcache reseted.")
 		
 
 		
