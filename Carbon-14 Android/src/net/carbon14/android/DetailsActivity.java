@@ -47,13 +47,17 @@ public class DetailsActivity extends TabActivity {
 		if (ProviderManager.carbonEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_carbon").setIndicator("Carbon").setContent(R.id.carbonLayout));
 		}
+		
+		if (ProviderManager.energyEnabled) {
+			tabHost.addTab(tabHost.newTabSpec("tab_energy").setIndicator("Energy").setContent(R.id.energyLayout));
+		}
+		
+		if (ProviderManager.aprioriEnabled) {
+			tabHost.addTab(tabHost.newTabSpec("tab_apriori").setIndicator("APriori").setContent(R.id.aprioriLayout));
+		}
 
 		if (ProviderManager.upcEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
-		}
-
-		if (ProviderManager.ratingEnabled) {
-			tabHost.addTab(tabHost.newTabSpec("tab_rating").setIndicator("Rating").setContent(R.id.ratingLayout));
 		}
 	}
 	
@@ -120,30 +124,40 @@ public class DetailsActivity extends TabActivity {
 	private void submitBarcode(String barcode) {
 		if (barcode == null) return;
 		
-		if (ProviderManager.upcEnabled) {
-			Provider provider = ProviderManager.providers.get("UPC Database");
-			if (provider != null) {
-				WebView webView = (WebView) findViewById(R.id.upcWebView);
-				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
-				webView.loadUrl(url);
-			}
-		}
-
-		if (ProviderManager.ratingEnabled) {
-			Provider provider = ProviderManager.providers.get("Rating");
-			if (provider != null) {
-				WebView webView = (WebView) findViewById(R.id.ratingWebView);
-				webView.setVerticalScrollbarOverlay(true);
-				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
-				webView.loadUrl(url);
-			}
-		}
-
 		if (ProviderManager.carbonEnabled) {
-			Provider provider = ProviderManager.providers.get("Environment");
+			Provider provider = ProviderManager.providers.get("Carbon");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
+				webView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				webView.loadUrl(url);
+			}
+		}
+		
+		if (ProviderManager.energyEnabled) {
+			Provider provider = ProviderManager.providers.get("Energy");
+			if (provider != null) {
+				WebView webView = (WebView) findViewById(R.id.energyWebView);
+				webView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				webView.loadUrl(url);
+			}
+		}
+		
+		if (ProviderManager.aprioriEnabled) {
+			Provider provider = ProviderManager.providers.get("APriori");
+			if (provider != null) {
+				WebView webView = (WebView) findViewById(R.id.aprioriWebView);
+				webView.setVerticalScrollbarOverlay(true);
+				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+				webView.loadUrl(url);
+			}
+		}
+		
+		if (ProviderManager.upcEnabled) {
+			Provider provider = ProviderManager.providers.get("UPC");
+			if (provider != null) {
+				WebView webView = (WebView) findViewById(R.id.upcWebView);
 				webView.setVerticalScrollbarOverlay(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);

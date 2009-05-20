@@ -36,8 +36,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class ProviderManager {
 	public static boolean carbonEnabled;
+	public static boolean energyEnabled;
+	public static boolean aprioriEnabled;
 	public static boolean upcEnabled;
-	public static boolean ratingEnabled;
 	
 	public static HashMap<String, Provider> providers;
 	public final static String PROVIDERS_URL = "http://carbon-14.appspot.com/services/providers/get";

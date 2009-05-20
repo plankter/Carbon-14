@@ -99,15 +99,21 @@
 						android:background="@color/transparent"
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent" />
-
+						
 					<WebView
-						android:id="@+id/upcWidgetWebView"
+						android:id="@+id/energyWidgetWebView"
 						android:background="@color/transparent"
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent" />
+						
+					<WebView
+						android:id="@+id/aprioriWidgetWebView"
+						android:background="@color/transparent"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent" />s
 
 					<WebView
-						android:id="@+id/ratingWidgetWebView"
+						android:id="@+id/upcWidgetWebView"
 						android:background="@color/transparent"
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent" />

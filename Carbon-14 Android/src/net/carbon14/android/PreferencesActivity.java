@@ -31,9 +31,10 @@ public final class PreferencesActivity extends
 		android.preference.PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
-	static final String PROVIDER_UPC = "preferences_providers_upc";
 	static final String PROVIDER_CARBON = "preferences_providers_carbon";
-	static final String PROVIDER_RATING = "preferences_providers_rating";
+	static final String PROVIDER_ENERGY = "preferences_providers_energy";
+	static final String PROVIDER_APRIORI = "preferences_providers_apriori";
+	static final String PROVIDER_UPC = "preferences_providers_upc";
 
 	static final String KEY_DECODE_1D = "preferences_decode_1D";
 	static final String KEY_DECODE_QR = "preferences_decode_QR";
@@ -53,12 +54,9 @@ public final class PreferencesActivity extends
 		addPreferencesFromResource(R.xml.preferences);
 
 		PreferenceScreen preferences = getPreferenceScreen();
-		preferences.getSharedPreferences()
-				.registerOnSharedPreferenceChangeListener(this);
-		mDecode1D = (CheckBoxPreference) preferences
-				.findPreference(KEY_DECODE_1D);
-		mDecodeQR = (CheckBoxPreference) preferences
-				.findPreference(KEY_DECODE_QR);
+		preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		mDecode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
+		mDecodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);
 	}
 
 	// Prevent the user from turning off both decode options

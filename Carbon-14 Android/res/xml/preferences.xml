@@ -10,13 +10,16 @@
 		android:title="Providers">
 		<CheckBoxPreference
 			android:key="preferences_providers_carbon"
-			android:title="Carbon-14" android:defaultValue="true"></CheckBoxPreference>
+			android:title="Carbon" android:defaultValue="true"></CheckBoxPreference>
 		<CheckBoxPreference
-			android:title="UPC Database"
+			android:key="preferences_providers_energy"
+			android:title="Energy" android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference
+			android:key="preferences_providers_apriori"
+			android:title="APriori"></CheckBoxPreference>
+		<CheckBoxPreference
+			android:title="UPC"
 			android:key="preferences_providers_upc"></CheckBoxPreference>
-		<CheckBoxPreference
-			android:key="preferences_providers_rating"
-			android:title="Rating"></CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:title="@string/preferences_general_title">

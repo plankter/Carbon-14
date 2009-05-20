@@ -155,8 +155,9 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
+		ProviderManager.energyEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_ENERGY, false);
+		ProviderManager.aprioriEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_APRIORI, false);
 		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
-		ProviderManager.ratingEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_RATING, false);
 
 		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
 		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
@@ -234,8 +235,29 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		if (barcode == null)
 			return;
 
+		if (ProviderManager.carbonEnabled) {
+			Provider provider = ProviderManager.providers.get("Carbon");
+			if (provider != null) {
+				WebView widgetWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
+				widgetWebView.setVerticalScrollbarOverlay(true);
+				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
+				widgetWebView.loadUrl(url);
+			}
+		}
+		
+
+		if (ProviderManager.energyEnabled) {
+			Provider provider = ProviderManager.providers.get("Energy");
+			if (provider != null) {
+				WebView widgetWebView = (WebView) findViewById(R.id.energyWidgetWebView);
+				widgetWebView.setVerticalScrollbarOverlay(true);
+				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
+				widgetWebView.loadUrl(url);
+			}
+		}
+		
 		if (ProviderManager.upcEnabled) {
-			Provider provider = ProviderManager.providers.get("UPC Database");
+			Provider provider = ProviderManager.providers.get("UPC");
 			if (provider != null) {
 				WebView widgetWebView = (WebView) findViewById(R.id.upcWidgetWebView);
 				widgetWebView.setVerticalScrollbarOverlay(true);
@@ -244,20 +266,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 			}
 		}
 
-		if (ProviderManager.ratingEnabled) {
-			Provider provider = ProviderManager.providers.get("Rating");
+		if (ProviderManager.aprioriEnabled) {
+			Provider provider = ProviderManager.providers.get("APriori");
 			if (provider != null) {
-				WebView widgetWebView = (WebView) findViewById(R.id.ratingWidgetWebView);
-				widgetWebView.setVerticalScrollbarOverlay(true);
-				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
-				widgetWebView.loadUrl(url);
-			}
-		}
-
-		if (ProviderManager.carbonEnabled) {
-			Provider provider = ProviderManager.providers.get("Environment");
-			if (provider != null) {
-				WebView widgetWebView = (WebView) findViewById(R.id.carbonWidgetWebView);
+				WebView widgetWebView = (WebView) findViewById(R.id.aprioriWidgetWebView);
 				widgetWebView.setVerticalScrollbarOverlay(true);
 				String url = provider.getWidgetUrl() + "?barcode=" + barcode;
 				widgetWebView.loadUrl(url);

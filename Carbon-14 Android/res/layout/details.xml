@@ -28,6 +28,32 @@
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
 			</LinearLayout>
+			
+			
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:id="@+id/energyLayout"
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:padding="5px">
+				<WebView
+					android:id="@+id/energyWebView"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
+			</LinearLayout>
+			
+			
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:id="@+id/aprioriLayout"
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:padding="5px">
+				<WebView
+					android:id="@+id/aprioriWebView"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
+			</LinearLayout>
 
 
 			<LinearLayout
@@ -38,19 +64,6 @@
 				android:padding="5px">
 				<WebView
 					android:id="@+id/upcWebView"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
-			</LinearLayout>
-
-
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:id="@+id/ratingLayout"
-				android:orientation="vertical"
-				android:layout_width="fill_parent"
-				android:padding="5px">
-				<WebView
-					android:id="@+id/ratingWebView"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
 			</LinearLayout>
