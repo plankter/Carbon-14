@@ -190,7 +190,7 @@ class DetailsPage(webapp.RequestHandler):
 		if result is not None:
 			template_values = {
 						'product': result,
-						'url': '/services/environment/submit?barcode=' + barcode,
+						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }
 		
 			path = os.path.join(os.path.dirname(__file__), 'details.html')

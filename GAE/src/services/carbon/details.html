@@ -32,7 +32,7 @@
 				<td class="content">{{ product.quantity }} {{ product.category.unit }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Carbon Footprint</td>
+				<td class="caption">Carbon&nbsp;Footprint</td>
 				<td class="content">
 					<img src="http://chart.apis.google.com/chart?
 					chs=100x50
@@ -42,32 +42,6 @@
 					&amp;cht=gom" 
 					alt="Carbon Benchmark" />
 					{{ product.carbonFootprint|floatformat }}
-				</td>
-			</tr>
-			<tr>
-				<td class="caption">Direct Energy Consumption</td>
-				<td class="content">
-					<img src="http://chart.apis.google.com/chart?
-					chs=100x50
-					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ product.directEnergyConsumption }}
-					&amp;chds={{ product.category.minDirectEnergyConsumption }},{{ product.category.maxDirectEnergyConsumption }}
-					&amp;cht=gom" 
-					alt="Direct Energy Consumption Benchmark" />
-					{{ product.directEnergyConsumption|floatformat }}
-				</td>
-			</tr>
-			<tr>
-				<td class="caption">Indirect Energy Consumption</td>
-				<td class="content">
-					<img src="http://chart.apis.google.com/chart?
-					chs=100x50
-					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ product.indirectEnergyConsumption }}
-					&amp;chds={{ product.category.minIndirectEnergyConsumption }},{{ product.category.maxIndirectEnergyConsumption }}
-					&amp;cht=gom" 
-					alt="Indirect Energy Consumption Benchmark" />
-					{{ product.indirectEnergyConsumption|floatformat }}
 				</td>
 			</tr>
 		</table>
