@@ -63,5 +63,14 @@ a.button:active span {
     padding: 6px 0 4px 18px; /* push text down 1px */
 }
 
+#charts {
+	margin-top: 10px;
+	text-align: center;
+	border-style: double;
+	border-color: gray;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #data {
 }

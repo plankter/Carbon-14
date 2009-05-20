@@ -8,51 +8,62 @@
 	<body class="details">
 		<table id="data">
 			<tr>
-				<td class="caption">Code</td>
+				<th class="caption">Code</th>
 				<td class="content">{{ product.code }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Name</td>
+				<th class="caption">Name</th>
 				<td class="content">{{ product.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Category</td>
+				<th class="caption">Category</th>
 				<td class="content">{{ product.category.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Producer</td>
+				<th class="caption">Producer</th>
 				<td class="content">{{ product.producer.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Description</td>
+				<th class="caption">Description</th>
 				<td class="content">{{ product.description }}</td>
 			</tr>
-			<tr>
-				<td class="caption">Direct Energy Consumption</td>
-				<td class="content">
-					<img src="http://chart.apis.google.com/chart?
-					chs=100x50
-					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ product.directEnergyConsumption }}
-					&amp;chds={{ product.category.minDirectEnergyConsumption }},{{ product.category.maxDirectEnergyConsumption }}
-					&amp;cht=gom" 
-					alt="Direct Energy Consumption Benchmark" />
-					{{ product.directEnergyConsumption|floatformat }}
-				</td>
-			</tr>
-			<tr>
-				<td class="caption">Indirect Energy Consumption</td>
-				<td class="content">
-					<img src="http://chart.apis.google.com/chart?
-					chs=100x50
-					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ product.indirectEnergyConsumption }}
-					&amp;chds={{ product.category.minIndirectEnergyConsumption }},{{ product.category.maxIndirectEnergyConsumption }}
-					&amp;cht=gom" 
-					alt="Indirect Energy Consumption Benchmark" />
-					{{ product.indirectEnergyConsumption|floatformat }}
-				</td>
-			</tr>
+		</table>
+		
+		<table id="charts">
+			<caption>Energy Consumption</caption>
+			<thead>
+				<tr>
+					<th>Direct</th>
+					<th>Indirect</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ product.directEnergyConsumption|floatformat }} kWh</td>
+					<td>{{ product.indirectEnergyConsumption|floatformat }} kWh</td>
+				</tr>
+				<tr>
+					<td>
+						<img src="http://chart.apis.google.com/chart?
+						chs=100x50
+						&amp;chf=bg,s,EFEFEF00
+						&amp;chd=t:{{ product.directEnergyConsumption }}
+						&amp;chds={{ product.category.minDirectEnergyConsumption }},{{ product.category.maxDirectEnergyConsumption }}
+						&amp;cht=gom" 
+						alt="Direct Energy Consumption Benchmark" />
+					</td>
+
+					<td>
+						<img src="http://chart.apis.google.com/chart?
+						chs=100x50
+						&amp;chf=bg,s,EFEFEF00
+						&amp;chd=t:{{ product.indirectEnergyConsumption }}
+						&amp;chds={{ product.category.minIndirectEnergyConsumption }},{{ product.category.maxIndirectEnergyConsumption }}
+						&amp;cht=gom" 
+						alt="Indirect Energy Consumption Benchmark" />
+					</td>
+				</tr>
+			</tbody>
 		</table>
 	</body>
 </html>
