@@ -154,10 +154,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, false);
-		ProviderManager.energyEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_ENERGY, false);
-		ProviderManager.aprioriEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_APRIORI, false);
-		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, false);
+		ProviderManager.carbonEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_CARBON, true);
+		ProviderManager.energyEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_ENERGY, true);
+		ProviderManager.aprioriEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_APRIORI, true);
+		ProviderManager.upcEnabled = prefs.getBoolean(PreferencesActivity.PROVIDER_UPC, true);
 
 		mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
 		mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
@@ -355,17 +355,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		mLastResult = rawResult;
 		playBeepSoundAndVibrate();
 		drawResultPoints(barcode, rawResult);
-
-		// switch (mSource) {
-		// case NATIVE_APP_INTENT:
-		// case PRODUCT_SEARCH_LINK:
-		// handleDecodeExternally(rawResult, barcode);
-		// break;
-		// case ZXING_LINK:
-		// case NONE:
-		// handleDecodeInternally(rawResult, barcode);
-		// break;
-		// }
 
 		handleDecodeInternally(rawResult, barcode);
 	}
