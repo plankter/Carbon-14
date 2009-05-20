@@ -41,12 +41,18 @@ class MainPage(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__), 'main.html')
 		self.response.out.write(template.render(path, template_values))
 		
+		
+class Reset(webapp.RequestHandler):
+	def get(self):
+		memcache.flush_all()
+		
 
 		
 def main():
 	application = webapp.WSGIApplication(
 		[
 			('/', MainPage),
+			('/reset', Reset),
 			(r'^(/admin)(.*)$', appengine_admin.Admin),
 		],
 		debug=True)

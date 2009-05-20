@@ -162,8 +162,14 @@ def handle404(self):
 
 
 def requestData(barcode):
-	product = Product.gql("WHERE code = :1", barcode).get()
-	return product
+	product = memcache.get(barcode)
+	if product is not None:
+		return product
+	else:
+		product = Product.gql("WHERE code = :1", barcode).get()
+		if not memcache.add(barcode, product):
+			logging.error("Memcache set failed.")
+		return product
 
 
 class WidgetCarbonPage(webapp.RequestHandler):
@@ -261,12 +267,12 @@ class SubmitPage(webapp.RequestHandler):
 		
 def main():
 	application = webapp.WSGIApplication([
-		('/services/carbon/widget', WidgetPage),
-		('/services/carbon/details', DetailsPage),
+		('/services/carbon/widget', WidgetCarbonPage),
+		('/services/carbon/details', DetailsCarbonPage),
 		('/services/carbon/generate', GenerateTestData),
 		('/services/carbon/submit', SubmitPage),
-		('/services/energy/widget', WidgetPage),
-		('/services/energy/details', DetailsPage),
+		('/services/energy/widget', WidgetEnergyPage),
+		('/services/energy/details', DetailsEnergyPage),
 		(r'^(/services/carbon/admin)(.*)$', appengine_admin.Admin),
 		], debug=True)
 	util.run_wsgi_app(application)
