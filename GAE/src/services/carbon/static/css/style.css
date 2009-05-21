@@ -74,7 +74,8 @@ a.button:active span {
 
 #tips {
 	text-align: center;
-	margin: 10px auto;
+	margin: 10px;
 	border: 1px solid gray;
 	padding: 2px;
+	width: 100%;
 }
