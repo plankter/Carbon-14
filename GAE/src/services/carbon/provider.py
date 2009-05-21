@@ -46,6 +46,7 @@ class AdminAccount(appengine_admin.ModelAdmin):
 class ProductCategory(db.Model):
 	name = db.StringProperty(required=True)
 	unit = db.StringProperty()
+	tips = db.TextProperty()
 	averageCarbonFootprint = db.FloatProperty()
 	minCarbonFootprint = db.FloatProperty()
 	maxCarbonFootprint = db.FloatProperty()
@@ -62,7 +63,7 @@ class ProductCategory(db.Model):
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
 	listFields = ('name', 'created', 'updated')
-	editFields = ('name', 'unit', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
+	editFields = ('name', 'unit', 'tips', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -73,7 +74,6 @@ class Producer(db.Model):
 	email = db.EmailProperty()
 	phone = db.PhoneNumberProperty()
 	address = db.PostalAddressProperty()
-	rating = db.RatingProperty()
 	description = db.TextProperty()
 	logo = db.BlobProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
@@ -83,7 +83,7 @@ class Producer(db.Model):
 class AdminProducer(appengine_admin.ModelAdmin):
 	model = Producer
 	listFields = ('name', 'description', 'created', 'updated')
-	editFields = ('name', 'link', 'email', 'phone', 'address', 'rating', 'description', 'logo')
+	editFields = ('name', 'link', 'email', 'phone', 'address', 'description', 'logo')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -95,7 +95,7 @@ class Product(db.Model):
 	producer = db.ReferenceProperty(Producer, required=True)
 	unitSize = db.FloatProperty()
 	description = db.TextProperty()
-	rating = db.RatingProperty()
+	tips = db.TextProperty()
 	carbonFootprint = db.FloatProperty()
 	directEnergyConsumption = db.FloatProperty()
 	indirectEnergyConsumption = db.FloatProperty()
@@ -106,7 +106,7 @@ class Product(db.Model):
 class AdminProduct(appengine_admin.ModelAdmin):
 	model = Product
 	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
-	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'description', 'rating', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'tips', 'description', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -194,9 +194,12 @@ class DetailsCarbonPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
+			bestProduct = Product.gql("WHERE category = :1 ORDER BY carbonFootprint", product.category).get()
+			
 			footprint = product.carbonFootprint * product.unitSize
 			template_values = {
 						'product': product,
+						'bestProduct': bestProduct,
 						'footprint': footprint,
 						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }

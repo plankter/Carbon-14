@@ -40,6 +40,8 @@ handlers:
 - url: /services/energy/(.*)
   script: services/carbon/provider.py
 
+- url: /static
+  static_dir: static
 
 - url: /.*
   script: main.py

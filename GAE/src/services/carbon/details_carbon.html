@@ -8,35 +8,35 @@
 	<body class="details">
 		<table id="data">
 			<tr>
-				<td class="caption">Code</td>
+				<th class="caption">Code</th>
 				<td class="content">{{ product.code }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Name</td>
+				<th class="caption">Name</th>
 				<td class="content">{{ product.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Category</td>
+				<th class="caption">Category</th>
 				<td class="content">{{ product.category.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Producer</td>
+				<th class="caption">Producer</th>
 				<td class="content">{{ product.producer.name }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Description</td>
+				<th class="caption">Description</th>
 				<td class="content">{{ product.description }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Unit&nbsp;Size</td>
+				<th class="caption">Unit&nbsp;Size</th>
 				<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
 			</tr>
 			<tr>
-				<td class="caption">Carbon Footprint</td>
-				<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub></td>
+				<th class="caption">Carbon Footprint</th>
+				<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub>eq</td>
 			</tr>
 			<tr>
-				<td class="caption">Normalized Footprint</td>
+				<th class="caption">Normalized Footprint</th>
 				<td class="content">
 					<img src="http://chart.apis.google.com/chart?
 					chs=100x50
@@ -49,6 +49,35 @@
 				</td>
 			</tr>
 		</table>
+		
+		<table id="tips">
+			<caption>Tips & Hints</caption>
+			<tr>
+				<th class="caption">Best Product</th>
+			</tr>
+			<tr>
+				<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
+			</tr>
+			
+			{% if product.category.tips %}
+			<tr>
+				<th class="caption">Category Recommendations</th>
+			</tr>
+			<tr>
+				<td class="content">{{ product.category.tips }}</td>
+			</tr>
+			{% endif %}
+			
+			{% if product.tips %}
+			<tr>
+				<th class="caption">Product Recommendations</th>
+			</tr>
+			<tr>
+				<td class="content">{{ product.tips }}</td>
+			</tr>
+			{% endif %}
+		</table>
+		
 		<div class="centered">
 			<a class="button" href="{{ url }}"><span>Add&nbsp;to&nbsp;Profile</span></a>
 		</div>

@@ -35,7 +35,7 @@
 
 a.button {
     background: transparent url('bg_button_a.gif') no-repeat scroll top right;
-    color: #444;
+    color: silver;
     display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -72,5 +72,9 @@ a.button:active span {
 	margin-right: auto;
 }
 
-#data {
+#tips {
+	text-align: center;
+	margin: 10px auto;
+	border: 1px solid gray;
+	padding: 2px;
 }
