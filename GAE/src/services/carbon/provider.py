@@ -248,25 +248,24 @@ class DetailsEnergyPage(webapp.RequestHandler):
 
 class SubmitPage(webapp.RequestHandler):
 	def get(self):
+		barcode = self.request.get('barcode')
+		url = '/services/carbon/details?barcode=' + barcode
 		# get the current user
 		user = users.get_current_user()
 		if not user:
-			greeting = ("<a href=\"%s\">Sign in or register</a>." %
-					users.create_login_url(self.request))
-			
-			self.response.out.write("<html><body>%s</body></html>" % greeting)
-			
-		else:		
+			greeting = ("<a href=\"%s\">Sign in or register</a>." % users.create_login_url(url))
+			self.response.out.write("<html><body>%s</body></html>" % greeting)		
+		else:
 			# create user account if haven't already
 			account = Account.getAccount(user)
 			if account is None:
 				account = Account(user=user)
 				account.put()
 			
-			barcode = self.request.get('barcode')
 			product = requestData(barcode)
 			order = Order(customer=account, product=product)
 			order.put()
+			self.redirect(url, True)
 			
 		
 		

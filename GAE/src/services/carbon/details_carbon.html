@@ -4,79 +4,100 @@
 		<title>Carbon</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="static/css/style.css" type="text/css" />
+		<script type="text/javascript" src="static/js/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="static/js/jquery.idTabs.min.js"></script>
 	</head>
 	<body class="details">
-		<table id="data">
-			<tr>
-				<th class="caption">Code</th>
-				<td class="content">{{ product.code }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Name</th>
-				<td class="content">{{ product.name }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Category</th>
-				<td class="content">{{ product.category.name }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Producer</th>
-				<td class="content">{{ product.producer.name }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Description</th>
-				<td class="content">{{ product.description }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Unit&nbsp;Size</th>
-				<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
-			</tr>
-			<tr>
-				<th class="caption">Carbon Footprint</th>
-				<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub>eq</td>
-			</tr>
-			<tr>
-				<th class="caption">Normalized Footprint</th>
-				<td class="content">
-					<img src="http://chart.apis.google.com/chart?
-					chs=100x50
-					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ product.carbonFootprint }}
-					&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
-					&amp;cht=gom" 
-					alt="Carbon Benchmark" />
-					{{ product.carbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
-				</td>
-			</tr>
-		</table>
-		
-		<table id="tips">
-			<caption>Tips & Hints</caption>
-			<tr>
-				<th class="caption">Best Product</th>
-			</tr>
-			<tr>
-				<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
-			</tr>
+		<div id="usual" class="usual">
+			<ul class="idTabs"> 
+				<li><a href="#tab_info" class="selected">Info</a></li> 
+				<li><a href="#tab_tips">Tips</a></li>
+			</ul>
 			
-			{% if product.category.tips %}
-			<tr>
-				<th class="caption">Category Recommendations</th>
-			</tr>
-			<tr>
-				<td class="content">{{ product.category.tips }}</td>
-			</tr>
-			{% endif %}
+			<div id="tab_info" style="display: block;">			
 			
-			{% if product.tips %}
-			<tr>
-				<th class="caption">Product Recommendations</th>
-			</tr>
-			<tr>
-				<td class="content">{{ product.tips }}</td>
-			</tr>
-			{% endif %}
-		</table>
+				<table class="details">
+					<tr>
+						<th class="caption">Code</th>
+						<td class="content">{{ product.code }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Name</th>
+						<td class="content">{{ product.name }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Category</th>
+						<td class="content">{{ product.category.name }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Producer</th>
+						<td class="content">{{ product.producer.name }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Description</th>
+						<td class="content">{{ product.description }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Unit&nbsp;Size</th>
+						<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
+					</tr>
+					<tr>
+						<th class="caption">Carbon Footprint</th>
+						<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub>eq</td>
+					</tr>
+					<tr>
+						<th class="caption">Normalized Footprint</th>
+						<td class="content">
+							<img src="http://chart.apis.google.com/chart?
+							chs=100x50
+							&amp;chf=bg,s,EFEFEF00
+							&amp;chd=t:{{ product.carbonFootprint }}
+							&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
+							&amp;cht=gom" 
+							alt="Carbon Benchmark" />
+							{{ product.carbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
+						</td>
+					</tr>
+				</table>
+			
+			</div>
+			
+			
+			<div id="tab_tips" style="display: none;">
+			
+				<table class="details">
+					<tr>
+						<th class="caption">Best Product</th>
+					</tr>
+					<tr>
+						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
+					</tr>
+					
+					{% if product.category.tips %}
+					<tr>
+						<th class="caption">Category Recommendations</th>
+					</tr>
+					<tr>
+						<td class="content">{{ product.category.tips }}</td>
+					</tr>
+					{% endif %}
+					
+					{% if product.tips %}
+					<tr>
+						<th class="caption">Product Recommendations</th>
+					</tr>
+					<tr>
+						<td class="content">{{ product.tips }}</td>
+					</tr>
+					{% endif %}
+				</table>
+			
+			</div>
+		</div>
+ 
+		<script type="text/javascript"> 
+		  $("#usual ul").idTabs(); 
+		</script>
 		
 		<div class="centered">
 			<a class="button" href="{{ url }}"><span>Add&nbsp;to&nbsp;Profile</span></a>
