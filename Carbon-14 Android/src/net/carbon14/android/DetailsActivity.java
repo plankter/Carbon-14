@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TabHost;
 
 public class DetailsActivity extends TabActivity {
@@ -128,7 +129,17 @@ public class DetailsActivity extends TabActivity {
 			Provider provider = ProviderManager.providers.get("Carbon");
 			if (provider != null) {
 				WebView webView = (WebView) findViewById(R.id.carbonWebView);
+				webView.setWebViewClient(new WebViewClient() {  
+				    /* shouldOverrideUrlLoading() will be called every time the user clicks a link */  
+				    @Override  
+				    public boolean shouldOverrideUrlLoading(WebView view, String url)  
+				    { 
+				        view.loadUrl(url);
+				        return true;  
+				    }  
+				});
 				webView.setVerticalScrollbarOverlay(true);
+				webView.getSettings().setJavaScriptEnabled(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
