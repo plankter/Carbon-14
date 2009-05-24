@@ -1,3 +1,5 @@
+/* @override http://carbon-14.appspot.com/services/carbon/static/css/style.css */
+
 .widget {
 	color: white;
 	background-color: black;
@@ -11,6 +13,7 @@
 	color: white;
 	background-color: black;
 	font: small "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	margin: 0;
 }
 
 .caption {
@@ -27,6 +30,10 @@
 	padding-left: 2px;
 }
 
+td.content li {
+	list-style-type: square;
+}
+
 .centered {
 	margin-right: auto;
 	margin-left: auto;
@@ -34,33 +41,43 @@
 }
 
 a.button {
-    background: transparent url('bg_button_a.gif') no-repeat scroll top right;
-    color: silver;
-    display: block;
-    float: left;
-    font: normal 12px arial, sans-serif;
-    height: 24px;
-    margin-right: 6px;
-    padding-right: 18px; /* sliding doors padding */
+	background: transparent url('bg_button_a.gif') no-repeat scroll top right;
+	color: silver;
+	display: block;
+	float: left;
+	font: normal 12px arial, sans-serif;
+	height: 24px;
+	margin-right: 6px;
+	padding-right: 18px;
+	/* sliding doors paddin
+
+g */
     text-decoration: none;
 }
 
 a.button span {
-    background: transparent url('bg_button_span.gif') no-repeat;
-    display: block;
-    line-height: 14px;
-    padding: 5px 0 5px 18px;
+	background: transparent url('bg_button_span.gif') no-repeat;
+	display: block;
+	color: silver;
+	line-height: 14px;
+	padding: 5px 0 5px 18px;
 }
 
 a.button:active {
-    background-position: bottom right;
-    color: #000;
-    outline: none; /* hide dotted outline in Firefox */
+	background-position: bottom right;
+	color: #000;
+	outline: none;
+/* hide d
+
+otted outline in Firefox */
 }
 
 a.button:active span {
-    background-position: bottom left;
-    padding: 6px 0 4px 18px; /* push text down 1px */
+	background-position: bottom left;
+	padding: 6px 0 4px 18px;
+/* pus
+
+h text down 1px */
 }
 
 #charts {
@@ -79,46 +96,59 @@ a.button:active span {
 	padding: 2px;
 }
 
-
-
-
-
 /* Style for tabs */
+
 .usual {
-  background:#181818;
-  color:#111;
-  padding:3px 3px;
-  border:1px solid #222;
-  margin:2px auto;
+	background: #181818;
+	color: #111;
+	border: 1px solid #222;
+	margin-bottom: 2px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 3px;
 }
-.usual li { list-style:none; float:left; }
+
+.usual li {
+	list-style: none;
+	float: left;
+}
+
 .usual ul a {
-  display:block;
-  padding:6px 10px;
-  text-decoration:none!important;
-  margin:1px;
-  margin-left:0;
-  font:10px Verdana;
-  color:#FFF;
-  background:#444;
+	display: block;
+	text-decoration: none!important;
+	margin: 1px;
+	margin-left: 0;
+	font: 10px Verdana;
+	color: #FFF;
+	background: #444;
+	padding: 6px 10px;
 }
+
 .usual ul a:hover {
-  color:#FFF;
-  background:#111;
-  }
-.usual ul a.selected {
-  margin-bottom:0;
-  color:#000;
-  background:snow;
-  border-bottom:1px solid snow;
-  cursor:default;
-  }
-.usual div {
-  padding:2px 2px 2px 2px;
-  *padding-top:3px;
-  *margin-top:-15px;
-  clear:left;
-  background:snow;
-  font:10pt Georgia;
+	color: #FFF;
+	background: #111;
 }
-.usual div a { color:#000; font-weight:bold; }
+
+.usual ul a.selected {
+	margin-bottom: 0;
+	color: #000;
+	background: snow;
+	border-bottom: 1px solid snow;
+	cursor: default;
+}
+
+.usual div {
+	padding: 2px 2px 2px 2px;
+	*padding-top: 3px;
+	*margin-top: -15px;
+	clear: left;
+	background: snow;
+	font: 10pt Georgia;
+}
+
+.usual div a {
+	color: #000;
+	font-weight: bold;
+}
