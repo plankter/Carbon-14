@@ -140,6 +140,7 @@ public class DetailsActivity extends TabActivity {
 				});
 				webView.setVerticalScrollbarOverlay(true);
 				webView.getSettings().setJavaScriptEnabled(true);
+				webView.getSettings().setLightTouchEnabled(true);
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
