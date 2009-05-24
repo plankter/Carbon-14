@@ -8,34 +8,23 @@
 		<script type="text/javascript" src="static/js/jquery.idTabs.min.js"></script>
 	</head>
 	<body class="details">
+		
 		<div id="usual" class="usual">
+			
 			<ul class="idTabs"> 
-				<li><a href="#tab_info" class="selected">Info</a></li> 
-				<li><a href="#tab_tips">Tips</a></li>
+				<li><a href="#tab_general" class="selected">General</a></li> 
+				<li><a href="#tab_advanced">Advanced</a></li>
 			</ul>
 			
-			<div id="tab_info" style="display: block;">			
-			
+			<div id="tab_general" style="display: block;">			
 				<table class="details">
 					<tr>
-						<th class="caption">Code</th>
-						<td class="content">{{ product.code }}</td>
-					</tr>
-					<tr>
-						<th class="caption">Name</th>
+						<th class="caption">Product</th>
 						<td class="content">{{ product.name }}</td>
-					</tr>
-					<tr>
-						<th class="caption">Category</th>
-						<td class="content">{{ product.category.name }}</td>
 					</tr>
 					<tr>
 						<th class="caption">Producer</th>
 						<td class="content">{{ product.producer.name }}</td>
-					</tr>
-					<tr>
-						<th class="caption">Description</th>
-						<td class="content">{{ product.description }}</td>
 					</tr>
 					<tr>
 						<th class="caption">Unit&nbsp;Size</th>
@@ -55,22 +44,33 @@
 							&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
 							&amp;cht=gom" 
 							alt="Carbon Benchmark" />
+							<br />
 							{{ product.carbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
 						</td>
 					</tr>
-				</table>
-			
+					<tr>
+						<th class="caption">Best Product</th>
+						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
+					</tr>
+				</table>			
 			</div>
 			
 			
-			<div id="tab_tips" style="display: none;">
-			
+			<div id="tab_advanced" style="display: none;">			
 				<table class="details">
 					<tr>
-						<th class="caption">Best Product</th>
+						<th class="caption">Code</th>
+						<td class="content">{{ product.code }}</td>
 					</tr>
+					
 					<tr>
-						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
+						<th class="caption">Category</th>
+						<td class="content">{{ product.category.name }}</td>
+					</tr>
+					
+					<tr>
+						<th class="caption">Description</th>
+						<td class="content">{{ product.description }}</td>
 					</tr>
 					
 					{% if product.category.tips %}
@@ -90,9 +90,9 @@
 						<td class="content">{{ product.tips }}</td>
 					</tr>
 					{% endif %}
-				</table>
-			
+				</table>			
 			</div>
+			
 		</div>
  
 		<script type="text/javascript"> 
@@ -102,5 +102,6 @@
 		<div class="centered">
 			<a class="button" href="{{ url }}"><span>Add&nbsp;to&nbsp;Profile</span></a>
 		</div>
+		
 	</body>
 </html>
