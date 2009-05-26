@@ -34,6 +34,7 @@ class Account(db.Model):
 		user = users.User(email)
 		return cls.getAccount(user)
 	
+	
 ## Admin views ##
 class AdminAccount(appengine_admin.ModelAdmin):
 	model = Account
@@ -57,6 +58,9 @@ class ProductCategory(db.Model):
 	created = db.DateTimeProperty("Created", auto_now_add=True)
 	updated = db.DateTimeProperty("Updated", auto_now=True)
 	
+	def __unicode__(self):
+		return self.name
+	
 ## Admin views ##
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
@@ -76,6 +80,9 @@ class Producer(db.Model):
 	logo = db.BlobProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
 	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+	def __unicode__(self):
+		return self.name
 	
 ## Admin views ##
 class AdminProducer(appengine_admin.ModelAdmin):
@@ -103,6 +110,9 @@ class Product(db.Model):
 	indirectEnergyConsumption = db.FloatProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
 	updated = db.DateTimeProperty("Updated", auto_now=True)
+	
+	def __unicode__(self):
+		return self.name
 	
 ## Admin views ##
 class AdminProduct(appengine_admin.ModelAdmin):
