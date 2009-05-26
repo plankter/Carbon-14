@@ -13,7 +13,8 @@
 			
 			<ul class="idTabs"> 
 				<li><a href="#tab_general" class="selected">General</a></li> 
-				<li><a href="#tab_advanced">Advanced</a></li>
+				<li><a href="#tab_product">Product</a></li>
+				<li><a href="#tab_footprint">Footprint</a></li>
 			</ul>
 			
 			<div id="tab_general" style="display: block;">			
@@ -21,46 +22,58 @@
 					<tr>
 						<th class="caption">Product</th>
 						<td class="content">{{ product.name }}</td>
-					</tr>
+					</tr>					
+					
 					<tr>
-						<th class="caption">Producer</th>
-						<td class="content">{{ product.producer.name }}</td>
+						<th class="caption">Product Footprint</th>
+						<td class="content">{{ productFootprint|floatformat }} g CO<sub>2</sub>eq</td>
 					</tr>
+					
 					<tr>
-						<th class="caption">Unit&nbsp;Size</th>
-						<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
-					</tr>
-					<tr>
-						<th class="caption">Carbon Footprint</th>
-						<td class="content">{{ footprint|floatformat }} g CO<sub>2</sub>eq</td>
-					</tr>
-					<tr>
-						<th class="caption">Normalized Footprint</th>
+						<th class="caption">Comparative Footprint</th>
 						<td class="content">
 							<img src="http://chart.apis.google.com/chart?
 							chs=100x50
 							&amp;chf=bg,s,EFEFEF00
-							&amp;chd=t:{{ product.carbonFootprint }}
-							&amp;chds={{ product.category.minCarbonFootprint }},{{ product.category.maxCarbonFootprint }}
+							&amp;chd=t:{{ totalFootprint }}
+							&amp;chds={{ product.category.maxCarbonFootprint }},{{ product.category.minCarbonFootprint }}
 							&amp;cht=gom" 
 							alt="Carbon Benchmark" />
 							<br />
-							{{ product.carbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
+							{{ totalFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
 						</td>
 					</tr>
+					
 					<tr>
-						<th class="caption">Best Product</th>
+						<th class="caption">Best of Class</th>
 						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
 					</tr>
+					
+					{% if product.category.shortTips %}
+					<tr>
+						<th class="caption">Tips</th>					
+						<td class="content">{{ product.category.shortTips }}</td>
+					</tr>
+					{% endif %}
 				</table>			
 			</div>
 			
 			
-			<div id="tab_advanced" style="display: none;">			
+			<div id="tab_product" style="display: none;">			
 				<table class="details">
 					<tr>
 						<th class="caption">Code</th>
 						<td class="content">{{ product.code }}</td>
+					</tr>
+					
+					<tr>
+						<th class="caption">Product</th>
+						<td class="content">{{ product.name }}</td>
+					</tr>
+					
+					<tr>
+						<th class="caption">Producer</th>
+						<td class="content">{{ product.producer.name }}</td>
 					</tr>
 					
 					<tr>
@@ -69,22 +82,44 @@
 					</tr>
 					
 					<tr>
+						<th class="caption">Unit&nbsp;Size</th>
+						<td class="content">{{ product.unitSize|floatformat }} {{ product.category.unit }}</td>
+					</tr>
+					
+					<tr>
 						<th class="caption">Description</th>
 						<td class="content">{{ product.description }}</td>
 					</tr>
 					
+				</table>			
+			</div>
+			
+			
+			<div id="tab_footprint" style="display: none;">			
+				<table class="details">
+					<tr>
+						<th class="caption">Carbon Footprint</th>
+						<td class="content">
+							<img src="http://chart.apis.google.com/chart?
+							chs=200x100
+							&amp;chl=Material|Manufacturing|Distribution|Usage|Disposal
+							&amp;chf=bg,s,EFEFEF00
+							&amp;chd=t:{{ product.materialCarbonFootprint }},{{ product.manufacturingCarbonFootprint }},{{ product.distributionCarbonFootprint }},{{ product.usageCarbonFootprint }},{{ product.disposalCarbonFootprint }}
+							&amp;cht=p" 
+							alt="Carbon Footprint" />
+						</td>
+					</tr>
+						
 					{% if product.category.tips %}
 					<tr>
-						<th class="caption">Category Tips</th>
-					
+						<th class="caption">Category Tips</th>					
 						<td class="content">{{ product.category.tips }}</td>
 					</tr>
 					{% endif %}
 					
 					{% if product.tips %}
 					<tr>
-						<th class="caption">Product Tips</th>
-				
+						<th class="caption">Product Tips</th>				
 						<td class="content">{{ product.tips }}</td>
 					</tr>
 					{% endif %}

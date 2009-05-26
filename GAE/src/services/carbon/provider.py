@@ -46,14 +46,12 @@ class AdminAccount(appengine_admin.ModelAdmin):
 class ProductCategory(db.Model):
 	name = db.StringProperty(required=True)
 	unit = db.StringProperty()
+	shortTips = db.TextProperty()
 	tips = db.TextProperty()
-	averageCarbonFootprint = db.FloatProperty()
 	minCarbonFootprint = db.FloatProperty()
 	maxCarbonFootprint = db.FloatProperty()
-	averageDirectEnergyConsumption = db.FloatProperty()
 	minDirectEnergyConsumption = db.FloatProperty()
 	maxDirectEnergyConsumption = db.FloatProperty()
-	averageIndirectEnergyConsumption = db.FloatProperty()
 	minIndirectEnergyConsumption = db.FloatProperty()
 	maxIndirectEnergyConsumption = db.FloatProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
@@ -63,7 +61,7 @@ class ProductCategory(db.Model):
 class AdminProductCategory(appengine_admin.ModelAdmin):
 	model = ProductCategory
 	listFields = ('name', 'created', 'updated')
-	editFields = ('name', 'unit', 'tips', 'averageCarbonFootprint', 'minCarbonFootprint', 'maxCarbonFootprint', 'averageDirectEnergyConsumption', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'averageIndirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
+	editFields = ('name', 'unit', 'shortTips', 'tips', 'minCarbonFootprint', 'maxCarbonFootprint', 'minDirectEnergyConsumption', 'maxDirectEnergyConsumption', 'minIndirectEnergyConsumption', 'maxIndirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -96,7 +94,11 @@ class Product(db.Model):
 	unitSize = db.FloatProperty()
 	description = db.TextProperty()
 	tips = db.TextProperty()
-	carbonFootprint = db.FloatProperty()
+	materialCarbonFootprint = db.FloatProperty()
+	manufacturingCarbonFootprint = db.FloatProperty()
+	distributionCarbonFootprint = db.FloatProperty()
+	usageCarbonFootprint = db.FloatProperty()
+	disposalCarbonFootprint = db.FloatProperty()
 	directEnergyConsumption = db.FloatProperty()
 	indirectEnergyConsumption = db.FloatProperty()
 	created = db.DateTimeProperty("Created", auto_now_add=True)
@@ -106,7 +108,7 @@ class Product(db.Model):
 class AdminProduct(appengine_admin.ModelAdmin):
 	model = Product
 	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
-	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'tips', 'description', 'carbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'tips', 'description', 'materialCarbonFootprint', 'manufacturingCarbonFootprint', 'distributionCarbonFootprint', 'usageCarbonFootprint', 'disposalCarbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -178,7 +180,9 @@ class WidgetCarbonPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
+			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
 			template_values = {
+						'totalFootprint': totalFootprint,
 						'product': product,
 						 }
 		
@@ -195,12 +199,13 @@ class DetailsCarbonPage(webapp.RequestHandler):
 		
 		if product is not None:
 			bestProduct = Product.gql("WHERE category = :1 ORDER BY carbonFootprint", product.category).get()
-			
-			footprint = product.carbonFootprint * product.unitSize
+			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
+			productFootprint = totalFootprint * product.unitSize
 			template_values = {
 						'product': product,
 						'bestProduct': bestProduct,
-						'footprint': footprint,
+						'totalFootprint': totalFootprint,
+						'productFootprint': productFootprint,
 						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }
 		
