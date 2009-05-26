@@ -239,6 +239,7 @@ class Admin(BaseRequestHandler):
         """
         modelAdmin = getModelAdmin(modelName)
         item = self._safeGetItem(modelAdmin.model, key)
+        
         form = modelAdmin.AdminForm(urlPrefix = self.urlPrefix, data = self.request.POST, instance = item)
         if form.is_valid():
         # Save the data, and redirect to the edit page

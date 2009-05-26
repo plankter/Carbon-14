@@ -101,6 +101,8 @@ class Product(db.Model):
 	unitSize = db.FloatProperty()
 	description = db.TextProperty()
 	tips = db.TextProperty()
+	methodology = db.StringProperty()
+	totalCarbonFootprint = db.FloatProperty()
 	materialCarbonFootprint = db.FloatProperty()
 	manufacturingCarbonFootprint = db.FloatProperty()
 	distributionCarbonFootprint = db.FloatProperty()
@@ -118,7 +120,7 @@ class Product(db.Model):
 class AdminProduct(appengine_admin.ModelAdmin):
 	model = Product
 	listFields = ('code', 'name', 'category', 'producer', 'created', 'updated')
-	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'tips', 'description', 'materialCarbonFootprint', 'manufacturingCarbonFootprint', 'distributionCarbonFootprint', 'usageCarbonFootprint', 'disposalCarbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
+	editFields = ('code', 'name', 'category', 'producer', 'unitSize', 'tips', 'methodology', 'description', 'totalCarbonFootprint', 'materialCarbonFootprint', 'manufacturingCarbonFootprint', 'distributionCarbonFootprint', 'usageCarbonFootprint', 'disposalCarbonFootprint', 'directEnergyConsumption', 'indirectEnergyConsumption')
 	readonlyFields = ('created', 'updated')
 	
 	
@@ -139,33 +141,6 @@ class AdminOrder(appengine_admin.ModelAdmin):
 	
 # Register to admin site
 appengine_admin.register(AdminAccount, AdminProductCategory, AdminProducer, AdminProduct, AdminOrder)
-
-
-class GenerateTestData(webapp.RequestHandler):
-	def get(self):
-		category = ProductCategory(name="Beverages",
-			minCarbonFootprint=20.0,
-			maxCarbonFootprint=110.0,
-			minDirectEnergyConsumption=30.0,
-			maxDirectEnergyConsumption=400.0,
-			minIndirectEnergyConsumption=100.0,
-			maxIndirectEnergyConsumption=200.0).put()
-		
-		producer = Producer(name="The Coca-Cola Company").put()
-		
-		Product(code="000040822938",
-			name="Fanta Orange",
-			producer=producer,
-			category=category,
-			carbonFootprint=40.0,
-			directEnergyConsumption=150.0,
-			indirectEnergyConsumption=176.0,
-			description="Orange Soft Drink with Sugar and Sweeteners").put()
-		
-		Product(code="000497000064",
-			name="Sprite",
-			producer=producer,
-			category=category).put()
 
 
 def handle404(self):
@@ -190,9 +165,7 @@ class WidgetCarbonPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
-			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
 			template_values = {
-						'totalFootprint': totalFootprint,
 						'product': product,
 						 }
 		
@@ -208,13 +181,13 @@ class DetailsCarbonPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
-			bestProduct = Product.gql("WHERE category = :1 ORDER BY carbonFootprint", product.category).get()
-			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
-			productFootprint = totalFootprint * product.unitSize
+			bestProduct = Product.gql("WHERE category = :1 ORDER BY totalCarbonFootprint", product.category).get()
+			# totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
+			productFootprint = product.totalCarbonFootprint * product.unitSize
 			template_values = {
 						'product': product,
 						'bestProduct': bestProduct,
-						'totalFootprint': totalFootprint,
+						# 'totalFootprint': totalFootprint,
 						'productFootprint': productFootprint,
 						'url': '/services/carbon/submit?barcode=' + barcode,
 						 }
@@ -223,7 +196,6 @@ class DetailsCarbonPage(webapp.RequestHandler):
 			self.response.out.write(template.render(path, template_values))
 		else:
 			handle404(self)
-			
 
 
 
@@ -282,13 +254,23 @@ class SubmitPage(webapp.RequestHandler):
 			order.put()
 			self.redirect(url, True)
 			
+
+#def UpdateProductCategory(product):
+#	category = product.category
+#	if (product.totalCarbonFootprint < category.minCarbonFootprint):
+#		category.minCarbonFootprint = product.totalCarbonFootprint
+#		category.bestProductCode = product.code
+#		
+#	if (product.totalCarbonFootprint > category.maxCarbonFootprint):
+#		category.maxCarbonFootprint = product.totalCarbonFootprint
+#		
+#	category.put()
 		
 		
 def main():
 	application = webapp.WSGIApplication([
 		('/services/carbon/widget', WidgetCarbonPage),
 		('/services/carbon/details', DetailsCarbonPage),
-		('/services/carbon/generate', GenerateTestData),
 		('/services/carbon/submit', SubmitPage),
 		('/services/energy/widget', WidgetEnergyPage),
 		('/services/energy/details', DetailsEnergyPage),

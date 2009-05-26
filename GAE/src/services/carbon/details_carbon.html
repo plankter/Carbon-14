@@ -40,13 +40,8 @@
 							&amp;cht=gom" 
 							alt="Carbon Benchmark" />
 							<br />
-							{{ totalFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
+							{{ product.totalCarbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
 						</td>
-					</tr>
-					
-					<tr>
-						<th class="caption">Best of Class</th>
-						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
 					</tr>
 					
 					{% if product.category.shortTips %}
@@ -55,6 +50,12 @@
 						<td class="content">{{ product.category.shortTips }}</td>
 					</tr>
 					{% endif %}
+					
+					<tr>
+						<th class="caption">Best of Class</th>
+						<td class="content"><a class="button" href="/services/carbon/details?barcode={{ bestProduct.code }}"><span>{{ bestProduct.name }}</span></a></td>
+					</tr>
+					
 				</table>			
 			</div>
 			
@@ -97,13 +98,25 @@
 			
 			<div id="tab_footprint" style="display: none;">			
 				<table class="details">
+					
+					<tr>
+						<th class="caption">Methodology</th>
+					</tr>
+					<tr>					
+						<td class="content">{{ product.methodology }}</td>
+					</tr>
+					
 					<tr>
 						<th class="caption">Carbon Footprint</th>
+					</tr>
+					<tr>
 						<td class="content">
 							<img src="http://chart.apis.google.com/chart?
-							chs=250x100
+							chs=250x120
 							&amp;chf=bg,s,EFEFEF00
-							&amp;chl=Material|Manufacturing|Distribution|Usage|Disposal
+							&amp;chco=CF0638,FA6632,FECD23,0A996F,0A6789
+							&amp;chdl=Material|Manufacturing|Distribution|Usage|Disposal
+							&amp;chl={{ product.materialCarbonFootprint|floatformat }}|{{ product.manufacturingCarbonFootprint|floatformat }}|{{ product.distributionCarbonFootprint|floatformat }}|{{ product.usageCarbonFootprint|floatformat }}|{{ product.disposalCarbonFootprint|floatformat }}
 							&amp;chd=t:{{ product.materialCarbonFootprint }},{{ product.manufacturingCarbonFootprint }},{{ product.distributionCarbonFootprint }},{{ product.usageCarbonFootprint }},{{ product.disposalCarbonFootprint }}
 							&amp;cht=p" 
 							alt="Carbon Footprint" />
@@ -112,14 +125,18 @@
 						
 					{% if product.category.tips %}
 					<tr>
-						<th class="caption">Category Tips</th>					
+						<th class="caption">Category Tips</th>
+					</tr>
+					<tr>					
 						<td class="content">{{ product.category.tips }}</td>
 					</tr>
 					{% endif %}
 					
 					{% if product.tips %}
 					<tr>
-						<th class="caption">Product Tips</th>				
+						<th class="caption">Product Tips</th>
+					</tr>
+					<tr>				
 						<td class="content">{{ product.tips }}</td>
 					</tr>
 					{% endif %}

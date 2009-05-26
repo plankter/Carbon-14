@@ -1,5 +1,3 @@
-/* @override http://carbon-14.appspot.com/services/carbon/static/css/style.css */
-
 .widget {
 	color: white;
 	background-color: black;
@@ -37,6 +35,7 @@ td.content li {
 .centered {
 	margin-right: auto;
 	margin-left: auto;
+	text-align: center;
 	width: 100px;
 }
 
@@ -49,9 +48,7 @@ a.button {
 	height: 24px;
 	margin-right: 6px;
 	padding-right: 18px;
-	/* sliding doors paddin
-
-g */
+	/* sliding doors padding */
     text-decoration: none;
 }
 
@@ -67,17 +64,13 @@ a.button:active {
 	background-position: bottom right;
 	color: #000;
 	outline: none;
-/* hide d
-
-otted outline in Firefox */
+/* hide dotted outline in Firefox */
 }
 
 a.button:active span {
 	background-position: bottom left;
 	padding: 6px 0 4px 18px;
-/* pus
-
-h text down 1px */
+/* push text down 1px */
 }
 
 #charts {
