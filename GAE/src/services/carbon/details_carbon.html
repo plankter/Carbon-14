@@ -32,15 +32,15 @@
 					<tr>
 						<th class="caption">Comparative Footprint</th>
 						<td class="content">
+							{{ product.totalCarbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
+							<br />
 							<img src="http://chart.apis.google.com/chart?
-							chs=100x50
+							chs=200x100
 							&amp;chf=bg,s,EFEFEF00
 							&amp;chd=t:{{ product.totalCarbonFootprint }}
 							&amp;chds={{ product.category.maxCarbonFootprint }},{{ product.category.minCarbonFootprint }}
 							&amp;cht=gom" 
-							alt="Carbon Benchmark" />
-							<br />
-							{{ product.totalCarbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
+							alt="Carbon Benchmark" />	
 						</td>
 					</tr>
 					
@@ -128,7 +128,7 @@
 						<th class="caption">Category Tips</th>
 					</tr>
 					<tr>					
-						<td class="content">{{ product.category.tips }}</td>
+						<td class="content tips">{{ product.category.tips }}</td>
 					</tr>
 					{% endif %}
 					
@@ -137,7 +137,7 @@
 						<th class="caption">Product Tips</th>
 					</tr>
 					<tr>				
-						<td class="content">{{ product.tips }}</td>
+						<td class="content tips">{{ product.tips }}</td>
 					</tr>
 					{% endif %}
 				</table>			
@@ -150,7 +150,7 @@
 		</script>
 		
 		<div class="centered">
-			<a class="button" href="{{ url }}"><span>Add&nbsp;to&nbsp;Profile</span></a>
+			<a class="button" href="{{ url }}"><span>Buy&nbsp;Product</span></a>
 		</div>
 		
 	</body>

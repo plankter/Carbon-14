@@ -82,6 +82,10 @@ a.button:active span {
 	margin-right: auto;
 }
 
+td.tips {
+	font-size: 9pt;
+}
+
 #tips {
 	text-align: center;
 	margin: 10px auto;
