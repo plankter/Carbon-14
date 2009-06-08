@@ -112,12 +112,13 @@
 					<tr>
 						<td class="content">
 							<img src="http://chart.apis.google.com/chart?
-							chs=250x120
+							chs=270x120
+							&amp;chds=0,{{ product.category.maxCarbonFootprint }}
+							&amp;chd=t:{{ product.materialCarbonFootprint }},{{ product.manufacturingCarbonFootprint }},{{ product.distributionCarbonFootprint }},{{ product.usageCarbonFootprint }},{{ product.disposalCarbonFootprint }}
 							&amp;chf=bg,s,EFEFEF00
 							&amp;chco=CF0638,FA6632,FECD23,0A996F,0A6789
 							&amp;chdl=Material|Manufacturing|Distribution|Usage|Disposal
 							&amp;chl={{ product.materialCarbonFootprint|floatformat }}|{{ product.manufacturingCarbonFootprint|floatformat }}|{{ product.distributionCarbonFootprint|floatformat }}|{{ product.usageCarbonFootprint|floatformat }}|{{ product.disposalCarbonFootprint|floatformat }}
-							&amp;chd=t:{{ product.materialCarbonFootprint }},{{ product.manufacturingCarbonFootprint }},{{ product.distributionCarbonFootprint }},{{ product.usageCarbonFootprint }},{{ product.disposalCarbonFootprint }}
 							&amp;cht=p" 
 							alt="Carbon Footprint" />
 						</td>
