@@ -8,16 +8,16 @@
 	<body class="widget">
 		<table id="data">
 			<tr>
-				<td class="caption">Comparative&nbsp;Footprint</td>
+				<td class="caption">Carbon&nbsp;Footprint</td>
 				<td class="content">
 					<img src="http://chart.apis.google.com/chart?
 					chs=100x50
 					&amp;chf=bg,s,EFEFEF00
-					&amp;chd=t:{{ totalFootprint }}
+					&amp;chd=t:{{ product.totalCarbonFootprint }}
 					&amp;chds={{ product.category.maxCarbonFootprint }},{{ product.category.minCarbonFootprint }}
 					&amp;cht=gom" 
 					alt="Carbon Benchmark" />
-					{{ product.totalCarbonFootprint|floatformat }} 
+					{{ product.totalCarbonFootprint|floatformat }} g CO<sub>2</sub>/{{ product.category.unit }}
 				</td>
 			</tr>
 		</table>
