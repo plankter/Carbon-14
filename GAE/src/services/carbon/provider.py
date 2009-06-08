@@ -205,12 +205,15 @@ class WidgetEnergyPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
-			template_values = {
-						'product': product,
-						 }
-		
-			path = os.path.join(os.path.dirname(__file__), 'widget_energy.html')
-			self.response.out.write(template.render(path, template_values))
+			if product.directEnergyConsumption is not None:
+				template_values = {
+							'product': product,
+							 }
+			
+				path = os.path.join(os.path.dirname(__file__), 'widget_energy.html')
+				self.response.out.write(template.render(path, template_values))
+			else:
+				handle404(self)
 		else:
 			handle404(self)
 				
@@ -221,12 +224,15 @@ class DetailsEnergyPage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		if product is not None:
-			template_values = {
-						'product': product,
-						 }
-		
-			path = os.path.join(os.path.dirname(__file__), 'details_energy.html')
-			self.response.out.write(template.render(path, template_values))
+			if product.directEnergyConsumption is not None:
+				template_values = {
+							'product': product,
+							 }
+			
+				path = os.path.join(os.path.dirname(__file__), 'details_energy.html')
+				self.response.out.write(template.render(path, template_values))
+			else:
+				handle404(self)
 		else:
 			handle404(self)
 
