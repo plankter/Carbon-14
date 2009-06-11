@@ -154,8 +154,8 @@ def requestData(barcode):
 		return product
 	else:
 		product = Product.gql("WHERE code = :1", barcode).get()
-		if not memcache.add(barcode, product):
-			logging.error("Memcache set failed.")
+		#if not memcache.add(barcode, product):
+		#	logging.error("Memcache set failed.")
 		return product
 
 
