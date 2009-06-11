@@ -60,6 +60,8 @@ public class DetailsActivity extends TabActivity {
 		if (ProviderManager.upcEnabled) {
 			tabHost.addTab(tabHost.newTabSpec("tab_upc").setIndicator("UPC").setContent(R.id.upcLayout));
 		}
+		
+		tabHost.addTab(tabHost.newTabSpec("tab_test").setIndicator("Test").setContent(R.id.testLayout));
 	}
 	
 	@Override
@@ -174,6 +176,14 @@ public class DetailsActivity extends TabActivity {
 				String url = provider.getDetailsUrl() + "?barcode=" + barcode;
 				webView.loadUrl(url);
 			}
+		}
+		
+		Provider provider = ProviderManager.providers.get("Test");
+		if (provider != null) {
+			WebView webView = (WebView) findViewById(R.id.testWebView);
+			webView.setVerticalScrollbarOverlay(true);
+			String url = provider.getDetailsUrl() + "?barcode=" + barcode;
+			webView.loadUrl(url);
 		}
 	}
 
