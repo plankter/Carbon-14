@@ -114,6 +114,7 @@ GAE/src/services/carbon/static/css/bg_button_span.gif -text
 GAE/src/services/carbon/static/css/style.css -text
 GAE/src/services/carbon/static/js/jquery-1.3.2.min.js -text
 GAE/src/services/carbon/static/js/jquery.idTabs.min.js -text
+GAE/src/services/carbon/test.xml -text
 GAE/src/services/carbon/widget_carbon.html -text
 GAE/src/services/carbon/widget_energy.html -text
 GAE/src/services/providers.py -text

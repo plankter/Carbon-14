@@ -14,6 +14,9 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
+from google.appengine.api import urlfetch
+from xml.dom.minidom import parse, parseString
+
 import appengine_admin
 
 
@@ -259,8 +262,62 @@ class SubmitPage(webapp.RequestHandler):
 			order = Order(customer=account, product=product)
 			order.put()
 			self.redirect(url, True)
-			
 
+
+
+
+def updateProduct(barcode):
+	url = "http://carbon-14.appspot.com/services/carbon/test?barcode=" + barcode
+	result = urlfetch.fetch(url)
+	
+	if result.status_code == 200:
+		dom = parseString(result.content)
+		
+		id = int(getText(dom.getElementsByTagName("id")[0].childNodes))
+		if (id == barcode):
+			product = requestData(barcode)
+			
+			distributionCarbonFootprint = float(getText(dom.getElementsByTagName("distributionCarbonFootprint")[0].childNodes))
+			product.distributionCarbonFootprint = distributionCarbonFootprint
+			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
+			product.totalCarbonFootprint = totalFootprint
+			
+			product.put()
+		else:
+			handle404(self)
+	else:
+		handle404(self)
+	
+	
+
+def getText(nodelist):
+	rc = ""
+	for node in nodelist:
+		if node.nodeType == node.TEXT_NODE:
+			rc = rc + node.data
+	return rc
+		
+class UpdatePage(webapp.RequestHandler):
+	def get(self):
+		barcode = self.request.get('barcode')
+		updateProduct(barcode)
+		self.redirect("http://carbon-14.appspot.com/services/carbon/admin/Product/", True)
+
+
+class TestPage(webapp.RequestHandler):
+	def get(self):
+		barcode = self.request.get('barcode')
+		distributionCarbonFootprint = 12
+		
+		template_values = {
+						   'id': barcode,
+						   'distributionCarbonFootprint': distributionCarbonFootprint
+						   }
+			
+		path = os.path.join(os.path.dirname(__file__), 'test.xml')
+		self.response.out.write(template.render(path, template_values))
+
+		
 #def UpdateProductCategory(product):
 #	category = product.category
 #	if (product.totalCarbonFootprint < category.minCarbonFootprint):
@@ -278,6 +335,8 @@ def main():
 		('/services/carbon/widget', WidgetCarbonPage),
 		('/services/carbon/details', DetailsCarbonPage),
 		('/services/carbon/submit', SubmitPage),
+		('/services/carbon/update', UpdatePage),
+		('/services/carbon/test', TestPage),
 		('/services/energy/widget', WidgetEnergyPage),
 		('/services/energy/details', DetailsEnergyPage),
 		(r'^(/services/carbon/admin)(.*)$', appengine_admin.Admin),
