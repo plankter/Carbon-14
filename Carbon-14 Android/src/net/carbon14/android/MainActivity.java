@@ -275,14 +275,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 				widgetWebView.loadUrl(url);
 			}
 		}
-		
-		Provider provider = ProviderManager.providers.get("Test");
-		if (provider != null) {
-			WebView widgetWebView = (WebView) findViewById(R.id.testWidgetWebView);
-			widgetWebView.setVerticalScrollbarOverlay(true);
-			String url = provider.getWidgetUrl() + "?barcode=" + barcode;
-			widgetWebView.loadUrl(url);
-		}
 	}
 
 	@Override
