@@ -496,7 +496,12 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	}
 
 	private void initCamera(SurfaceHolder surfaceHolder) {
-		CameraManager.get().openDriver(surfaceHolder);
+		try {
+			CameraManager.get().openDriver(surfaceHolder);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (mHandler == null) {
 			boolean beginScanning = mLastResult == null;
 			mHandler = new CaptureActivityHandler(this, mDecodeMode, beginScanning);
