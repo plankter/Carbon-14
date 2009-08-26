@@ -16,6 +16,7 @@
                 {% for item in items %}
                 <tr>
                     {% for property in item.listProperties %}
+					
                     {% if forloop.first %}
                     <td><a href="{{ urlPrefix }}/{{ moduleTitle }}/edit/{{ item.key }}/">
                         {% ifequal property.typeName "BlobProperty" %}
@@ -38,7 +39,15 @@
                     </td>
                     {% endif %}
                     {% endfor %}
-                    <td><a href="{{ urlPrefix }}/{{ moduleTitle }}/delete/{{ item.key }}/" onclick='return confirm("Are you sure?");'>Delete</a></td>
+                    <td><a href="{{ urlPrefix }}/{{ moduleTitle }}/delete/{{ item.key }}/" onclick='return confirm("Are you sure?");'>Delete</a>
+
+					{% ifequal moduleTitle "Product" %}
+						{% for property in item.listProperties %}
+							{% ifequal property.name "code" %}
+								&nbsp;|&nbsp;<a href="http://carbon-14.appspot.com/services/carbon/update?barcode={{ property.value }}" onclick='return confirm("Are you sure?");'>Update</a></td>
+							{% endifequal %}
+						{% endfor %}
+					{% endifequal %}
                 </tr>
                 {% endfor %}
                 </tbody>

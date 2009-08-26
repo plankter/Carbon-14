@@ -168,6 +168,11 @@ td.delete_col {
     font-size: 1.1em;
 }
 
+.updateButton {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
 .error {
     margin-left: 15px;
 }

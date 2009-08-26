@@ -29,14 +29,7 @@
             
 				<div style="float:right; clear:right;" class="deleteButton">
 					<a href="{{ urlPrefix }}/{{ moduleTitle }}/delete/{{ item.key }}/" onclick='return confirm("Are you sure?");'>Delete</a>
-				</div>
-				
-				
-				{% ifequal moduleTitle "Product" %}
-					<div style="float:right; clear:right;" class="updateButton">
-						<a href="http://carbon-14.appspot.com/services/carbon/update?barcode={{ item.key }}/" onclick='return confirm("Are you sure?");'>Update Product Carbon Footprint</a>
-					</div>
-				{% endifequal %}            
+				</div>       
             
             {% endif %}
             
