@@ -285,7 +285,7 @@ class UpdatePage(webapp.RequestHandler):
 			dom = parseString(result.content)
 			id = int(getText(dom.getElementsByTagName("id")[0].childNodes))
 			
-			distributionCarbonFootprint = float(getText(dom.getElementsByTagName("distributionCarbonFootprint")[0].childNodes))
+			distributionCarbonFootprint = 1000*float(getText(dom.getElementsByTagName("distributionCarbonFootprint")[0].childNodes))
 			product.distributionCarbonFootprint = distributionCarbonFootprint
 			totalFootprint = product.materialCarbonFootprint + product.manufacturingCarbonFootprint + product.distributionCarbonFootprint + product.usageCarbonFootprint + product.disposalCarbonFootprint
 			product.totalCarbonFootprint = totalFootprint
