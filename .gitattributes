@@ -21,6 +21,8 @@ Carbon-14[!!-~]Android/assets/images/scan-example.png -text
 Carbon-14[!!-~]Android/assets/images/scan-from-phone.png -text
 Carbon-14[!!-~]Android/assets/images/search-book-contents.jpg -text
 Carbon-14[!!-~]Android/default.properties -text
+Carbon-14[!!-~]Android/libs/core.jar -text
+Carbon-14[!!-~]Android/libs/xstream-1.3.1.jar -text
 Carbon-14[!!-~]Android/res/drawable/fanta.png -text
 Carbon-14[!!-~]Android/res/drawable/icon.png -text
 Carbon-14[!!-~]Android/res/drawable/launcher_icon.png -text
