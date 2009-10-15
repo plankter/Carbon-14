@@ -294,6 +294,7 @@ class UpdatePage(webapp.RequestHandler):
 
 			self.redirect("http://carbon-14.appspot.com/services/carbon/admin/Product/list/", True)
 		else:
+			print url
 			handle404(self)
 
 
