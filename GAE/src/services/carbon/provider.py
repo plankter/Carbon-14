@@ -278,7 +278,7 @@ class UpdatePage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		#url = "http://carbon-14.appspot.com/services/carbon/test?barcode=" + barcode
-		url = "http://localhost:8080/PCFServices/services/mobile/emissions?sku=" + barcode
+		url = "http://127.0.0.1:8080/PCFServices/services/mobile/emissions?sku=" + barcode
 		result = urlfetch.fetch(url)
 	
 		if result.status_code == 200:
@@ -294,7 +294,6 @@ class UpdatePage(webapp.RequestHandler):
 
 			self.redirect("http://carbon-14.appspot.com/services/carbon/admin/Product/list/", True)
 		else:
-			print url
 			handle404(self)
 
 
