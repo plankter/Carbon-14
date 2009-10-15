@@ -278,7 +278,7 @@ class UpdatePage(webapp.RequestHandler):
 		product = requestData(barcode)
 		
 		#url = "http://carbon-14.appspot.com/services/carbon/test?barcode=" + barcode
-		url = "http://192.168.126.35:8080/PCFServices/services/mobile/emissions?sku=" + barcode
+		url = "http://10.26.48.189:8080/PCFServices/services/mobile/emissions?sku=" + barcode
 		result = urlfetch.fetch(url)
 	
 		if result.status_code == 200:
