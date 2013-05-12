@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Carbon-14</title>
+  </head>
+  <body>
+
+    <div id="logout">
+      {{ user.nickname }}
+      <a href="{{ logout_url }}">Logout</a>
+    </div>
+
+    {% if admin %}
+    <div id="admin">
+      <fieldset>
+        <legend>Admin</legend>
+        <p>
+          <a href="/_ah/admin">Local Console</a><br />
+          <a href="http://appengine.google.com">GAE Console</a>
+			<a href="http://carbon-14.appspot.com/reset">Reset</a>
+        </p>
+      </fieldset>
+    </div>
+    {% endif %}
+
+  </body>
+</html>

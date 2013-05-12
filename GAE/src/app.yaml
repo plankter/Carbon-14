@@ -1,0 +1,55 @@
+application: carbon-14
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /appengine_admin_media
+  static_dir: appengine_admin/media
+  secure: never
+
+- url: /services/test/(.*)
+  script: services/test/provider.py
+
+- url: /services/providers/(.*)
+  script: services/providers.py
+  
+  
+- url: /services/upc/static
+  static_dir: services/upc/static
+  
+- url: /services/upc/(.*)
+  script: services/upc/provider.py
+  
+  
+- url: /services/apriori/static
+  static_dir: services/apriori/static
+  
+- url: /services/apriori/(.*)
+  script: services/apriori/provider.py
+  
+  
+- url: /services/carbon/static
+  static_dir: services/carbon/static
+  
+- url: /services/carbon/(.*)
+  script: services/carbon/provider.py
+  
+
+- url: /services/energy/static
+  static_dir: services/carbon/static
+
+- url: /services/energy/(.*)
+  script: services/carbon/provider.py
+
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: main.py
+  login: required
+  
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin

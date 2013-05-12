@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Energy</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="static/css/style.css" type="text/css" />
+	</head>
+	<body class="details">
+		<table id="data">
+			<tr>
+				<th class="caption">Code</th>
+				<td class="content">{{ product.code }}</td>
+			</tr>
+			<tr>
+				<th class="caption">Name</th>
+				<td class="content">{{ product.name }}</td>
+			</tr>
+			<tr>
+				<th class="caption">Category</th>
+				<td class="content">{{ product.category.name }}</td>
+			</tr>
+			<tr>
+				<th class="caption">Producer</th>
+				<td class="content">{{ product.producer.name }}</td>
+			</tr>
+			<tr>
+				<th class="caption">Description</th>
+				<td class="content">{{ product.description }}</td>
+			</tr>
+		</table>
+		
+		<table id="charts">
+			<caption>Energy Consumption</caption>
+			<thead>
+				<tr>
+					<th>Direct</th>
+					<th>Indirect</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ product.directEnergyConsumption|floatformat }} kWh</td>
+					<td>{{ product.indirectEnergyConsumption|floatformat }} kWh</td>
+				</tr>
+				<tr>
+					<td>
+						<img src="http://chart.apis.google.com/chart?
+						chs=100x50
+						&amp;chf=bg,s,EFEFEF00
+						&amp;chd=t:{{ product.directEnergyConsumption }}
+						&amp;chds={{ product.category.maxDirectEnergyConsumption }},{{ product.category.minDirectEnergyConsumption }}
+						&amp;cht=gom" 
+						alt="Direct Energy Consumption Benchmark" />
+					</td>
+
+					<td>
+						<img src="http://chart.apis.google.com/chart?
+						chs=100x50
+						&amp;chf=bg,s,EFEFEF00
+						&amp;chd=t:{{ product.indirectEnergyConsumption }}
+						&amp;chds={{ product.category.maxIndirectEnergyConsumption }},{{ product.category.minIndirectEnergyConsumption }}
+						&amp;cht=gom" 
+						alt="Indirect Energy Consumption Benchmark" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

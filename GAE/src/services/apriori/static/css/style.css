@@ -1,0 +1,31 @@
+.widget {
+	color: white;
+	background-color: black;
+	font-size: small;
+	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+	padding: 2px;
+	border: 1px groove #b2b2b2;
+}
+
+.details {
+	color: white;
+	background-color: black;
+	font: small "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.caption {
+	font-weight: bold;
+	background-color: #313131;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.content {
+	background-color: black;
+	width: 100%;
+	padding-right: 2px;
+	padding-left: 2px;
+}
+
+#data {
+}
